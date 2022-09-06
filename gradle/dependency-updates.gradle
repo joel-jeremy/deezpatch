@@ -1,0 +1,13 @@
+def isNonStable = { String version ->
+    def nonStableKeyword = [ "PREVIEW", "ALPHA", "BETA", "SNAPSHOT" ].any { 
+        it -> version.toUpperCase().contains(it) 
+    }
+    return nonStableKeyword
+}
+tasks.named("dependencyUpdates").configure {
+    rejectVersionIf {
+        isNonStable(it.candidate.version) && !isNonStable(it.currentVersion)
+    }
+    checkForGradleUpdate = true
+    outputFormatter = "html"
+}

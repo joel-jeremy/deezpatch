@@ -1,0 +1,15 @@
+pluginManagement {
+    plugins {
+        id "io.github.gradle-nexus.publish-plugin" version "${nexusPublishPluginVersion}"
+        id "me.champeau.jmh" version "${jmhPluginVersion}"
+        id "net.ltgt.errorprone" version "${errorPronePluginVersion}"
+        id "net.ltgt.nullaway" version "${nullawayPluginVersion}"
+        id "com.github.ben-manes.versions" version "${versionsPluginVersion}"
+    }
+}
+
+rootProject.name = 'deezpatch'
+
+include "commands"
+include "events"
+include "queries"
