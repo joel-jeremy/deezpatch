@@ -1,2 +1,2 @@
-# messenjer
-A simple messaging library
+# deezpatch
+A simple message dispatching library
