@@ -28,36 +28,36 @@ import static java.util.Objects.requireNonNull;
  * @param <T> The request type.  
  * @param <R> The result type.
  */
-public abstract class RequestType<T extends Request<R>, R> {
+public abstract class RequestKey<T extends Request<R>, R> {
     private static final ResultTypeByRequestType RESULT_TYPE_BY_REQUEST_TYPE = 
         new ResultTypeByRequestType();
 
-    private final Type requestType;
-    private final Type resultType;
+    private final Type request;
+    private final Type result;
 
     /**
      * Default constructor. Auto-detect the request type and result type
      * from the generic type parameters {@link T} and {@link R}.
      */
-    protected RequestType() {
+    protected RequestKey() {
         ParameterizedType superClass = 
             (ParameterizedType)getClass().getGenericSuperclass();
         Type[] typeParams = superClass.getActualTypeArguments();
         // This is T.
-        requestType = typeParams[0];
+        request = typeParams[0];
         // This is R.
-        resultType = typeParams[1];
+        result = typeParams[1];
     }
 
     /**
-     * Used by {@link RequestType#from(Type, Type)}.
+     * Used by {@link RequestKey#from(Type, Type)}.
      * 
      * @param requestType The request type.
      * @param resultType The result type.
      */
-    private RequestType(Type requestType, Type resultType) {
-        this.requestType = requireNonNull(requestType);
-        this.resultType = requireNonNull(resultType);
+    private RequestKey(Type requestType, Type resultType) {
+        this.request = requireNonNull(requestType);
+        this.result = requireNonNull(resultType);
     }
 
     /**
@@ -65,7 +65,7 @@ public abstract class RequestType<T extends Request<R>, R> {
      * @return The request type.
      */
     public Type requestType() {
-        return requestType;
+        return request;
     }
 
     /**
@@ -73,19 +73,19 @@ public abstract class RequestType<T extends Request<R>, R> {
      * @return The request's result type.
      */
     public Type resultType() {
-        return resultType;
+        return result;
     }
 
     /**
-     * @implNote Two {@link RequestType}s are equal when their request types and 
+     * @implNote Two {@link RequestKey}s are equal when their request types and 
      * request result types are equal.
      * 
      * {@inheritDoc}
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof RequestType) {
-            RequestType<?, ?> other = (RequestType<?, ?>)obj;
+        if (obj instanceof RequestKey) {
+            RequestKey<?, ?> other = (RequestKey<?, ?>)obj;
             return Objects.equals(requestType(), other.requestType()) &&
                 Objects.equals(resultType(), other.resultType());
         }
@@ -106,32 +106,32 @@ public abstract class RequestType<T extends Request<R>, R> {
     }
 
     /**
-     * Create a {@link RequestType} from the {@link Request} object.
+     * Create a {@link RequestKey} from the {@link Request} object.
      * 
      * @param <T> The request type.
      * @param <R> The request result type.
      * @param request The request object.
      * @return The request type.
      */
-    public static <T extends Request<R>, R> RequestType<T, R> from(T request) {
+    public static <T extends Request<R>, R> RequestKey<T, R> from(T request) {
         requireNonNull(request);
-        return new RequestType<>(
+        return new RequestKey<>(
             request.getClass(), 
             determineResultType(request.getClass())
         ) {};
     }
 
     /**
-     * Create a {@link RequestType} from the request type.
+     * Create a {@link RequestKey} from the request type.
      * 
      * @param <T> The request type.
      * @param <R> The result type.
      * @param requestType The request type.
      * @return The request type.
      */
-    public static <T extends Request<R>, R> RequestType<T, R> from(Class<T> requestType) {
+    public static <T extends Request<R>, R> RequestKey<T, R> from(Class<T> requestType) {
         @SuppressWarnings("unchecked")
-        RequestType<T, R> casted = (RequestType<T,R>)from(
+        RequestKey<T, R> casted = (RequestKey<T,R>)from(
             requestType, 
             determineResultType(requestType)    
         );
@@ -139,12 +139,12 @@ public abstract class RequestType<T extends Request<R>, R> {
     }
 
     /**
-     * Create a {@link RequestType} from the request type.
+     * Create a {@link RequestKey} from the request type.
      * 
      * @param requestType The request type.
      * @return The request type.
      */
-    public static RequestType<?, ?> from(Type requestType) {
+    public static RequestKey<?, ?> from(Type requestType) {
         return from(
             requestType, 
             determineResultType(TypeUtilities.getRawType(requestType))    
@@ -152,16 +152,16 @@ public abstract class RequestType<T extends Request<R>, R> {
     }
 
     /**
-     * Create a {@link RequestType} from the request type and the result type.
+     * Create a {@link RequestKey} from the request type and the result type.
      * 
      * @param requestType The request type.
      * @param resultType The result type.
      * @return The request type.
      */
-    private static RequestType<?, ?> from(Type requestType, Type resultType) {
+    private static RequestKey<?, ?> from(Type requestType, Type resultType) {
         requireNonNull(requestType);
         requireNonNull(resultType);
-        return new RequestType<>(requestType, resultType) {};
+        return new RequestKey<>(requestType, resultType) {};
     }
 
     private static Type determineResultType(Class<?> requestType) {

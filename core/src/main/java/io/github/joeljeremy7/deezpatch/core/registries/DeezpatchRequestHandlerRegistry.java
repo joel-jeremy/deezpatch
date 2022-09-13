@@ -6,7 +6,7 @@ import io.github.joeljeremy7.deezpatch.core.Request;
 import io.github.joeljeremy7.deezpatch.core.RequestHandler;
 import io.github.joeljeremy7.deezpatch.core.RequestHandlerProvider;
 import io.github.joeljeremy7.deezpatch.core.RequestHandlerRegistry;
-import io.github.joeljeremy7.deezpatch.core.RequestType;
+import io.github.joeljeremy7.deezpatch.core.RequestKey;
 import io.github.joeljeremy7.deezpatch.core.TypeUtilities;
 import io.github.joeljeremy7.deezpatch.core.internal.LambdaFactory;
 import io.github.joeljeremy7.deezpatch.core.internal.RequestHandlerMethod;
@@ -65,8 +65,8 @@ public class DeezpatchRequestHandlerRegistry
                 validateMethodParameters(requestHandlerMethod);
 
                 // First parameter in the method is the request object.
-                RequestType<?,?> requestType = 
-                    RequestType.from(requestHandlerMethod.getGenericParameterTypes()[0]);
+                RequestKey<?,?> requestType = 
+                    RequestKey.from(requestHandlerMethod.getGenericParameterTypes()[0]);
 
                 validateMethodReturnType(
                     requestHandlerMethod,
@@ -83,7 +83,7 @@ public class DeezpatchRequestHandlerRegistry
     /** {@inheritDoc} */
     @Override
     public <T extends Request<R>, R> Optional<RegisteredRequestHandler<T, R>> getRequestHandlerFor(
-            RequestType<T, R> requestType
+            RequestKey<T, R> requestType
     ) {
         requireNonNull(requestType);
 
@@ -101,7 +101,7 @@ public class DeezpatchRequestHandlerRegistry
         return Optional.ofNullable(handler);
     }
 
-    private void register(RequestType<?, ?> requestType, Method requestHandlerMethod) {
+    private void register(RequestKey<?, ?> requestType, Method requestHandlerMethod) {
         requireNonNull(requestType);
         requireNonNull(requestHandlerMethod);
 
@@ -220,7 +220,7 @@ public class DeezpatchRequestHandlerRegistry
 
     private static void validateMethodReturnType(
             Method requestHandlerMethod,
-            RequestType<?, ?> requestType
+            RequestKey<?, ?> requestType
     ) {
         Type resultType = requestType.resultType();
 

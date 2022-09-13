@@ -56,12 +56,13 @@ public class SyncRequestHandlerInvocationStrategyTests {
         void test3() {
             var exception = new RuntimeException();
             var strategy = new SyncRequestHandlerInvocationStrategy();
+            var request = new IntegerRequest("1");
 
             RuntimeException thrown = assertThrows(
                 RuntimeException.class, 
                 () -> strategy.invoke(
                     r -> { throw exception; }, 
-                    new IntegerRequest("1")
+                    request
                 )
             );
 

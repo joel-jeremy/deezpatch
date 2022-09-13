@@ -29,7 +29,7 @@ public class DeezpatchEventHandlerRegistryTests {
         @DisplayName(
             "should throw when event handler builder argument is null"
         )
-        public void test1() {
+        void test1() {
             assertThrows(
                 NullPointerException.class, 
                 () -> new DeezpatchEventHandlerRegistry(null)
@@ -43,7 +43,7 @@ public class DeezpatchEventHandlerRegistryTests {
         @DisplayName(
             "should throw when event handler class argument is null"
         )
-        public void test1() {
+        void test1() {
             DeezpatchEventHandlerRegistry eventHandlerRegistry = 
                 buildEventHandlerRegistry(TestEventHandlers.testEventHandler());
             
@@ -57,7 +57,7 @@ public class DeezpatchEventHandlerRegistryTests {
         @DisplayName(
             "should detect and register methods annotated with @EventHandler"
         )
-        public void test2() {
+        void test2() {
             DeezpatchEventHandlerRegistry eventHandlerRegistry = 
                 buildEventHandlerRegistry(TestEventHandlers.testEventHandler());
 
@@ -80,7 +80,7 @@ public class DeezpatchEventHandlerRegistryTests {
         @DisplayName(
             "should throw when a method annotated with @EventHandler does not have a parameter"
         )
-        public void test3() {
+        void test3() {
             DeezpatchEventHandlerRegistry eventHandlerRegistry = 
                 buildEventHandlerRegistry(TestEventHandlers.invalidEventHandler());
             
@@ -117,7 +117,7 @@ public class DeezpatchEventHandlerRegistryTests {
         @DisplayName(
             "should throw when a method annotated with @EventHandler does not return void"
         )
-        public void test5() {
+        void test5() {
             DeezpatchEventHandlerRegistry eventHandlerRegistry = 
                 buildEventHandlerRegistry(TestEventHandlers.invalidReturnTypeEventHandler());
             
@@ -135,7 +135,7 @@ public class DeezpatchEventHandlerRegistryTests {
         @DisplayName(
             "should throw when event type argument is null"
         )
-        public void test1() {
+        void test1() {
             DeezpatchEventHandlerRegistry eventHandlerRegistry = 
                 buildEventHandlerRegistry(TestEventHandlers.testEventHandler())
                     .register(TestEventHandler.class);
@@ -150,7 +150,7 @@ public class DeezpatchEventHandlerRegistryTests {
         @DisplayName(
             "should return registered event handler for event type"
         )
-        public void test2() {
+        void test2() {
             var testEventHandler = TestEventHandlers.testEventHandler();
             DeezpatchEventHandlerRegistry eventHandlerRegistry = 
                 buildEventHandlerRegistry(testEventHandler)
@@ -172,7 +172,7 @@ public class DeezpatchEventHandlerRegistryTests {
         @DisplayName(
             "should return empty list when there is no registered event handler for event type"
         )
-        public void test3() {
+        void test3() {
             DeezpatchEventHandlerRegistry eventHandlerRegistry = 
                 buildEventHandlerRegistry(TestEventHandlers.testEventHandler());
 

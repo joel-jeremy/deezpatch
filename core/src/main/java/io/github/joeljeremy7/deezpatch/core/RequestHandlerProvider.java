@@ -16,6 +16,6 @@ public interface RequestHandlerProvider {
      * an empty {@code Optional}.
      */
     <T extends Request<R>, R> Optional<RegisteredRequestHandler<T, R>> getRequestHandlerFor(
-        RequestType<T, R> requestType
+        RequestKey<T, R> requestType
     );
 }

@@ -49,12 +49,13 @@ public class SyncEventHandlerInvocationStrategyTests {
         void test3() {
             var exception = new RuntimeException();
             var strategy = new SyncEventHandlerInvocationStrategy();
+            var event = new TestEvent("Test");
 
             RuntimeException thrown = assertThrows(
                 RuntimeException.class, 
                 () -> strategy.invoke(
                     e -> { throw exception; }, 
-                    new TestEvent("Test")
+                    event
                 )
             );
 

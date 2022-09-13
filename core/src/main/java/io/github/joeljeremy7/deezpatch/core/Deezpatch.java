@@ -46,7 +46,7 @@ public class Deezpatch implements Dispatcher, Publisher {
     /** {@inheritDoc} */
     @Override
     public <T extends Request<R>, R> Optional<R> send(T request) {
-        RequestType<T, R> requestType = RequestType.from(request);
+        RequestKey<T, R> requestType = RequestKey.from(request);
         RegisteredRequestHandler<T, R> requestHandler =
             requestHandlerProvider.getRequestHandlerFor(requestType)
                 .orElseThrow(() -> new DeezpatchException(

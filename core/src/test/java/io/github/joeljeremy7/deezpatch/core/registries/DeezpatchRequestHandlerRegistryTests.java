@@ -2,7 +2,7 @@ package io.github.joeljeremy7.deezpatch.core.registries;
 
 import io.github.joeljeremy7.deezpatch.core.RegisteredRequestHandler;
 import io.github.joeljeremy7.deezpatch.core.Request;
-import io.github.joeljeremy7.deezpatch.core.RequestType;
+import io.github.joeljeremy7.deezpatch.core.RequestKey;
 import io.github.joeljeremy7.deezpatch.core.testentities.IntegerRequest;
 import io.github.joeljeremy7.deezpatch.core.testentities.TestInstanceProviders;
 import io.github.joeljeremy7.deezpatch.core.testentities.TestRequestHandlers;
@@ -66,7 +66,7 @@ public class DeezpatchRequestHandlerRegistryTests {
 
             requestHandlerRegistry.register(PrimitiveRequestHandler.class);
             
-            RequestType<IntegerRequest, Integer> requestType = new RequestType<>(){};
+            RequestKey<IntegerRequest, Integer> requestType = new RequestKey<>(){};
             assertTrue(
                 requestHandlerRegistry.getRequestHandlerFor(requestType).isPresent()
             );
@@ -83,7 +83,7 @@ public class DeezpatchRequestHandlerRegistryTests {
 
             requestHandlerRegistry.register(PrimitiveRequestHandler.class);
             
-            RequestType<IntegerRequest, Integer> requestType = new RequestType<>(){};
+            RequestKey<IntegerRequest, Integer> requestType = new RequestKey<>(){};
             assertTrue(
                 requestHandlerRegistry.getRequestHandlerFor(requestType).isPresent()
             );
@@ -99,7 +99,7 @@ public class DeezpatchRequestHandlerRegistryTests {
 
             requestHandlerRegistry.register(VoidRequestHandler.class);
             
-            RequestType<VoidRequest, Void> requestType = new RequestType<>(){};
+            RequestKey<VoidRequest, Void> requestType = new RequestKey<>(){};
             assertTrue(
                 requestHandlerRegistry.getRequestHandlerFor(requestType).isPresent()
             );
@@ -144,11 +144,14 @@ public class DeezpatchRequestHandlerRegistryTests {
                 TestRequestHandlers.primitiveRequestHandler(),
                 TestRequestHandlers.throwingIntegerRequestHandler(new RuntimeException("Oops!"))
             );
+
+            // Register a TestRequest handler.
+            requestHandlerRegistry.register(VoidRequestHandler.class);
             
             assertThrows(
                 UnsupportedOperationException.class, 
+                // Register another TestRequest handler.
                 () -> requestHandlerRegistry
-                    .register(VoidRequestHandler.class)
                     .register(ThrowingVoidRequestHandler.class)
             );
         }
@@ -172,7 +175,7 @@ public class DeezpatchRequestHandlerRegistryTests {
 
             requestHandlerRegistry.register(requestHandler.getClass());
             
-            RequestType<IntegerRequest, Integer> requestType = new RequestType<>(){};
+            RequestKey<IntegerRequest, Integer> requestType = new RequestKey<>(){};
 
             assertFalse(
                 requestHandlerRegistry.getRequestHandlerFor(requestType).isPresent()
@@ -225,7 +228,7 @@ public class DeezpatchRequestHandlerRegistryTests {
                 buildRequestHandlerRegistry(requestHandler)
                     .register(PrimitiveRequestHandler.class);
 
-            RequestType<IntegerRequest, Integer> requestType = new RequestType<>(){};
+            RequestKey<IntegerRequest, Integer> requestType = new RequestKey<>(){};
             Optional<RegisteredRequestHandler<IntegerRequest, Integer>> resolved = 
                 requestHandlerRegistry.getRequestHandlerFor(requestType);
 
@@ -250,7 +253,7 @@ public class DeezpatchRequestHandlerRegistryTests {
 
             // No registrations...
 
-            RequestType<RequestWithNoHandler, Void> requestType = new RequestType<>(){};
+            RequestKey<RequestWithNoHandler, Void> requestType = new RequestKey<>(){};
             Optional<RegisteredRequestHandler<RequestWithNoHandler, Void>> resolved = 
                 requestHandlerRegistry.getRequestHandlerFor(requestType);
 
