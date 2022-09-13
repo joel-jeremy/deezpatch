@@ -1,5 +1,16 @@
 # Deezpatch
 
+[![Gradle Build](https://github.com/joeljeremy7/deezpatch/actions/workflows/gradle-build.yaml/badge.svg)](https://github.com/joeljeremy7/deezpatch/actions/workflows/gradle-build.yaml)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.joeljeremy7.deezpatch/core/badge.svg)](https://search.maven.org/search?q=g:%22io.github.joeljeremy7.deezpatch%22)
+[![Coverage Status](https://coveralls.io/repos/github/joeljeremy7/deezpatch/badge.svg?branch=main)](https://coveralls.io/github/joeljeremy7/deezpatch?branch=main)
+[![Known Vulnerabilities](https://snyk.io/test/github/joeljeremy7/deezpatch/badge.svg)](https://snyk.io/test/github/joeljeremy7/deezpatch)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/joeljeremy7/deezpatch/blob/main/LICENSE)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=io.github.joeljeremy7.deezpatch&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=io.github.joeljeremy7.deezpatch)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joeljeremy7.deezpatch&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joeljeremy7.deezpatch)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joeljeremy7.deezpatch&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joeljeremy7.deezpatch)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joeljeremy7.deezpatch&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joeljeremy7.deezpatch)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=io.github.joeljeremy7.deezpatch&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=io.github.joeljeremy7.deezpatch)
+
 A simple dispatch library.
 
 This library aims to help build applications which apply the [Command Query Responsibility Segregation](https://martinfowler.com/bliki/CQRS.html) pattern.
