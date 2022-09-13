@@ -26,7 +26,7 @@ publishing {
 					description = project.description
 				}
                 packaging = "jar"
-                url = "https://github.com/joeljeremy7/externalized-properties"
+                url = "https://github.com/joeljeremy7/deezpatch"
 
                 licenses {
                     license {
@@ -45,9 +45,9 @@ publishing {
                 }
 
                 scm {
-                    connection = "scm:git:https://github.com/joeljeremy7/externalized-properties.git"
-                    developerConnection = "scm:git:https://github.com/joeljeremy7/externalized-properties.git"
-                    url = "https://github.com/joeljeremy7/externalized-properties"
+                    connection = "scm:git:https://github.com/joeljeremy7/deezpatch.git"
+                    developerConnection = "scm:git:https://github.com/joeljeremy7/deezpatch.git"
+                    url = "https://github.com/joeljeremy7/deezpatch"
                 }
             }
         }
@@ -56,7 +56,7 @@ publishing {
     if (project.hasProperty("github-packages")) {
         repositories {
             maven {
-                url = "https://maven.pkg.github.com/joeljeremy7/externalized-properties"
+                url = "https://maven.pkg.github.com/joeljeremy7/deezpatch"
                 name = "github-packages"
                 credentials {
                     username = System.getenv("GITHUB_ACTOR") ?: property("githubActor")

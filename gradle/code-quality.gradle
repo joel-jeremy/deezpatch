@@ -59,7 +59,7 @@ tasks.withType(JavaCompile).configureEach { task ->
 
         nullaway {
             severity = net.ltgt.gradle.errorprone.CheckSeverity.ERROR
-            annotatedPackages.add("io.github.joeljeremy7.externalizedproperties")
+            annotatedPackages.add("io.github.joeljeremy7.deezpatch")
             checkOptionalEmptiness = true
             suggestSuppressions = true
         }

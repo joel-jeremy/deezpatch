@@ -1,0 +1,21 @@
+package io.github.joeljeremy7.deezpatch.core;
+
+import java.util.Optional;
+
+/**
+ * The request handler provider.
+ */
+public interface RequestHandlerProvider {
+    /**
+     * Get request handler for the specified request type.
+     * 
+     * @param <T> The request type.
+     * @param <R> The request result type.
+     * @param requestType The request type.
+     * @return The request handler, if any is registered. Otherwise,
+     * an empty {@code Optional}.
+     */
+    <T extends Request<R>, R> Optional<RegisteredRequestHandler<T, R>> getRequestHandlerFor(
+        RequestType<T, R> requestType
+    );
+}

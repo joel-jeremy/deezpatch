@@ -1,5 +1,8 @@
 plugins {
     id "io.github.gradle-nexus.publish-plugin"
+    id "com.github.kt3k.coveralls"
+    id "io.snyk.gradle.plugin.snykplugin"
+    id "org.sonarqube"
     id "com.github.ben-manes.versions"
     id "me.champeau.jmh" apply false
     id "net.ltgt.errorprone" apply false
@@ -7,9 +10,9 @@ plugins {
 }
 
 apply from: "${rootDir}/gradle/reporting.gradle"
-// apply from: "${rootDir}/gradle/coveralls.gradle"
-// apply from: "${rootDir}/gradle/snyk.gradle"
-// apply from: "${rootDir}/gradle/sonarqube.gradle"
+apply from: "${rootDir}/gradle/coveralls.gradle"
+apply from: "${rootDir}/gradle/snyk.gradle"
+apply from: "${rootDir}/gradle/sonarqube.gradle"
 apply from: "${rootDir}/gradle/dependency-updates.gradle"
 
 allprojects {

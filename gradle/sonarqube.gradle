@@ -1,0 +1,13 @@
+apply plugin: "org.sonarqube"
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "io.github.joeljeremy7.deezpatch"
+        property "sonar.organization", "deezpatch"
+        property "sonar.login", System.getenv("SONAR_TOKEN")
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
+    }
+}
+
+tasks.sonarqube.dependsOn(testCodeCoverageReport)

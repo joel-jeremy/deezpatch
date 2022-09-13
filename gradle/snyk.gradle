@@ -1,0 +1,9 @@
+apply plugin: "io.snyk.gradle.plugin.snykplugin"
+
+snyk {
+    api = System.getenv("SNYK_TOKEN")
+    severity = "low"
+    arguments = "--all-sub-projects --sarif-file-output=snyk.sarif"
+    autoDownload = true
+    autoUpdate = true
+}

@@ -1,0 +1,9 @@
+description = "A simple message handling library"
+
+jar {
+    manifest {
+        attributes(
+            "Automatic-Module-Name": "io.github.joeljeremy7.deezpatch.core"
+        )
+    }
+}

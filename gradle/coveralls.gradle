@@ -1,0 +1,19 @@
+apply plugin: "com.github.kt3k.coveralls"
+
+def javaProjects = project.subprojects.findAll { new File(it.projectDir, "src").exists() }
+configure(javaProjects) {
+    apply plugin: "java-library"
+}
+
+coveralls {
+    sourceDirs = javaProjects.sourceSets.main.allSource.srcDirs.flatten()
+    jacocoReportPath = "${buildDir}/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
+}
+
+tasks.named("coveralls").configure {
+    group = "Coverage reports"
+    description = "Uploads the aggregated coverage report to Coveralls"
+
+    dependsOn testCodeCoverageReport
+    onlyIf { System.getenv("CI") }
+}
