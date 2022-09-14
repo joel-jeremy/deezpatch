@@ -1,6 +1,7 @@
 package io.github.joeljeremy7.deezpatch.core;
 
 import io.github.joeljeremy7.deezpatch.core.testentities.IntegerRequest;
+import io.github.joeljeremy7.deezpatch.core.testentities.ListRequest;
 import io.github.joeljeremy7.deezpatch.core.testentities.TestRequest;
 import io.github.joeljeremy7.deezpatch.core.testentities.TestResult;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -631,6 +633,31 @@ public class RequestKeyTests {
                 new RequestKey<>(){};
             
             assertEquals(TestResult.class, requestType.resultType());
+        }
+    }
+
+    @Nested
+    class RawRequestTypeMethod {
+        @Test
+        @DisplayName("should return raw request type")
+        void test1() {
+            RequestKey<TestRequest, TestResult> requestType = 
+                new RequestKey<>(){};
+            
+            assertEquals(TestRequest.class, requestType.rawRequestType());
+        }
+    }
+
+    @Nested
+    class RawResultTypeMethod {
+        @Test
+        @DisplayName("should return raw result type")
+        void test1() {
+            RequestKey<ListRequest, List<String>> requestType = 
+                new RequestKey<>(){};
+            
+            // Raw List.class
+            assertEquals(List.class, requestType.rawResultType());
         }
     }
 

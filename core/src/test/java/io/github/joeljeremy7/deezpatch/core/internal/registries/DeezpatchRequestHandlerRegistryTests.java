@@ -184,13 +184,14 @@ public class DeezpatchRequestHandlerRegistryTests {
 
         @Test
         @DisplayName(
-            "should throw when result type is not compatible/assignable from " + 
-            "request handler method's return type"
+            "should throw when result type is the same as the request handler method's " + 
+            "return type"
         )
         void test9() {
-            DeezpatchRequestHandlerRegistry requestHandlerRegistry = buildRequestHandlerRegistry(
-                TestRequestHandlers.incompatibleRequestHandler()
-            );
+            DeezpatchRequestHandlerRegistry requestHandlerRegistry = 
+                buildRequestHandlerRegistry(
+                    TestRequestHandlers.incompatibleRequestHandler()
+                );
             
             assertThrows(
                 UnsupportedOperationException.class, 
@@ -198,8 +199,6 @@ public class DeezpatchRequestHandlerRegistryTests {
                     .register(IncompatibleRequestHandler.class)
             );
         }
-
-        // TODO: Add test case where lambda creation fails.
     }
 
     @Nested
