@@ -11,11 +11,11 @@ public interface RequestHandlerProvider {
      * 
      * @param <T> The request type.
      * @param <R> The request result type.
-     * @param requestType The request type.
+     * @param requestKey The request key.
      * @return The request handler, if any is registered. Otherwise,
      * an empty {@code Optional}.
      */
     <T extends Request<R>, R> Optional<RegisteredRequestHandler<T, R>> getRequestHandlerFor(
-        RequestKey<T, R> requestType
+        RequestKey<T, R> requestKey
     );
 }

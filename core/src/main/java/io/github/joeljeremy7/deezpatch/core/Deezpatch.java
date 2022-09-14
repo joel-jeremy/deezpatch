@@ -46,11 +46,12 @@ public class Deezpatch implements Dispatcher, Publisher {
     /** {@inheritDoc} */
     @Override
     public <T extends Request<R>, R> Optional<R> send(T request) {
-        RequestKey<T, R> requestType = RequestKey.from(request);
+        RequestKey<T, R> requestKey = RequestKey.from(request);
+        
         RegisteredRequestHandler<T, R> requestHandler =
-            requestHandlerProvider.getRequestHandlerFor(requestType)
+            requestHandlerProvider.getRequestHandlerFor(requestKey)
                 .orElseThrow(() -> new DeezpatchException(
-                    "No request handler found for request type: " + requestType + "."
+                    "No request handler found for request key: " + requestKey + "."
                 ));
         
         try {
@@ -77,7 +78,7 @@ public class Deezpatch implements Dispatcher, Publisher {
         List<RegisteredEventHandler<T>> eventHandlers = 
             eventHandlerProvider.getEventHandlersFor(eventType);
         
-        eventHandlers.forEach(eventHandler -> {
+        for (RegisteredEventHandler<T> eventHandler : eventHandlers) {
             try {
                 eventHandlerInvocationStrategy.invoke(eventHandler, event);
             } catch (RuntimeException ex) {
@@ -91,7 +92,7 @@ public class Deezpatch implements Dispatcher, Publisher {
 
                 throw ex;
             }
-        });
+        }
     }
 
     /**

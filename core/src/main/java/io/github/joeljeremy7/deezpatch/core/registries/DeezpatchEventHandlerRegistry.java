@@ -9,8 +9,9 @@ import io.github.joeljeremy7.deezpatch.core.internal.EventHandlerMethod;
 import io.github.joeljeremy7.deezpatch.core.internal.LambdaFactory;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static java.util.Objects.requireNonNull;
 
@@ -74,8 +75,8 @@ public class DeezpatchEventHandlerRegistry
         List<RegisteredEventHandler<T>> eventHandlers = 
             (List)eventHandlersByEventType.get(eventType);
         
-        // Map's list is mutable. Always return an immutable copy here.
-        return List.copyOf(eventHandlers);
+        // Internal list is mutable. Always wrap in an unmodifiable list here.
+        return Collections.unmodifiableList(eventHandlers);
     }
     
     private void register(Class<?> eventType, Method eventHandlerMethod) {
@@ -146,7 +147,7 @@ public class DeezpatchEventHandlerRegistry
             extends ClassValue<List<RegisteredEventHandler<?>>> {
         @Override
         protected List<RegisteredEventHandler<?>> computeValue(Class<?> eventType) {
-            return new CopyOnWriteArrayList<>();
+            return new ArrayList<>();
         }
     }
 }

@@ -13,7 +13,7 @@
 
 A simple dispatch library.
 
-This library aims to help build applications which apply the [Command Query Responsibility Segregation](https://martinfowler.com/bliki/CQRS.html) pattern.
+This library aims to help build applications which apply the [Command Query Responsibility Segregation](https://martinfowler.com/bliki/CQRS.html) (CQRS) pattern.
 
 ## 🛠️ Get Deezpatch
 
@@ -53,16 +53,18 @@ What differentiates Deezpatch from other messaging/dispatch libraries? The libra
 
 ## 📨 Requests and Events
 
-### Request
+### Requests
 
 Requests are messages that either:
 
-1. Initiate a state change/mutation (commands)
-2. Retrieve data (queries)
+1. Initiate a state change/mutation
+    - Commands in [CQRS](https://martinfowler.com/bliki/CQRS.html)
+2. Retrieve/query data
+    - Queries in [CQRS](https://martinfowler.com/bliki/CQRS.html)
 
 Requests are dispatched to a single request handler.
 
-### Event
+### Events
 
 Events are messages that indicate that something has occurred in the system.
 
