@@ -115,10 +115,9 @@ public abstract class RequestKey<T extends Request<R>, R> {
      */
     public static <T extends Request<R>, R> RequestKey<T, R> from(T request) {
         requireNonNull(request);
-        return new RequestKey<>(
-            request.getClass(), 
-            determineResultType(request.getClass())
-        ) {};
+        @SuppressWarnings("unchecked")
+        RequestKey<T, R> requestKey = from(request.getClass());
+        return requestKey;
     }
 
     /**
@@ -130,12 +129,10 @@ public abstract class RequestKey<T extends Request<R>, R> {
      * @return The request type.
      */
     public static <T extends Request<R>, R> RequestKey<T, R> from(Class<T> requestType) {
-        @SuppressWarnings("unchecked")
-        RequestKey<T, R> casted = (RequestKey<T,R>)from(
+        return new RequestKey<>(
             requestType, 
-            determineResultType(requestType)    
-        );
-        return casted;
+            determineResultType(requestType)
+        ) {};
     }
 
     /**
@@ -159,17 +156,10 @@ public abstract class RequestKey<T extends Request<R>, R> {
      * @return The request type.
      */
     private static RequestKey<?, ?> from(Type requestType, Type resultType) {
-        requireNonNull(requestType);
-        requireNonNull(resultType);
         return new RequestKey<>(requestType, resultType) {};
     }
 
     private static Type determineResultType(Class<?> requestType) {
-        if (!Request.class.isAssignableFrom(requestType)) {
-            throw new IllegalArgumentException(
-                requestType + " does not implement " + Request.class.getName() + "."
-            );
-        }
         return RESULT_TYPE_BY_REQUEST_TYPE.get(requestType);
     }
 
@@ -183,6 +173,12 @@ public abstract class RequestKey<T extends Request<R>, R> {
          */
         @Override
         protected Type computeValue(Class<?> requestType) {
+            if (!Request.class.isAssignableFrom(requestType)) {
+                throw new IllegalArgumentException(
+                    requestType + " does not implement " + Request.class.getName() + "."
+                );
+            }
+            
             /**
              * Note: Does not support parameterized request types yet 
              * e.g. public class MyRequest<T> implements Request<T> {}

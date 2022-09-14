@@ -83,12 +83,12 @@ public class DeezpatchRequestHandlerRegistry
     /** {@inheritDoc} */
     @Override
     public <T extends Request<R>, R> Optional<RegisteredRequestHandler<T, R>> getRequestHandlerFor(
-            RequestKey<T, R> requestType
+            RequestKey<T, R> requestKey
     ) {
-        requireNonNull(requestType);
+        requireNonNull(requestKey);
 
         WeakConcurrentMap<Type, RegisteredRequestHandler<?,?>> handlersByResultType = 
-            mappingsByRequestType.get(requestType.requestType());
+            mappingsByRequestType.get(requestKey.requestType());
 
         if (handlersByResultType == null) {
             return Optional.empty();
@@ -96,7 +96,7 @@ public class DeezpatchRequestHandlerRegistry
 
         @SuppressWarnings("unchecked")
         RegisteredRequestHandler<T, R> handler = 
-            (RegisteredRequestHandler<T, R>)handlersByResultType.get(requestType.resultType());
+            (RegisteredRequestHandler<T, R>)handlersByResultType.get(requestKey.resultType());
         
         return Optional.ofNullable(handler);
     }

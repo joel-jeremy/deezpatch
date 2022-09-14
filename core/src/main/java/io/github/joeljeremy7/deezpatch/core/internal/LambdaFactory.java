@@ -9,7 +9,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * Utility to create lambda functions using {@code LambdaMetafactory}.
@@ -74,9 +74,14 @@ public class LambdaFactory {
     }
 
     private static class FunctionalInterfaceMethodMap extends ClassValue<Method> {
+        /**
+         * Get the single abstract method (SAM) of the functional interface.
+         */
         @Override
         protected Method computeValue(Class<?> functionalInterface) {
-            Method[] methods = Arrays.stream(functionalInterface.getMethods())
+            Method[] methods = Stream.of(functionalInterface)
+                .filter(Class::isInterface)
+                .flatMap(m -> Stream.of(m.getMethods()))
                 .filter(m -> Modifier.isAbstract(m.getModifiers()))
                 .toArray(Method[]::new);
 
