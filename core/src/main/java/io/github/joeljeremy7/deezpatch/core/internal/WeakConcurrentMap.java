@@ -14,6 +14,7 @@ import java.util.function.Function;
  * A simple weak concurrent map implementation which only holds weak references
  * to the keys.
  */
+@Internal
 public class WeakConcurrentMap<K,V> {
     private final ConcurrentMap<WeakConcurrentMap.WeakKey<K>, V> map = new ConcurrentHashMap<>();
     private final ReferenceQueue<K> referenceQueue = new ReferenceQueue<>();

@@ -1,4 +1,4 @@
-package io.github.joeljeremy7.deezpatch.core.registries;
+package io.github.joeljeremy7.deezpatch.core.internal.registries;
 
 import io.github.joeljeremy7.deezpatch.core.RegisteredRequestHandler;
 import io.github.joeljeremy7.deezpatch.core.Request;

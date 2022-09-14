@@ -1,4 +1,4 @@
-description = "A simple message handling library"
+description = "Deezpatch Core"
 
 jar {
     manifest {

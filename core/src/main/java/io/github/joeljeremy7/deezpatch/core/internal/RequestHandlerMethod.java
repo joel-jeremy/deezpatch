@@ -7,6 +7,7 @@ import io.github.joeljeremy7.deezpatch.core.RequestHandler;
  * This is for non-void-returning request handler methods.
  */
 @FunctionalInterface
+@Internal
 public interface RequestHandlerMethod {
     /**
      * Invoke the actual method annotated with {@link RequestHandler}.

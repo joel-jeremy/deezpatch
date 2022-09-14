@@ -1,9 +1,9 @@
 package io.github.joeljeremy7.deezpatch.core;
 
+import io.github.joeljeremy7.deezpatch.core.internal.registries.DeezpatchEventHandlerRegistry;
+import io.github.joeljeremy7.deezpatch.core.internal.registries.DeezpatchRequestHandlerRegistry;
 import io.github.joeljeremy7.deezpatch.core.invocationstrategies.SyncEventHandlerInvocationStrategy;
 import io.github.joeljeremy7.deezpatch.core.invocationstrategies.SyncRequestHandlerInvocationStrategy;
-import io.github.joeljeremy7.deezpatch.core.registries.DeezpatchEventHandlerRegistry;
-import io.github.joeljeremy7.deezpatch.core.registries.DeezpatchRequestHandlerRegistry;
 
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
