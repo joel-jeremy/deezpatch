@@ -69,11 +69,27 @@ public abstract class RequestKey<T extends Request<R>, R> {
     }
 
     /**
+     * The raw request type.
+     * @return The raw request type.
+     */
+    public Class<?> rawRequestType() {
+        return TypeUtilities.getRawType(requestType());
+    }
+
+    /**
      * The request's result type.
      * @return The request's result type.
      */
     public Type resultType() {
         return result;
+    }
+
+    /**
+     * The request's raw result type.
+     * @return The request's raw result type.
+     */
+    public Class<?> rawResultType() {
+        return TypeUtilities.getRawType(resultType());
     }
 
     /**

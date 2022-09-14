@@ -7,7 +7,6 @@ import io.github.joeljeremy7.deezpatch.core.RequestHandler;
 import io.github.joeljeremy7.deezpatch.core.RequestHandlerProvider;
 import io.github.joeljeremy7.deezpatch.core.RequestHandlerRegistry;
 import io.github.joeljeremy7.deezpatch.core.RequestKey;
-import io.github.joeljeremy7.deezpatch.core.TypeUtilities;
 import io.github.joeljeremy7.deezpatch.core.internal.Internal;
 import io.github.joeljeremy7.deezpatch.core.internal.LambdaFactory;
 import io.github.joeljeremy7.deezpatch.core.internal.RequestHandlerMethod;
@@ -222,26 +221,28 @@ public class DeezpatchRequestHandlerRegistry
 
     private static void validateMethodReturnType(
             Method requestHandlerMethod,
-            RequestKey<?, ?> requestType
+            RequestKey<?, ?> requestKey
     ) {
-        Type resultType = requestType.resultType();
+        Type resultType = requestKey.resultType();
+        Type methodReturnType = requestHandlerMethod.getGenericReturnType();
+        
+        // Attempt to convert result type and request handler method return type to 
+        // a primitive type before comparing because we treat wrappers and primitives 
+        // as interchangeable.
+        Class<?> rawResultType = PRIMITIVE_TYPE_MAP.get(requestKey.rawResultType());
+        Class<?> rawMethodReturnType = PRIMITIVE_TYPE_MAP.get(requestHandlerMethod.getReturnType());
+        if (rawResultType.isPrimitive() && rawMethodReturnType.isPrimitive()) {
+            resultType = rawResultType;
+            methodReturnType = rawMethodReturnType;
+        }
 
-        // Convert both result type and method return type to primitive types
-        // before comparing because we treat the two as interchangeable.
-        Class<?> rawResultType = PRIMITIVE_TYPE_MAP.get(
-            TypeUtilities.getRawType(resultType)
-        );
-        Class<?> rawMethodReturnType = PRIMITIVE_TYPE_MAP.get(
-            TypeUtilities.getRawType(requestHandlerMethod.getReturnType())
-        );
-
-        if (!rawResultType.isAssignableFrom(rawMethodReturnType)) {
-            throw new UnsupportedOperationException(
-                "Request's result type and request handler method's return type " +
-                "are not compatible. Result type " + resultType.getTypeName() + " is not " +
-                "assignable from method's return type " + 
-                requestHandlerMethod.getGenericReturnType().getTypeName() + "."
-            );
+        if (!resultType.equals(methodReturnType)) {
+            throw new UnsupportedOperationException(String.format(
+                "Mismatch between request's result type '%s' and request " + 
+                "handler method's return type '%s'. Please adjust accordingly.",
+                resultType.getTypeName(),
+                requestHandlerMethod.getGenericReturnType().getTypeName()
+            ));
         }
     }
 

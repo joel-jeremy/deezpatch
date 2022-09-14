@@ -2,6 +2,9 @@ package io.github.joeljeremy7.deezpatch.core.testentities;
 
 import io.github.joeljeremy7.deezpatch.core.RequestHandler;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class TestRequestHandlers {
     private TestRequestHandlers() {}
 
@@ -15,6 +18,10 @@ public class TestRequestHandlers {
 
     public static VoidRequestHandler voidRequestHandler() {
         return new VoidRequestHandler();
+    }
+
+    public static ListRequestHandler listRequestHandler() {
+        return new ListRequestHandler();
     }
 
     public static ThrowingIntegerRequestHandler throwingIntegerRequestHandler(
@@ -118,6 +125,16 @@ public class TestRequestHandlers {
         public void handle(VoidRequest request) {
             // Fire! Then forget.
             track(request);
+        }
+    }
+
+    public static class ListRequestHandler extends TrackableHandler {
+        private ListRequestHandler() {}
+
+        @RequestHandler
+        public List<String> handle(ListRequest request) {
+            track(request);
+            return Arrays.asList(request.parameter().split(","));
         }
     }
 
