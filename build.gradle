@@ -21,7 +21,7 @@ allprojects {
     group = "io.github.joeljeremy7.deezpatch"
 
     def snapshotSuffix = rootProject.hasProperty("release") ? "" : "-SNAPSHOT"
-    version = "1.0.0-alpha" + snapshotSuffix
+    version = "1.0.0-alpha.1" + snapshotSuffix
 
     repositories {
         mavenLocal()
