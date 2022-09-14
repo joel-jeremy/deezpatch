@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 /**
  * Utility to create lambda functions using {@code LambdaMetafactory}.
  */
+@Internal
 public class LambdaFactory {
 
     private static final FunctionalInterfaceMethodMap FUNCTIONAL_INTERFACE_METHOD_MAP =

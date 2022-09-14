@@ -1,14 +1,14 @@
-package io.github.joeljeremy7.deezpatch.core.registries;
+package io.github.joeljeremy7.deezpatch.core.internal.registries;
 
 import io.github.joeljeremy7.deezpatch.core.EventHandler;
 import io.github.joeljeremy7.deezpatch.core.RegisteredEventHandler;
-import io.github.joeljeremy7.deezpatch.core.testentities.TrackableHandler;
 import io.github.joeljeremy7.deezpatch.core.testentities.TestEvent;
-import io.github.joeljeremy7.deezpatch.core.testentities.TestInstanceProviders;
 import io.github.joeljeremy7.deezpatch.core.testentities.TestEventHandlers;
 import io.github.joeljeremy7.deezpatch.core.testentities.TestEventHandlers.InvalidEventHandler;
 import io.github.joeljeremy7.deezpatch.core.testentities.TestEventHandlers.InvalidReturnTypeEventHandler;
 import io.github.joeljeremy7.deezpatch.core.testentities.TestEventHandlers.TestEventHandler;
+import io.github.joeljeremy7.deezpatch.core.testentities.TestInstanceProviders;
+import io.github.joeljeremy7.deezpatch.core.testentities.TrackableHandler;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

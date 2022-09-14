@@ -1,4 +1,4 @@
-package io.github.joeljeremy7.deezpatch.core.registries;
+package io.github.joeljeremy7.deezpatch.core.internal.registries;
 
 import io.github.joeljeremy7.deezpatch.core.InstanceProvider;
 import io.github.joeljeremy7.deezpatch.core.RegisteredRequestHandler;
@@ -8,6 +8,7 @@ import io.github.joeljeremy7.deezpatch.core.RequestHandlerProvider;
 import io.github.joeljeremy7.deezpatch.core.RequestHandlerRegistry;
 import io.github.joeljeremy7.deezpatch.core.RequestKey;
 import io.github.joeljeremy7.deezpatch.core.TypeUtilities;
+import io.github.joeljeremy7.deezpatch.core.internal.Internal;
 import io.github.joeljeremy7.deezpatch.core.internal.LambdaFactory;
 import io.github.joeljeremy7.deezpatch.core.internal.RequestHandlerMethod;
 import io.github.joeljeremy7.deezpatch.core.internal.VoidRequestHandlerMethod;
@@ -23,6 +24,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * The default request handler registry.
  */
+@Internal
 public class DeezpatchRequestHandlerRegistry 
         implements RequestHandlerRegistry, RequestHandlerProvider {
 

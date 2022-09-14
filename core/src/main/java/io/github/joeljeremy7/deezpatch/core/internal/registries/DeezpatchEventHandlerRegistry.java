@@ -1,4 +1,4 @@
-package io.github.joeljeremy7.deezpatch.core.registries;
+package io.github.joeljeremy7.deezpatch.core.internal.registries;
 
 import io.github.joeljeremy7.deezpatch.core.EventHandler;
 import io.github.joeljeremy7.deezpatch.core.EventHandlerProvider;
@@ -6,6 +6,7 @@ import io.github.joeljeremy7.deezpatch.core.EventHandlerRegistry;
 import io.github.joeljeremy7.deezpatch.core.InstanceProvider;
 import io.github.joeljeremy7.deezpatch.core.RegisteredEventHandler;
 import io.github.joeljeremy7.deezpatch.core.internal.EventHandlerMethod;
+import io.github.joeljeremy7.deezpatch.core.internal.Internal;
 import io.github.joeljeremy7.deezpatch.core.internal.LambdaFactory;
 
 import java.lang.reflect.Method;
@@ -18,6 +19,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * The default event handler registry.
  */
+@Internal
 public class DeezpatchEventHandlerRegistry 
         implements EventHandlerRegistry, EventHandlerProvider {
 
