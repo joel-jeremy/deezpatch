@@ -49,11 +49,9 @@ module foo.bar {
 
 ## 🚀 Performance
 
-What differentiates Deezpatch from other messaging/dispatch libraries? The library utilizes the benefits provided by `Lambdametafactory` to avoid the cost of invoking methods reflectively. This results in performance similar to directly invoking the methods.
+What differentiates Deezpatch from other messaging/dispatch libraries? The library utilizes the benefits provided by [java.lang.invoke.LambdaMetafactory](https://docs.oracle.com/javase/8/docs/api/java/lang/invoke/LambdaMetafactory.html) to avoid the cost of invoking methods reflectively. This results in performance close to directly invoking the methods.
 
-## 📨 Requests and Events
-
-### Requests
+## ✉️ Requests
 
 Requests are messages that either:
 
@@ -62,10 +60,125 @@ Requests are messages that either:
 2. Retrieve/query data
     - Queries in [CQRS](https://martinfowler.com/bliki/CQRS.html)
 
-Requests are dispatched to a single request handler.
+```java
+public class GreetCommand implements Request<Void> {
+    private final String name;
+    
+    public GreetRequest(String name) {
+        this.name = name;
+    }
+    
+    public String name() {
+        return name;
+    }
+}
 
-### Events
+public class PingQuery implements Request<Pong> {}
+```
+
+## 📨  Request Handlers
+
+Requests are handled by request handlers. Request handlers can be registered through the use of the [@RequestHandler](core/src/main/java/io/github/joeljeremy7/deezpatch/core/RequestHandler.java) annotation.
+
+A request must only have a single request handler.
+
+```java
+public class GreetCommandHandler {
+    @RequestHandler
+    public void handle(GreetCommand command) {
+        sayHi(command.name());
+    }
+}
+
+public class PingQueryHandler {
+    @RequestHandler
+    public Pong handle(PingQuery query) {
+        return new Pong("Here's your pong!");
+    }
+}
+```
+
+## 🏤 Request Dispatcher
+
+Requests are dispatched to a single request handler and this can be done through a dispatcher.
+
+```java
+public static void main(String[] args) {
+    // Deezpatch implements the Dispatcher interface.
+    Deezpatch deezpatch = Deezpatch.builder()
+        .instanceProvider(applicationContext::getBean)
+        .requests(config -> config.register(
+            GreetCommandHandler.java,
+            PingQueryHandler.java
+        ))
+        .build();
+
+    // Send command!
+    deezpatch.send(new GreetCommand("Jay"));
+
+    // Send query!
+    Optional<Pong> pong = deezpatch.send(new PingQuery());
+}
+```
+
+## ✉️ Events
 
 Events are messages that indicate that something has occurred in the system.
 
-Events are dispatched to zero or more event handlers.
+```java
+public class GreetedEvent implements Event {
+    private final String greeting;
+
+    public GreetedEvent(String greeting) {
+        this.greeting = greeting;
+    }
+
+    public String greeting() {
+        return greeting;
+    }
+}
+```
+
+## 📨 Event Handlers
+
+Events are handled by event handlers. Event handlers can be registered through the use of the [@EventHandler](core/src/main/java/io/github/joeljeremy7/deezpatch/core/EventHandler.java) annotation.
+
+An event can zero or more event handlers.
+
+```java
+public class GreetedEventHandler {
+    @EventHandler
+    public void sayHello(GreetedEvent event) {
+        // Well, hello!
+    }
+
+    @EventHandler
+    public void sayHey(GreetedEvent event) {
+        // Well, hey!
+    }
+
+    @EventHandler
+    public void sayKumusta(GreetedEvent event) {
+        // Well, kumusta?
+    }
+}
+```
+
+## 📣 Event Publisher
+
+Events are dispatched to zero or more event handlers and this can be done through a publisher.
+
+```java
+public static void main(String[] args) {
+    // Deezpatch implements the Publisher interface.
+    Deezpatch deezpatch = Deezpatch.builder()
+        .instanceProvider(applicationContext::getBean)
+        .events(config -> config.register(
+            GreetedEventHandler.java
+        ))
+        .build();
+
+    // Publish event!
+    deezpatch.publish(new GreetedEvent("Hi Jay!"));
+}
+```
