@@ -1,5 +1,6 @@
 package io.github.joeljeremy7.deezpatch.core.internal;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -9,8 +10,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Annotated elements must not be used by any external code. 
- * They might be changed or removed without prior notice.
+ * 
+ * <h2>Annotated elements might be changed or removed without prior notice.</h2>
  */
+@Documented
 @Target({ TYPE, PACKAGE })
 @Retention(RUNTIME)
+@Internal
 public @interface Internal {}
