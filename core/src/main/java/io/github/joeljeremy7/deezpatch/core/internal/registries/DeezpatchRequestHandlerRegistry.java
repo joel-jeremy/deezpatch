@@ -11,12 +11,13 @@ import io.github.joeljeremy7.deezpatch.core.internal.Internal;
 import io.github.joeljeremy7.deezpatch.core.internal.LambdaFactory;
 import io.github.joeljeremy7.deezpatch.core.internal.RequestHandlerMethod;
 import io.github.joeljeremy7.deezpatch.core.internal.VoidRequestHandlerMethod;
-import io.github.joeljeremy7.deezpatch.core.internal.WeakConcurrentMap;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.Map;
 import java.util.Optional;
+import java.util.WeakHashMap;
 
 import static java.util.Objects.requireNonNull;
 
@@ -34,8 +35,8 @@ public class DeezpatchRequestHandlerRegistry
      * Map key is the request type. It returns another map whose key is the result type.
      * The second map returns the request handler mapped to the result type.
      */
-    private final WeakConcurrentMap<Type, WeakConcurrentMap<Type, RegisteredRequestHandler<?,?>>>
-        mappingsByRequestType = new WeakConcurrentMap<>();
+    private final Map<Type, Map<Type, RegisteredRequestHandler<?,?>>>
+        mappingsByRequestType = new WeakHashMap<>();
     
     private final InstanceProvider instanceProvider;
 
@@ -52,7 +53,7 @@ public class DeezpatchRequestHandlerRegistry
     @Override
     public DeezpatchRequestHandlerRegistry register(Class<?>... requestHandlerClasses) {
         requireNonNull(requestHandlerClasses);
-
+        
         for (Class<?> requestHandlerClass : requestHandlerClasses) {
             Method[] methods = requestHandlerClass.getMethods();
             // Register all methods marked with @RequestHandler.
@@ -88,7 +89,7 @@ public class DeezpatchRequestHandlerRegistry
     ) {
         requireNonNull(requestKey);
 
-        WeakConcurrentMap<Type, RegisteredRequestHandler<?,?>> handlersByResultType = 
+        Map<Type, RegisteredRequestHandler<?,?>> handlersByResultType = 
             mappingsByRequestType.get(requestKey.requestType());
 
         if (handlersByResultType == null) {
@@ -111,10 +112,10 @@ public class DeezpatchRequestHandlerRegistry
             instanceProvider
         );
 
-        WeakConcurrentMap<Type, RegisteredRequestHandler<?,?>> handlersByResultType = 
+        Map<Type, RegisteredRequestHandler<?,?>> handlersByResultType = 
             mappingsByRequestType.computeIfAbsent(
                 requestType.requestType(), 
-                k -> new WeakConcurrentMap<>()
+                k -> new WeakHashMap<>()
             );
 
         if (handlersByResultType.putIfAbsent(requestType.resultType(), builtHandler) != null) {
