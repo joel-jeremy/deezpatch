@@ -49,7 +49,7 @@ module foo.bar {
 
 ## 🚀 Performance
 
-What differentiates Deezpatch from other messaging/dispatch libraries? The library utilizes the benefits provided by [java.lang.invoke.LambdaMetafactory](https://docs.oracle.com/javase/8/docs/api/java/lang/invoke/LambdaMetafactory.html) to avoid the cost of invoking methods reflectively. This results in performance close to directly invoking the methods.
+What differentiates Deezpatch from other messaging/dispatch libraries? The library takes advantage of the benefits provided by [java.lang.invoke.LambdaMetafactory](https://docs.oracle.com/javase/8/docs/api/java/lang/invoke/LambdaMetafactory.html) to avoid the cost of invoking methods reflectively. This results in performance close to directly invoking the methods! 
 
 ### [Java 11 Benchmarks](https://jmh.morethan.io/?source=https://raw.githubusercontent.com/joeljeremy7/deezpatch/main/core/src/jmh/java/io/github/joeljeremy7/deezpatch/core/benchmarks/results-java11.json)
 
@@ -118,7 +118,7 @@ public static void main(String[] args) {
         .build();
 
     // Send command!
-    deezpatch.send(new GreetCommand("Jay"));
+    deezpatch.send(new GreetCommand("Deez"));
 
     // Send query!
     Optional<Pong> pong = deezpatch.send(new PingQuery());
@@ -147,7 +147,7 @@ public class GreetedEvent implements Event {
 
 Events are handled by event handlers. Event handlers can be registered through the use of the [@EventHandler](core/src/main/java/io/github/joeljeremy7/deezpatch/core/EventHandler.java) annotation.
 
-An event can zero or more event handlers.
+An event can have zero or more event handlers.
 
 ```java
 public class GreetedEventHandler {
@@ -157,13 +157,13 @@ public class GreetedEventHandler {
     }
 
     @EventHandler
-    public void sayHey(GreetedEvent event) {
-        // Well, hey!
+    public void sayKumusta(GreetedEvent event) {
+        // Well, kumusta?
     }
 
     @EventHandler
-    public void sayKumusta(GreetedEvent event) {
-        // Well, kumusta?
+    public void sayGotEm(GreetedEvent event) {
+        // Got 'em! 
     }
 }
 ```
@@ -183,6 +183,6 @@ public static void main(String[] args) {
         .build();
 
     // Publish event!
-    deezpatch.publish(new GreetedEvent("Hi Jay!"));
+    deezpatch.publish(new GreetedEvent("Hi from Deez!"));
 }
 ```
