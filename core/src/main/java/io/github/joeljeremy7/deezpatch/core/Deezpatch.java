@@ -56,7 +56,7 @@ public class Deezpatch implements Dispatcher, Publisher {
         
         try {
             return requestHandlerInvocationStrategy.invoke(requestHandler, request);
-        } catch (RuntimeException ex) {
+        } catch (Exception ex) {
             LOGGER.log(
                 Level.ERROR, 
                 () -> "Exception occurred while dispatching request " + 
@@ -78,20 +78,18 @@ public class Deezpatch implements Dispatcher, Publisher {
         List<RegisteredEventHandler<T>> eventHandlers = 
             eventHandlerProvider.getEventHandlersFor(eventType);
         
-        for (RegisteredEventHandler<T> eventHandler : eventHandlers) {
-            try {
-                eventHandlerInvocationStrategy.invoke(eventHandler, event);
-            } catch (RuntimeException ex) {
-                LOGGER.log(
-                    Level.ERROR, 
-                    () -> "Exception occurred while dispatching event " + 
-                        event.getClass().getName() + " to event handler " + 
-                        eventHandler + ".",
-                    ex
-                );
+        try {
+            eventHandlerInvocationStrategy.invokeAll(eventHandlers, event);
+        } catch (Exception ex) {
+            LOGGER.log(
+                Level.ERROR, 
+                () -> "Exception occurred while dispatching event " + 
+                    event.getClass().getName() + " to event handlers " + 
+                    eventHandlers + ".",
+                ex
+            );
 
-                throw ex;
-            }
+            throw ex;
         }
     }
 
@@ -277,7 +275,7 @@ public class Deezpatch implements Dispatcher, Publisher {
          * 
          * @param <T> The request type.
          * @param <R> The result type.
-         * @param requestHandler The request handler.
+         * @param requestHandler The request handler to invoke.
          * @param request The dispatched request.
          * @return The request result.
          */
@@ -292,14 +290,14 @@ public class Deezpatch implements Dispatcher, Publisher {
      */
     public static interface EventHandlerInvocationStrategy {
         /**
-         * Invoke the event handler.
+         * Invoke all the event handlers.
          * 
          * @param <T> The event type.
-         * @param eventHandler The event handler.
+         * @param eventHandlers The event handlers to invoke.
          * @param event The dispatched event.
          */
-        <T extends Event> void invoke(
-            RegisteredEventHandler<T> eventHandler,
+        <T extends Event> void invokeAll(
+            List<RegisteredEventHandler<T>> eventHandlers,
             T event
         );
     }

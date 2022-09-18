@@ -1,10 +1,12 @@
 package io.github.joeljeremy7.deezpatch.core.invocationstrategies;
 
+import io.github.joeljeremy7.deezpatch.core.RegisteredEventHandler;
 import io.github.joeljeremy7.deezpatch.core.testentities.TestEvent;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -14,15 +16,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SyncEventHandlerInvocationStrategyTests {
     @Nested
-    class InvokeMethod {
+    class InvokeAllMethod {
         @Test
         @DisplayName("should synchronously invoke the registered event handler")
         void test1() {
             AtomicBoolean handlerInvoked = new AtomicBoolean();
             var strategy = new SyncEventHandlerInvocationStrategy();
 
-            strategy.invoke(
-                e -> handlerInvoked.set(true), 
+            strategy.invokeAll(
+                List.of(e -> handlerInvoked.set(true)), 
                 new TestEvent("Test")
             );
 
@@ -36,8 +38,8 @@ public class SyncEventHandlerInvocationStrategyTests {
             var strategy = new SyncEventHandlerInvocationStrategy();
 
             var event = new TestEvent("Test");
-            strategy.invoke(
-                e -> eventRef.set(e), 
+            strategy.invokeAll(
+                List.of(e -> eventRef.set(e)), 
                 event
             );
 
@@ -51,10 +53,13 @@ public class SyncEventHandlerInvocationStrategyTests {
             var strategy = new SyncEventHandlerInvocationStrategy();
             var event = new TestEvent("Test");
 
+            List<RegisteredEventHandler<TestEvent>> eventHandlers =
+                List.of(e -> { throw exception; });
+
             RuntimeException thrown = assertThrows(
                 RuntimeException.class, 
-                () -> strategy.invoke(
-                    e -> { throw exception; }, 
+                () -> strategy.invokeAll(
+                    eventHandlers, 
                     event
                 )
             );

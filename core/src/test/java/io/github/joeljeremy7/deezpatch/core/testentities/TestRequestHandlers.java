@@ -2,7 +2,6 @@ package io.github.joeljeremy7.deezpatch.core.testentities;
 
 import io.github.joeljeremy7.deezpatch.core.RequestHandler;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class TestRequestHandlers {
@@ -134,7 +133,7 @@ public class TestRequestHandlers {
         @RequestHandler
         public List<String> handle(ListRequest request) {
             track(request);
-            return Arrays.asList(request.parameter().split(","));
+            return List.of(request.parameter().split(","));
         }
     }
 

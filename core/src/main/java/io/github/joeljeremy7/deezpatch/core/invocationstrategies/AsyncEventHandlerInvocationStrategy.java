@@ -4,6 +4,7 @@ import io.github.joeljeremy7.deezpatch.core.Deezpatch.EventHandlerInvocationStra
 
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 import static java.util.Objects.requireNonNull;
@@ -41,11 +42,13 @@ public class AsyncEventHandlerInvocationStrategy
 
     /** {@inheritDoc} */
     @Override
-    public <T extends Event> void invoke(
-            RegisteredEventHandler<T> eventHandler,
+    public <T extends Event> void invokeAll(
+            List<RegisteredEventHandler<T>> eventHandlers,
             T event
     ) {
-        asyncInvoke(eventHandler, event);
+        for (RegisteredEventHandler<T> eventHandler : eventHandlers) {
+            asyncInvoke(eventHandler, event);
+        }
     }
 
     private <T extends Event> void asyncInvoke(
@@ -55,7 +58,7 @@ public class AsyncEventHandlerInvocationStrategy
         executorService.execute(() -> {
             try {
                 eventHandler.invoke(event);
-            } catch (RuntimeException ex) {
+            } catch (Exception ex) {
                 LOGGER.log(
                     Level.ERROR, 
                     () -> "Exception occurred while asynchronously dispatching event " + 
