@@ -2,6 +2,9 @@ package io.github.joeljeremy7.deezpatch.core.invocationstrategies;
 
 import io.github.joeljeremy7.deezpatch.core.Deezpatch;
 import io.github.joeljeremy7.deezpatch.core.Deezpatch.EventHandlerInvocationStrategy;
+
+import java.util.List;
+
 import io.github.joeljeremy7.deezpatch.core.Event;
 import io.github.joeljeremy7.deezpatch.core.RegisteredEventHandler;
 
@@ -14,10 +17,12 @@ public class SyncEventHandlerInvocationStrategy
     
     /** {@inheritDoc} */
     @Override
-    public <T extends Event> void invoke(
-            RegisteredEventHandler<T> eventHandler,
+    public <T extends Event> void invokeAll(
+            List<RegisteredEventHandler<T>> eventHandlers,
             T event
     ) {
-        eventHandler.invoke(event);
+        for (RegisteredEventHandler<T> eventHandler : eventHandlers) {
+            eventHandler.invoke(event);
+        }
     }
 }

@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
@@ -229,7 +230,7 @@ public class DeezpatchTests {
         @DisplayName("should throw when request argument is null")
         void test1() {
             var deezpatch = buildDeezpatch(
-                Arrays.asList(TestRequestHandlers.primitiveRequestHandler()),
+                List.of(TestRequestHandlers.primitiveRequestHandler()),
                 Collections.emptyList()
             );
             
@@ -244,7 +245,7 @@ public class DeezpatchTests {
         void test2() {
             var requestHandler = TestRequestHandlers.primitiveRequestHandler();
             var deezpatch = buildDeezpatch(
-                Arrays.asList(requestHandler),
+                List.of(requestHandler),
                 Collections.emptyList()
             );
             
@@ -284,7 +285,7 @@ public class DeezpatchTests {
             var throwingRequestHandler = 
                 TestRequestHandlers.throwingIntegerRequestHandler(exception);
             var deezpatch = buildDeezpatch(
-                Arrays.asList(throwingRequestHandler),
+                List.of(throwingRequestHandler),
                 Collections.emptyList()
             );
 
@@ -320,7 +321,7 @@ public class DeezpatchTests {
                 };
 
             var deezpatch = buildDeezpatch(
-                Arrays.asList(requestHandler),
+                List.of(requestHandler),
                 Collections.emptyList(),
                 invocationStrategy, // Custom request handler invocation strategy
                 new SyncEventHandlerInvocationStrategy()
@@ -344,7 +345,7 @@ public class DeezpatchTests {
         void test6() {
             var voidRequestHandler = TestRequestHandlers.voidRequestHandler();
             var deezpatch = buildDeezpatch(
-                Arrays.asList(voidRequestHandler),
+                List.of(voidRequestHandler),
                 Collections.emptyList()
             );
             
@@ -369,7 +370,7 @@ public class DeezpatchTests {
             var throwingVoidRequestHandler = 
                 TestRequestHandlers.throwingVoidRequestHandler(exception);
             var deezpatch = buildDeezpatch(
-                Arrays.asList(throwingVoidRequestHandler),
+                List.of(throwingVoidRequestHandler),
                 Collections.emptyList()
             );
 
@@ -392,7 +393,7 @@ public class DeezpatchTests {
         void test1() {
             var deezpatch = buildDeezpatch(
                 Collections.emptyList(),
-                Arrays.asList(TestEventHandlers.testEventHandler())
+                List.of(TestEventHandlers.testEventHandler())
             );
             
             assertThrows(
@@ -407,7 +408,7 @@ public class DeezpatchTests {
             var testEventHandler = TestEventHandlers.testEventHandler();
             var deezpatch = buildDeezpatch(
                 Collections.emptyList(),
-                Arrays.asList(testEventHandler)
+                List.of(testEventHandler)
             );
             
             var testEvent = new TestEvent("Test"); 
@@ -448,7 +449,7 @@ public class DeezpatchTests {
                 TestEventHandlers.throwingEventHandler(exception);
             var deezpatch = buildDeezpatch(
                 Collections.emptyList(),
-                Arrays.asList(throwingEventHandler)
+                List.of(throwingEventHandler)
             );
 
             var testEvent = new TestEvent("Test");
@@ -473,18 +474,18 @@ public class DeezpatchTests {
             EventHandlerInvocationStrategy invocationStrategy =
                 new EventHandlerInvocationStrategy() {
                     @Override
-                    public <T extends Event> void invoke(
-                            RegisteredEventHandler<T> eventHandler,
+                    public <T extends Event> void invokeAll(
+                            List<RegisteredEventHandler<T>> eventHandlers,
                             T event
                     ) {
                         invocationStrategyInvoked.set(true);
-                        eventHandler.invoke(event);
+                        eventHandlers.forEach(e -> e.invoke(event));
                     }
                 };
 
             var deezpatch = buildDeezpatch(
                 Collections.emptyList(),
-                Arrays.asList(testEventHandler),
+                List.of(testEventHandler),
                 new SyncRequestHandlerInvocationStrategy(),
                 invocationStrategy // Custom event handler invocation strategy
 

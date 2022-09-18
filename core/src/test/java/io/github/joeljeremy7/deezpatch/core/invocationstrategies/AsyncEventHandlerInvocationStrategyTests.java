@@ -1,11 +1,13 @@
 package io.github.joeljeremy7.deezpatch.core.invocationstrategies;
 
 import io.github.joeljeremy7.deezpatch.core.Event;
+import io.github.joeljeremy7.deezpatch.core.RegisteredEventHandler;
 import io.github.joeljeremy7.deezpatch.core.testentities.TestEvent;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,7 +24,7 @@ public class AsyncEventHandlerInvocationStrategyTests {
         Executors.newSingleThreadExecutor();
 
     @Nested
-    class InvokeMethod {
+    class InvokeAllMethod {
         @Test
         @DisplayName("should asynchronously invoke the registered event handler")
         void test1() throws InterruptedException {
@@ -33,11 +35,11 @@ public class AsyncEventHandlerInvocationStrategyTests {
                 (e, ex) -> {}
             );
 
-            strategy.invoke(
-                e -> {
+            strategy.invokeAll(
+                List.of(e -> {
                     handlerInvoked.set(true);
                     countDownLatch.countDown();
-                }, 
+                }), 
                 new TestEvent("Test")
             );
 
@@ -56,11 +58,11 @@ public class AsyncEventHandlerInvocationStrategyTests {
             );
 
             var event = new TestEvent("Test");
-            strategy.invoke(
-                e -> {
+            strategy.invokeAll(
+                List.of(e -> {
                     eventRef.set(e);
                     countDownLatch.countDown();
-                }, 
+                }), 
                 event
             );
 
@@ -77,9 +79,12 @@ public class AsyncEventHandlerInvocationStrategyTests {
                 (e, ex) -> {}
             );
 
+            List<RegisteredEventHandler<TestEvent>> eventHandlers = 
+                List.of(e -> { throw exception; });
+
             assertDoesNotThrow(
-                () -> strategy.invoke(
-                    e -> { throw exception; }, 
+                () -> strategy.invokeAll(
+                    eventHandlers, 
                     new TestEvent("Test")
                 )
             );
@@ -103,9 +108,12 @@ public class AsyncEventHandlerInvocationStrategyTests {
                 exceptionHandler
             );
 
+            List<RegisteredEventHandler<TestEvent>> eventHandlers = 
+                List.of(e -> { throw exception; });
+            
             assertDoesNotThrow(
-                () -> strategy.invoke(
-                    e -> { throw exception; }, 
+                () -> strategy.invokeAll(
+                    eventHandlers, 
                     new TestEvent("Test")
                 )
             );
@@ -133,9 +141,13 @@ public class AsyncEventHandlerInvocationStrategyTests {
             );
 
             var event = new TestEvent("Test");
+
+            List<RegisteredEventHandler<TestEvent>> eventHandlers = 
+                List.of(e -> { throw exception; });
+
             assertDoesNotThrow(
-                () -> strategy.invoke(
-                    e -> { throw exception; }, 
+                () -> strategy.invokeAll(
+                    eventHandlers, 
                     event
                 )
             );
