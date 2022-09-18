@@ -38,8 +38,8 @@ tasks.withType(JavaCompile).configureEach { task ->
         enabled = task.name.equals("compileJava")
 
         def enabledChecks = [
-            "AssertFalse", "BuilderReturnThis", "CatchingUnchecked", "CheckedExceptionNotThrown", 
-            "ClassName", "ComparisonContractViolated", "DepAnn", "EmptyIf", "EqualsBrokenForNull",
+            "AssertFalse", "BuilderReturnThis", "CheckedExceptionNotThrown", "ClassName", 
+            "ComparisonContractViolated", "DepAnn", "EmptyIf", "EqualsBrokenForNull",
             "FieldCanBeFinal", "FieldCanBeLocal", "FieldCanBeStatic", "ForEachIterable",
             "FuzzyEqualsShouldNotBeUsedInEqualsMethod", "FunctionalInterfaceClash",
             "IterablePathParameter", "LongLiteralLowerCaseSuffix", "MissingBraces",
@@ -53,7 +53,7 @@ tasks.withType(JavaCompile).configureEach { task ->
         enabledChecks.each { enable(it) }
 
         def disabledChecks = [
-            "CanIgnoreReturnValueSuggester"
+            "CanIgnoreReturnValueSuggester", "CatchingUnchecked"
         ]
         disabledChecks.each { disable(it) }
 
