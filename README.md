@@ -86,6 +86,8 @@ Requests are handled by request handlers. Request handlers can be registered thr
 
 A request must only have a single request handler.
 
+**(`@RequestHandler`s fully support methods with `void` return types! No need to set method return type to `Void` and return `null` for no reason.)**
+
 ```java
 public class GreetCommandHandler {
     @RequestHandler
