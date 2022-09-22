@@ -1,12 +1,13 @@
 plugins {
-    id "io.github.gradle-nexus.publish-plugin"
-    id "com.github.kt3k.coveralls"
-    id "io.snyk.gradle.plugin.snykplugin"
-    id "org.sonarqube"
-    id "com.github.ben-manes.versions"
-    id "me.champeau.jmh" apply false
-    id "net.ltgt.errorprone" apply false
-    id "net.ltgt.nullaway" apply false
+  id "io.github.gradle-nexus.publish-plugin"
+  id "com.github.kt3k.coveralls"
+  id "io.snyk.gradle.plugin.snykplugin"
+  id "org.sonarqube"
+  id "com.github.ben-manes.versions"
+  id "me.champeau.jmh" apply false
+  id "net.ltgt.errorprone" apply false
+  id "net.ltgt.nullaway" apply false
+  id "com.diffplug.spotless" apply false
 }
 
 apply from: "${rootDir}/gradle/reporting.gradle"
@@ -16,69 +17,69 @@ apply from: "${rootDir}/gradle/sonarqube.gradle"
 apply from: "${rootDir}/gradle/dependency-updates.gradle"
 
 allprojects {
-    apply from: "${rootDir}/gradle/dependency-versions.gradle"
+  apply from: "${rootDir}/gradle/dependency-versions.gradle"
 
-    group = "io.github.joeljeremy7.deezpatch"
+  group = "io.github.joeljeremy7.deezpatch"
 
-    def snapshotSuffix = rootProject.hasProperty("release") ? "" : "-SNAPSHOT"
-    version = "1.0.0-alpha.4" + snapshotSuffix
+  def snapshotSuffix = rootProject.hasProperty("release") ? "" : "-SNAPSHOT"
+  version = "1.0.0-alpha.4" + snapshotSuffix
 
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
+  repositories {
+    mavenLocal()
+    mavenCentral()
+  }
 }
 
 def javaProjects = subprojects.findAll { new File(it.projectDir, "src").exists() }
 
 configure(javaProjects) {
-    apply plugin: "java-library"
-    apply plugin: "java-test-fixtures"
+  apply plugin: "java-library"
+  apply plugin: "java-test-fixtures"
 
-    apply from: "${rootDir}/gradle/publications.gradle"
-    apply from: "${rootDir}/gradle/code-quality.gradle"
-    // apply from: "${rootDir}/gradle/multi-jvm-tests.gradle"
+  apply from: "${rootDir}/gradle/publications.gradle"
+  apply from: "${rootDir}/gradle/code-quality.gradle"
+  // apply from: "${rootDir}/gradle/multi-jvm-tests.gradle"
 
-    testing {
-        suites {
-            integrationTest(JvmTestSuite) {
-                testType = TestSuiteType.INTEGRATION_TEST
-                targets {
-                    all {
-                        testTask.configure {
-                            shouldRunAfter test
-                        }
-                    }
-                }
+  testing {
+    suites {
+      integrationTest(JvmTestSuite) {
+        testType = TestSuiteType.INTEGRATION_TEST
+        targets {
+          all {
+            testTask.configure {
+              shouldRunAfter test
             }
+          }
         }
-        suites.configureEach {
-            useJUnitJupiter("${versions.junitJupiter}")
-        }
+      }
     }
-
-    java {
-        archivesBaseName = rootProject.relativeProjectPath(project.path).replace(":", "-")
-
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(11)
-        }
+    suites.configureEach {
+      useJUnitJupiter("${versions.junitJupiter}")
     }
+  }
 
-    tasks.withType(JavaCompile).configureEach {
-        // For some reason, options.release flag doesn't work with compileJava.
-        options.release = 11
-    }
+  java {
+    archivesBaseName = rootProject.relativeProjectPath(project.path).replace(":", "-")
 
-    javadoc {
-        configure(options) {
-            tags(
-                "apiNote:a:API Note:",
-                "implSpec:a:Implementation Requirements:",
-                "implNote:a:Implementation Note:"
-            )
-        }
+    toolchain {
+      languageVersion = JavaLanguageVersion.of(11)
     }
+  }
+
+  tasks.withType(JavaCompile).configureEach {
+    // For some reason, options.release flag doesn't work with compileJava.
+    options.release = 11
+  }
+
+  javadoc {
+    configure(options) {
+      tags(
+        "apiNote:a:API Note:",
+        "implSpec:a:Implementation Requirements:",
+        "implNote:a:Implementation Note:"
+      )
+    }
+  }
 }
 
 if (project.hasProperty("ossrh")) {

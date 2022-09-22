@@ -3,23 +3,23 @@ apply plugin: "me.champeau.jmh"
 description = "Deezpatch Core"
 
 jar {
-    manifest {
-        attributes(
-            "Automatic-Module-Name": "io.github.joeljeremy7.deezpatch.core"
-        )
-    }
+  manifest {
+    attributes(
+      "Automatic-Module-Name": "io.github.joeljeremy7.deezpatch.core"
+    )
+  }
 }
 
 dependencies {
-    jmh "org.springframework:spring-context:5.3.23"
-    jmh "net.sizovs:pipelinr:0.7"
-    jmh "org.greenrobot:eventbus-java:3.3.1"
+  jmh "org.springframework:spring-context:5.3.23"
+  jmh "net.sizovs:pipelinr:0.7"
+  jmh "org.greenrobot:eventbus-java:3.3.1"
 }
 
 jmh {
-    jmhVersion = "1.35"
-    humanOutputFile = project.file("${project.buildDir}/reports/jmh/human.txt")
-    resultsFile = project.file("${project.buildDir}/reports/jmh/results.json")
-    resultFormat = "JSON"
-    jvmArgs = [ "-Xmx2G" ]
+  jmhVersion = "1.35"
+  humanOutputFile = project.file("${project.buildDir}/reports/jmh/human.txt")
+  resultsFile = project.file("${project.buildDir}/reports/jmh/results.json")
+  resultFormat = "JSON"
+  jvmArgs = [ "-Xmx2G" ]
 }

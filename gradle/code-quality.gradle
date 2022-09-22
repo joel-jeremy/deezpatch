@@ -1,67 +1,80 @@
 // Copy classpath of root project
 buildscript {
-    dependencies {
-        classpath files(rootProject.buildscript.configurations.classpath) 
-    } 
+  dependencies {
+    classpath files(rootProject.buildscript.configurations.classpath) 
+  } 
 }
 
 apply plugin: "jacoco"
 apply plugin: "net.ltgt.errorprone"
 apply plugin: "net.ltgt.nullaway"
+apply plugin: "com.diffplug.spotless"
 
 dependencies {
-    errorprone "com.google.errorprone:error_prone_core:${versions.errorprone}"
-    errorprone "com.uber.nullaway:nullaway:${versions.nullaway}"
-    compileOnly "org.checkerframework:checker-qual:${versions.checkerframework}"
+  errorprone "com.google.errorprone:error_prone_core:${versions.errorprone}"
+  errorprone "com.uber.nullaway:nullaway:${versions.nullaway}"
+  compileOnly "org.checkerframework:checker-qual:${versions.checkerframework}"
 }
 
 jacoco {
-    toolVersion = "${versions.jacoco}"
+  toolVersion = "${versions.jacoco}"
 }
 
 jacocoTestCoverageVerification { 
-    violationRules { 
-        rule { 
-            limit { 
-                minimum = 1
-            } 
-        } 
+  violationRules { 
+    rule { 
+      limit { 
+        minimum = 1
+      } 
     } 
+  } 
 }
 tasks.named("check").configure {
-    finalizedBy jacocoTestCoverageVerification
+  finalizedBy jacocoTestCoverageVerification
 }
 
 tasks.withType(JavaCompile).configureEach { task ->
-    options.errorprone {
-        // Only apply to main source set (not test,jmh)
-        enabled = task.name.equals("compileJava")
+  options.errorprone {
+    // Only apply to main source set (not test,jmh)
+    enabled = task.name.equals("compileJava")
 
-        def enabledChecks = [
-            "AssertFalse", "BuilderReturnThis", "CheckedExceptionNotThrown", "ClassName", 
-            "ComparisonContractViolated", "DepAnn", "EmptyIf", "EqualsBrokenForNull",
-            "FieldCanBeFinal", "FieldCanBeLocal", "FieldCanBeStatic", "ForEachIterable",
-            "FuzzyEqualsShouldNotBeUsedInEqualsMethod", "FunctionalInterfaceClash",
-            "IterablePathParameter", "LongLiteralLowerCaseSuffix", "MissingBraces",
-            "MissingDefault", "MixedArrayDimensions", "NoAllocation", "PackageLocation", 
-            "PreferredInterfaceType", "RedundantThrows", "RemoveUnusedImports", 
-            "ReturnsNullCollection", "SelfAlwaysReturnsThis", "StronglyTypeByteString", 
-            "StronglyTypeTime", "SwitchDefault", "TimeUnitMismatch", "TransientMisuse", 
-            "UnnecessarilyVisible", "UnnecessaryAnonymousClass", "UnnecessaryOptionalGet", 
-            "UnsafeLocaleUsage", "UnusedTypeParameter", "UsingJsr305CheckReturnValue"
-        ]
-        enabledChecks.each { enable(it) }
+    def enabledChecks = [
+      "AssertFalse", "BuilderReturnThis", "CheckedExceptionNotThrown", "ClassName", 
+      "ComparisonContractViolated", "DepAnn", "EmptyIf", "EqualsBrokenForNull",
+      "FieldCanBeFinal", "FieldCanBeLocal", "FieldCanBeStatic", "ForEachIterable",
+      "FuzzyEqualsShouldNotBeUsedInEqualsMethod", "FunctionalInterfaceClash",
+      "IterablePathParameter", "LongLiteralLowerCaseSuffix", "MissingBraces",
+      "MissingDefault", "MixedArrayDimensions", "NoAllocation", "PackageLocation", 
+      "PreferredInterfaceType", "RedundantThrows", "RemoveUnusedImports", 
+      "ReturnsNullCollection", "SelfAlwaysReturnsThis", "StronglyTypeByteString", 
+      "StronglyTypeTime", "SwitchDefault", "TimeUnitMismatch", "TransientMisuse", 
+      "UnnecessarilyVisible", "UnnecessaryAnonymousClass", "UnnecessaryOptionalGet", 
+      "UnsafeLocaleUsage", "UnusedTypeParameter", "UsingJsr305CheckReturnValue"
+    ]
+    enabledChecks.each { enable(it) }
 
-        def disabledChecks = [
-            "CanIgnoreReturnValueSuggester", "CatchingUnchecked"
-        ]
-        disabledChecks.each { disable(it) }
+    def disabledChecks = [
+      "CanIgnoreReturnValueSuggester", "CatchingUnchecked"
+    ]
+    disabledChecks.each { disable(it) }
 
-        nullaway {
-            severity = net.ltgt.gradle.errorprone.CheckSeverity.ERROR
-            annotatedPackages.add("io.github.joeljeremy7.deezpatch")
-            checkOptionalEmptiness = true
-            suggestSuppressions = true
-        }
+    nullaway {
+      severity = net.ltgt.gradle.errorprone.CheckSeverity.ERROR
+      annotatedPackages.add("io.github.joeljeremy7.deezpatch")
+      checkOptionalEmptiness = true
+      suggestSuppressions = true
     }
+  }
+}
+
+spotless {
+  enforceCheck System.properties.containsKey("spotless")
+  java {
+    // Generated code should not be subjected to spotless.
+    target "src/*/java/**/*.java"
+    // Only format files which have changed since origin/main.
+    // ratchetFrom "origin/main"
+    toggleOffOn()
+    googleJavaFormat()
+  }
 }
