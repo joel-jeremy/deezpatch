@@ -3,18 +3,18 @@ package io.github.joeljeremy7.deezpatch.core.internal;
 import io.github.joeljeremy7.deezpatch.core.RequestHandler;
 
 /**
- * Functional interface used in building lambdas via {@code LambdaMetafactory}.
- * This is for non-void-returning request handler methods.
+ * Functional interface used in building lambdas via {@code LambdaMetafactory}. This is for
+ * non-void-returning request handler methods.
  */
 @FunctionalInterface
 @Internal
 public interface RequestHandlerMethod {
-    /**
-     * Invoke the actual method annotated with {@link RequestHandler}.
-     * 
-     * @param requestHandlerInstance The request handler instance.
-     * @param request The dispatched request.
-     * @return The request result.
-     */
-    Object invoke(Object requestHandlerInstance, Object request);
+  /**
+   * Invoke the actual method annotated with {@link RequestHandler}.
+   *
+   * @param requestHandlerInstance The request handler instance.
+   * @param request The dispatched request.
+   * @return The request result.
+   */
+  Object invoke(Object requestHandlerInstance, Object request);
 }

@@ -4,8 +4,8 @@ apply plugin: "maven-publish"
 apply plugin: "signing"
 
 java {
-    withJavadocJar()
-    withSourcesJar()
+  withJavadocJar()
+  withSourcesJar()
 }
 
 // Do not publish test fixtures.
@@ -13,85 +13,85 @@ components.java.withVariantsFromConfiguration(configurations.testFixturesApiElem
 components.java.withVariantsFromConfiguration(configurations.testFixturesRuntimeElements) { skip() }
 
 publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            afterEvaluate {
-                artifactId = archivesBaseName
-            }
-            from components.java
+  publications {
+    mavenJava(MavenPublication) {
+      afterEvaluate {
+        artifactId = archivesBaseName
+      }
+      from components.java
 
-            pom {
-                afterEvaluate {
-                    name = project.description
-					description = project.description
-				}
-                packaging = "jar"
-                url = "https://github.com/joeljeremy7/deezpatch"
-
-                licenses {
-                    license {
-                        name = "The Apache License, Version 2.0"
-                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = "joeljeremy7"
-                        name = "Joel Jeremy M. Marquez"
-                        email = "joeljeremy.marquez@gmail.com"
-                        roles = [ "owner", "developer" ]
-                    }
-                }
-
-                scm {
-                    connection = "scm:git:https://github.com/joeljeremy7/deezpatch.git"
-                    developerConnection = "scm:git:https://github.com/joeljeremy7/deezpatch.git"
-                    url = "https://github.com/joeljeremy7/deezpatch"
-                }
-            }
+      pom {
+        afterEvaluate {
+          name = project.description
+          description = project.description
         }
-    }
+        packaging = "jar"
+        url = "https://github.com/joeljeremy7/deezpatch"
 
-    if (project.hasProperty("github-packages")) {
-        repositories {
-            maven {
-                url = "https://maven.pkg.github.com/joeljeremy7/deezpatch"
-                name = "github-packages"
-                credentials {
-                    username = System.getenv("GITHUB_ACTOR") ?: property("githubActor")
-                    password = System.getenv("GITHUB_TOKEN") ?: property("githubToken")
-                }
-            }
+        licenses {
+          license {
+            name = "The Apache License, Version 2.0"
+            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+          }
         }
+
+        developers {
+          developer {
+            id = "joeljeremy7"
+            name = "Joel Jeremy M. Marquez"
+            email = "joeljeremy.marquez@gmail.com"
+            roles = [ "owner", "developer" ]
+          }
+        }
+
+        scm {
+          connection = "scm:git:https://github.com/joeljeremy7/deezpatch.git"
+          developerConnection = "scm:git:https://github.com/joeljeremy7/deezpatch.git"
+          url = "https://github.com/joeljeremy7/deezpatch"
+        }
+      }
     }
+  }
+
+  if (project.hasProperty("github-packages")) {
+    repositories {
+      maven {
+        url = "https://maven.pkg.github.com/joeljeremy7/deezpatch"
+        name = "github-packages"
+        credentials {
+          username = System.getenv("GITHUB_ACTOR") ?: property("githubActor")
+          password = System.getenv("GITHUB_TOKEN") ?: property("githubToken")
+        }
+      }
+    }
+  }
 }
 
 if (project.hasProperty("release")) {
-    // If release property is set, do not allow publishing with SNAPSHOT dependencies.
-    Task checkSnapshotDependencies = project.tasks.create("checkSnapshotDependencies", {
-        doFirst {
-            def snapshots = project.configurations.findAll {
-                it.canBeResolved
-            }.resolvedConfiguration.resolvedArtifacts.flatten().findAll {
-                it.moduleVersion.id.version.endsWith("-SNAPSHOT")
-            }.unique()
-            if (!snapshots.isEmpty()) {
-                throw new GradleException(
-                    "Cannot release with SNAPSHOT dependencies: $snapshots.moduleVersion"
-                )
-            }
-        }
-    })
-    project.tasks.publish.dependsOn checkSnapshotDependencies
+  // If release property is set, do not allow publishing with SNAPSHOT dependencies.
+  Task checkSnapshotDependencies = project.tasks.create("checkSnapshotDependencies", {
+    doFirst {
+      def snapshots = project.configurations.findAll {
+        it.canBeResolved
+      }.resolvedConfiguration.resolvedArtifacts.flatten().findAll {
+        it.moduleVersion.id.version.endsWith("-SNAPSHOT")
+      }.unique()
+      if (!snapshots.isEmpty()) {
+        throw new GradleException(
+          "Cannot release with SNAPSHOT dependencies: $snapshots.moduleVersion"
+        )
+      }
+    }
+  })
+  project.tasks.publish.dependsOn checkSnapshotDependencies
 }
 
 signing {
-    required project.hasProperty("ossrh")
+  required project.hasProperty("ossrh")
 
-    def signingKey = findProperty("signingKey")
-    def signingPassword = findProperty("signingPassword")
-    useInMemoryPgpKeys(signingKey, signingPassword)
-    
-    sign publishing.publications.mavenJava
+  def signingKey = findProperty("signingKey")
+  def signingPassword = findProperty("signingPassword")
+  useInMemoryPgpKeys(signingKey, signingPassword)
+  
+  sign publishing.publications.mavenJava
 }

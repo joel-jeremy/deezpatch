@@ -1,14 +1,15 @@
 pluginManagement {
-    plugins {
-        id "io.github.gradle-nexus.publish-plugin" version "${nexusPublishPluginVersion}"
-        id "com.github.kt3k.coveralls" version "${coverallsPluginVersion}"
-        id "io.snyk.gradle.plugin.snykplugin" version "${snykPluginVersion}"
-        id "org.sonarqube" version "${sonarqubePluginVersion}"
-        id "me.champeau.jmh" version "${jmhPluginVersion}"
-        id "net.ltgt.errorprone" version "${errorPronePluginVersion}"
-        id "net.ltgt.nullaway" version "${nullawayPluginVersion}"
-        id "com.github.ben-manes.versions" version "${versionsPluginVersion}"
-    }
+  plugins {
+    id "io.github.gradle-nexus.publish-plugin" version "${nexusPublishPluginVersion}"
+    id "com.github.kt3k.coveralls" version "${coverallsPluginVersion}"
+    id "io.snyk.gradle.plugin.snykplugin" version "${snykPluginVersion}"
+    id "org.sonarqube" version "${sonarqubePluginVersion}"
+    id "me.champeau.jmh" version "${jmhPluginVersion}"
+    id "net.ltgt.errorprone" version "${errorPronePluginVersion}"
+    id "net.ltgt.nullaway" version "${nullawayPluginVersion}"
+    id "com.github.ben-manes.versions" version "${versionsPluginVersion}"
+    id "com.diffplug.spotless" version "${spotlessPluginVersion}"
+  }
 }
 
 rootProject.name = 'deezpatch'

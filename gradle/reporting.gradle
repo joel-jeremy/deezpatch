@@ -2,19 +2,19 @@ apply plugin: "test-report-aggregation"
 apply plugin: "jacoco-report-aggregation"
 
 reporting {
-    reports {
-        testAggregateTestReport(AggregateTestReport) { 
-            testType = TestSuiteType.UNIT_TEST
-        }
-        testCodeCoverageReport(JacocoCoverageReport) { 
-            testType = TestSuiteType.UNIT_TEST
-        }
+  reports {
+    testAggregateTestReport(AggregateTestReport) { 
+      testType = TestSuiteType.UNIT_TEST
     }
+    testCodeCoverageReport(JacocoCoverageReport) { 
+      testType = TestSuiteType.UNIT_TEST
+    }
+  }
 }
 
 def javaProjects = subprojects.findAll { new File(it.projectDir, "src").exists() }
 
 dependencies {
-    testReportAggregation javaProjects
-    jacocoAggregation javaProjects
+  testReportAggregation javaProjects
+  jacocoAggregation javaProjects
 }

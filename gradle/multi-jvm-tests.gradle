@@ -1,29 +1,29 @@
 // Ideally every LTS release (succeeding the version used in source compilation) 
 // plus the latest released non-LTS version.
 def additionalTestRunsOnJvmVersions = 
-    System.getenv("ADDITIONAL_TEST_RUNS_ON_JVM_VERSIONS") ?:
-    System.getProperties().getOrDefault("additionalTestRunsOnJvmVersions", "17,18")
+  System.getenv("ADDITIONAL_TEST_RUNS_ON_JVM_VERSIONS") ?:
+  System.getProperties().getOrDefault("additionalTestRunsOnJvmVersions", "17,18")
 
 additionalTestRunsOnJvmVersions.split(",").findAll({ !it.isEmpty() }).each { javaVersion ->
-    def testTaskName = "testOnJava${javaVersion}"
+  def testTaskName = "testOnJava${javaVersion}"
 
-    tasks.register(testTaskName, Test) {
-        useJUnitPlatform()
+  tasks.register(testTaskName, Test) {
+    useJUnitPlatform()
 
-        javaLauncher = javaToolchains.launcherFor {
-            languageVersion = JavaLanguageVersion.of(javaVersion)
-        }
-
-        if (Integer.valueOf(javaVersion) >= 17) {
-            // We are reflectively setting environment variable in some unit tests.
-            // As of Java 17, this is no longer permitted. We need this flag to re-enable
-            // the unit test hack. We are opening java.util because we are reflectively
-            // accessing the internal mutable map of a Collections.unmodifiableMap instance.
-            jvmArgs = [ "--add-opens=java.base/java.util=ALL-UNNAMED" ]
-        }
+    javaLauncher = javaToolchains.launcherFor {
+      languageVersion = JavaLanguageVersion.of(javaVersion)
     }
 
-    tasks.named("check").configure {
-        dependsOn tasks.named(testTaskName)
+    if (Integer.valueOf(javaVersion) >= 17) {
+      // We are reflectively setting environment variable in some unit tests.
+      // As of Java 17, this is no longer permitted. We need this flag to re-enable
+      // the unit test hack. We are opening java.util because we are reflectively
+      // accessing the internal mutable map of a Collections.unmodifiableMap instance.
+      jvmArgs = [ "--add-opens=java.base/java.util=ALL-UNNAMED" ]
     }
+  }
+
+  tasks.named("check").configure {
+    dependsOn tasks.named(testTaskName)
+  }
 }
