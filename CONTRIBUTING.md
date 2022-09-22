@@ -20,17 +20,17 @@ The project requires Java 11.
 To build the project, run the command:
 
 ```sh
-./gradlew clean build
+./gradlew build
 ```
 
 To create reports, run the commands:
 
 ```sh
-./gradlew clean build testAggregateTestReport
+./gradlew build testAggregateTestReport
 ```
 
 ```sh
-./gradlew clean build testCodeCoverageReport
+./gradlew build testCodeCoverageReport
 ```
 
 ## Development Guidelines
@@ -44,7 +44,9 @@ The project follows the [GitHub flow](https://docs.github.com/en/get-started/qui
 Unit tests in this project follow a specific structure.
 
 - Classes must have a corresponding test class i.e. `Deezpatch` -> `DeezpatchTests`. The test class must be in the exact same java package as the class it corresponds to.
-- Test classes are nested in structure. Each method in the class under test must have a corresponding `@Nested` test class. Each `@Nested` test class must test scenarios that is supported by the method it corresponds to.
+- Test classes are nested in structure. Each method in the class under test must have a corresponding `@Nested` test class.
+- Each `@Nested` test class must test scenarios that is supported by the method it corresponds to via `@Test`.
+- Use `@DisplayName` to describe the scenario being tested by the `@Test` method e.g. `@DisplayName("should throw when x argument is null)`.
 
     ```java
     // Class under test: io.github.joeljeremy7.deezpatcher.core.Deezpatch
