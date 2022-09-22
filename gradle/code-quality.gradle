@@ -73,7 +73,7 @@ spotless {
     // Generated code should not be subjected to spotless.
     target "src/*/java/**/*.java"
     // Only format files which have changed since origin/main.
-    // ratchetFrom "origin/main"
+    ratchetFrom "origin/main"
     toggleOffOn()
     googleJavaFormat()
   }
