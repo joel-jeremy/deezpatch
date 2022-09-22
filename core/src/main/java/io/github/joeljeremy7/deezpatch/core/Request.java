@@ -4,38 +4,64 @@ package io.github.joeljeremy7.deezpatch.core;
  * Marker interface for all requests. For requests to be dispatchable via {@link Dispatcher}, they
  * must implement this interface.
  *
- * @apiNote In cases where no results are expected, {@code Void} must be used as result type e.g.
- *     <blockquote>
- *     <pre>
- * public class CreateMerchant implements Request{@literal <}Void{@literal >} {
- *     private final String merchantId;
+ * <h3>Requests can have a result and the result type is determined by {@link TResult} e.g.</h3>
  *
- *     public CreateMerchant(String merchantId) {
- *         this.merchantId = merchantId;
- *     }
+ * <blockquote>
  *
- *     public String merchantId() {
- *         return merchantId;
- *     }
+ * <pre>
+ * public class GetOrderById implements Request{@literal <}Order{@literal >} {
+ *   private final String orderId;
+ *
+ *   public GetOrderById(String orderId) {
+ *     this.orderId = orderId;
+ *   }
+ *
+ *   public String orderId() {
+ *     return orderId;
+ *   }
  * }
  * </pre>
- *     </blockquote>
  *
- * @apiNote Request implementations with type parameters/type variables are not permitted e.g.
- *     <blockquote>
- *     <pre>
- * public class GetMerchantById{@literal <}T{@literal >} implements Request{@literal <}T{@literal >} {
- *     private final String merchantId;
+ * </blockquote>
  *
- *     public GetMerchantById(String merchantId) {
- *         this.merchantId = merchantId;
- *     }
+ * <h3>In cases where no results are expected, {@code Void} must be used as result type e.g.</h3>
  *
- *     public String merchantId() {
- *         return merchantId;
- *     }
+ * <blockquote>
+ *
+ * <pre>
+ * public class CreateOrder implements Request{@literal <}Void{@literal >} {
+ *   private final String orderId;
+ *
+ *   public CreateOrder(String orderId) {
+ *     this.orderId = orderId;
+ *   }
+ *
+ *   public String orderId() {
+ *     return orderId;
+ *   }
  * }
  * </pre>
- *     </blockquote>
+ *
+ * </blockquote>
+ *
+ * <h3>Request implementations with type parameters/type variables are not permitted e.g.</h3>
+ *
+ * <blockquote>
+ *
+ * <pre>
+ * public class GetOrderById{@literal <}T{@literal >} implements Request{@literal <}T{@literal >} {
+ *   private final String orderId;
+ *
+ *   public GetOrderById(String orderId) {
+ *     this.orderId = orderId;
+ *   }
+ *
+ *   public String orderId() {
+ *     return orderId;
+ *   }
+ * }
+ * </pre>
+ *
+ * </blockquote>
  */
-public interface Request<R> {}
+public interface Request<TResult> {}

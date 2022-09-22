@@ -188,6 +188,7 @@ public class TypeUtilitiesTests {
     @DisplayName("should return true when type is a class")
     void test1() {
       Type type = String.class;
+
       assertTrue(type instanceof Class<?>);
       assertTrue(TypeUtilities.isClass(type));
     }
@@ -217,6 +218,7 @@ public class TypeUtilitiesTests {
     @DisplayName("should return false when type is not a parameterized type")
     void test2() {
       Type type = String.class;
+
       assertFalse(type instanceof ParameterizedType);
       assertFalse(TypeUtilities.isParameterizedType(type));
     }
@@ -237,6 +239,7 @@ public class TypeUtilitiesTests {
     @DisplayName("should return false when type is not a generic array type")
     void test2() {
       Type type = String.class;
+
       assertFalse(type instanceof GenericArrayType);
       assertFalse(TypeUtilities.isGenericArrayType(type));
     }
@@ -257,6 +260,7 @@ public class TypeUtilitiesTests {
     @DisplayName("should return false when type is not a type variable")
     void test2() {
       Type type = String.class;
+
       assertFalse(type instanceof TypeVariable<?>);
       assertFalse(TypeUtilities.isTypeVariable(type));
     }
@@ -284,6 +288,7 @@ public class TypeUtilitiesTests {
     @DisplayName("should return false when type is not a wildcard type")
     void test2() {
       Type type = String.class;
+
       assertFalse(type instanceof WildcardType);
       assertFalse(TypeUtilities.isWildcardType(type));
     }
@@ -324,6 +329,7 @@ public class TypeUtilitiesTests {
     @DisplayName("should return null when type is not a parameterized type")
     void test2() {
       Type type = String.class;
+
       assertFalse(type instanceof ParameterizedType);
       assertNull(TypeUtilities.asParameterizedType(type));
     }
@@ -344,6 +350,7 @@ public class TypeUtilitiesTests {
     @DisplayName("should return null when type is not a generic array type")
     void test2() {
       Type type = String.class;
+
       assertFalse(type instanceof GenericArrayType);
       assertNull(TypeUtilities.asGenericArrayType(type));
     }
@@ -364,6 +371,7 @@ public class TypeUtilitiesTests {
     @DisplayName("should return false when type is not a type variable")
     void test2() {
       Type type = String.class;
+
       assertFalse(type instanceof TypeVariable<?>);
       assertNull(TypeUtilities.asTypeVariable(type));
     }
@@ -391,6 +399,7 @@ public class TypeUtilitiesTests {
     @DisplayName("should return null when type is not a wildcard type")
     void test2() {
       Type type = String.class;
+
       assertFalse(type instanceof WildcardType);
       assertNull(TypeUtilities.asWildcardType(type));
     }
@@ -516,6 +525,7 @@ public class TypeUtilitiesTests {
     void test2() {
       Type parameterizedType = new TypeReference<List<String>>() {}.type();
       Class<?> rawArrayType = TypeUtilities.getRawArrayType(parameterizedType);
+
       assertEquals(List[].class, rawArrayType);
     }
 
@@ -524,6 +534,7 @@ public class TypeUtilitiesTests {
     <T> void test3() {
       Type typeVariable = new TypeReference<T>() {}.type();
       Class<?> rawArrayType = TypeUtilities.getRawArrayType(typeVariable);
+
       assertEquals(Object[].class, rawArrayType);
     }
 
@@ -532,6 +543,7 @@ public class TypeUtilitiesTests {
     <T> void test4() {
       Type genericArrayType = new TypeReference<List<String>[]>() {}.type();
       Class<?> rawArrayType = TypeUtilities.getRawArrayType(genericArrayType);
+
       assertEquals(List[][].class, rawArrayType);
     }
 
@@ -539,6 +551,7 @@ public class TypeUtilitiesTests {
     @DisplayName("should return 2D raw array type if type is another array type")
     <T> void test5() {
       Class<?> rawArrayType = TypeUtilities.getRawArrayType(String[].class);
+
       assertEquals(String[][].class, rawArrayType);
     }
 
@@ -585,6 +598,7 @@ public class TypeUtilitiesTests {
     <T> void test8() {
       Class<String> arrayComponentClass = String.class;
       Class<?> rawArrayType = TypeUtilities.getRawArrayType(arrayComponentClass);
+
       assertEquals(String[].class, rawArrayType);
     }
   }

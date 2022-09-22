@@ -81,6 +81,7 @@ public class DeezpatchEventHandlerRegistry implements EventHandlerRegistry, Even
 
   private static RegisteredEventHandler<?> buildEventHandler(
       Method eventHandlerMethod, InstanceProvider instanceProvider) {
+
     requireNonNull(eventHandlerMethod);
 
     EventHandlerMethod eventHandlerMethodLambda =
@@ -89,8 +90,7 @@ public class DeezpatchEventHandlerRegistry implements EventHandlerRegistry, Even
     final Class<?> eventHandlerClass = eventHandlerMethod.getDeclaringClass();
     final String eventHandlerString = eventHandlerMethod.toGenericString();
 
-    // Only request event handler instance when invoked instead of
-    // during registration time.
+    // Only request event handler instance when invoked instead of during registration time.
     return new RegisteredEventHandler<Object>() {
       @Override
       public void invoke(Object event) {

@@ -77,6 +77,7 @@ public class DeezpatchRequestHandlerRegistry
   @Override
   public <T extends Request<R>, R> Optional<RegisteredRequestHandler<T, R>> getRequestHandlerFor(
       RequestKey<T, R> requestKey) {
+
     requireNonNull(requestKey);
 
     Map<Type, RegisteredRequestHandler<?, ?>> handlersByResultType =
@@ -107,13 +108,14 @@ public class DeezpatchRequestHandlerRegistry
       throw new UnsupportedOperationException(
           "Duplicate request handler registration for request type: "
               + requestType
-              + ". "
-              + "Please note that primitive and wrapper result types are considered the same.");
+              + ". Please note that primitive and wrapper result types "
+              + "are considered the same.");
     }
   }
 
   private static RegisteredRequestHandler<?, ?> buildRequestHandler(
       Method requestHandlerMethod, InstanceProvider instanceProvider) {
+
     requireNonNull(requestHandlerMethod);
     requireNonNull(instanceProvider);
 
@@ -130,6 +132,7 @@ public class DeezpatchRequestHandlerRegistry
 
   private static RegisteredRequestHandler<?, ?> buildRequestHandlerWithReturnType(
       Method requestHandlerMethod, InstanceProvider instanceProvider) {
+
     RequestHandlerMethod requestHandlerMethodLambda =
         LambdaFactory.createLambdaFunction(requestHandlerMethod, RequestHandlerMethod.class);
 
@@ -186,6 +189,7 @@ public class DeezpatchRequestHandlerRegistry
 
   private static void validateMethodReturnType(
       Method requestHandlerMethod, RequestKey<?, ?> requestKey) {
+
     Type resultType = requestKey.resultType();
     Type methodReturnType = requestHandlerMethod.getGenericReturnType();
 

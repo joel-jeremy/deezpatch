@@ -22,9 +22,9 @@ public class SyncRequestHandlerInvocationStrategyTests {
       var strategy = new SyncRequestHandlerInvocationStrategy();
 
       strategy.invoke(
-          r -> {
+          req -> {
             handlerInvoked.set(true);
-            return Optional.of(Integer.parseInt(r.parameter()));
+            return Optional.of(Integer.parseInt(req.parameter()));
           },
           new IntegerRequest("1"));
 
@@ -39,9 +39,9 @@ public class SyncRequestHandlerInvocationStrategyTests {
 
       var request = new IntegerRequest("1");
       strategy.invoke(
-          r -> {
-            requestRef.set(r);
-            return Optional.of(Integer.parseInt(r.parameter()));
+          req -> {
+            requestRef.set(req);
+            return Optional.of(Integer.parseInt(req.parameter()));
           },
           request);
 
@@ -60,7 +60,7 @@ public class SyncRequestHandlerInvocationStrategyTests {
               RuntimeException.class,
               () ->
                   strategy.invoke(
-                      r -> {
+                      req -> {
                         throw exception;
                       },
                       request));

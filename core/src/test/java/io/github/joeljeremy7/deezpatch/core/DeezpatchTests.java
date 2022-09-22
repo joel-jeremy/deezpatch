@@ -43,6 +43,7 @@ public class DeezpatchTests {
       @DisplayName("should throw when instance provider argument is null")
       void test1() {
         Deezpatch.Builder builder = Deezpatch.builder();
+
         assertThrows(NullPointerException.class, () -> builder.instanceProvider(null));
       }
     }
@@ -53,6 +54,7 @@ public class DeezpatchTests {
       @DisplayName("should throw when request configurer argument is null")
       void test1() {
         Deezpatch.Builder builder = Deezpatch.builder();
+
         assertThrows(NullPointerException.class, () -> builder.requests(null));
       }
     }
@@ -63,6 +65,7 @@ public class DeezpatchTests {
       @DisplayName("should throw when event configurer argument is null")
       void test1() {
         Deezpatch.Builder builder = Deezpatch.builder();
+
         assertThrows(NullPointerException.class, () -> builder.events(null));
       }
     }
@@ -73,6 +76,7 @@ public class DeezpatchTests {
       @DisplayName("should throw when no instance provider is configured")
       void test1() {
         Deezpatch.Builder builder = Deezpatch.builder();
+
         assertThrows(IllegalStateException.class, () -> builder.build());
       }
 
@@ -224,8 +228,7 @@ public class DeezpatchTests {
 
     @Test
     @DisplayName("should propagate exception thrown by request handler")
-    // This test is true unless a custom request handler invocation
-    // strategy is used.
+    // This test is true unless a custom request handler invocation strategy is used.
     void test4() {
       var exception = new RuntimeException("Oops!");
       var throwingRequestHandler = TestRequestHandlers.throwingIntegerRequestHandler(exception);
@@ -290,8 +293,7 @@ public class DeezpatchTests {
 
     @Test
     @DisplayName("should propagate exception thrown by request handler that has void result")
-    // This test is true unless a custom request handler invocation
-    // strategy is used.
+    // This test is true unless a custom request handler invocation strategy is used.
     void test7() {
       var exception = new RuntimeException("Oops!");
       var throwingVoidRequestHandler = TestRequestHandlers.throwingVoidRequestHandler(exception);
@@ -351,8 +353,7 @@ public class DeezpatchTests {
 
     @Test
     @DisplayName("should propagate exception thrown by event handler")
-    // This test is true unless a custom event handler invocation
-    // strategy is used.
+    // This test is true unless a custom event handler invocation strategy is used.
     void test4() {
       var exception = new RuntimeException("Oops!");
       var throwingEventHandler = TestEventHandlers.throwingEventHandler(exception);

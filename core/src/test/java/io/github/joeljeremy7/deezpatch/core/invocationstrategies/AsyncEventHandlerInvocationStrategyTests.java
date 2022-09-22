@@ -97,7 +97,6 @@ public class AsyncEventHandlerInvocationStrategyTests {
               });
 
       assertDoesNotThrow(() -> strategy.invokeAll(eventHandlers, new TestEvent("Test")));
-
       assertTrue(countDownLatch.await(10, TimeUnit.SECONDS));
       assertSame(exception, handledException.get());
     }
@@ -124,7 +123,6 @@ public class AsyncEventHandlerInvocationStrategyTests {
               });
 
       assertDoesNotThrow(() -> strategy.invokeAll(eventHandlers, event));
-
       assertTrue(countDownLatch.await(10, TimeUnit.SECONDS));
       assertSame(event, causeEvent.get());
     }

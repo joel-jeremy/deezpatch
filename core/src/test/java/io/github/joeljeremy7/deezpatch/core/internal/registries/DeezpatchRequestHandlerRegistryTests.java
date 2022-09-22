@@ -60,8 +60,7 @@ public class DeezpatchRequestHandlerRegistryTests {
 
     @Test
     @DisplayName(
-        "should support methods which declares primitive method return types "
-            + "in lieu of wrapper types")
+        "should support methods which declares primitive method return types in lieu of wrapper types")
     void test3() {
       DeezpatchRequestHandlerRegistry requestHandlerRegistry =
           buildRequestHandlerRegistry(TestRequestHandlers.primitiveRequestHandler());
@@ -128,8 +127,7 @@ public class DeezpatchRequestHandlerRegistryTests {
 
     @Test
     @DisplayName(
-        "should ignore method with correct method signature "
-            + "but not annotated with @RequestHandler")
+        "should ignore method with correct method signature but not annotated with @RequestHandler")
     void test8() {
       var requestHandler =
           new TrackableHandler() {
@@ -152,8 +150,7 @@ public class DeezpatchRequestHandlerRegistryTests {
 
     @Test
     @DisplayName(
-        "should throw when result type is the same as the request handler method's "
-            + "return type")
+        "should throw when result type is the same as the request handler method's return type")
     void test9() {
       DeezpatchRequestHandlerRegistry requestHandlerRegistry =
           buildRequestHandlerRegistry(TestRequestHandlers.incompatibleRequestHandler());

@@ -79,8 +79,7 @@ public class DeezpatchEventHandlerRegistryTests {
 
     @Test
     @DisplayName(
-        "should ignore method with correct method signature "
-            + "but not annotated with @EventHandler")
+        "should ignore method with correct method signature but not annotated with @EventHandler")
     void test4() {
       var eventHandler =
           new TrackableHandler() {

@@ -25,6 +25,7 @@ public class RequestKeyTests {
     @DisplayName("should set request type based on type parameter (T)")
     void test1() {
       RequestKey<IntegerRequest, Integer> requestType = new RequestKey<>() {};
+
       assertEquals(IntegerRequest.class, requestType.requestType());
     }
 
@@ -32,6 +33,7 @@ public class RequestKeyTests {
     @DisplayName("should set result type based on type parameter (R)")
     void test2() {
       RequestKey<IntegerRequest, Integer> requestType = new RequestKey<>() {};
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -40,6 +42,7 @@ public class RequestKeyTests {
         "should set request type based on type parameter (T) " + "(request extends a base class)")
     void test3() {
       RequestKey<TestRequestWithBaseClass, Integer> requestType = new RequestKey<>() {};
+
       assertEquals(TestRequestWithBaseClass.class, requestType.requestType());
     }
 
@@ -48,6 +51,7 @@ public class RequestKeyTests {
         "should set result type based on type parameter (R) " + "(request extends a base class)")
     void test4() {
       RequestKey<TestRequestWithBaseClass, Integer> requestType = new RequestKey<>() {};
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -57,6 +61,7 @@ public class RequestKeyTests {
             + "(request implements a base interface)")
     void test5() {
       RequestKey<TestRequestWithBaseInterface, Integer> requestType = new RequestKey<>() {};
+
       assertEquals(TestRequestWithBaseInterface.class, requestType.requestType());
     }
 
@@ -66,6 +71,7 @@ public class RequestKeyTests {
             + "(request implements base interface)")
     void test6() {
       RequestKey<TestRequestWithBaseInterface, Integer> requestType = new RequestKey<>() {};
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -75,6 +81,7 @@ public class RequestKeyTests {
             + "(request extends a base class which extends another)")
     void test7() {
       RequestKey<TestRequestWithAnotherBaseClass, Integer> requestType = new RequestKey<>() {};
+
       assertEquals(TestRequestWithAnotherBaseClass.class, requestType.requestType());
     }
 
@@ -84,6 +91,7 @@ public class RequestKeyTests {
             + "(request extends base class which extends another)")
     void test8() {
       RequestKey<TestRequestWithAnotherBaseClass, Integer> requestType = new RequestKey<>() {};
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -93,6 +101,7 @@ public class RequestKeyTests {
             + "(request implements a base interface which extends another)")
     void test9() {
       RequestKey<TestRequestWithAnotherBaseInterface, Integer> requestType = new RequestKey<>() {};
+
       assertEquals(TestRequestWithAnotherBaseInterface.class, requestType.requestType());
     }
 
@@ -102,6 +111,7 @@ public class RequestKeyTests {
             + "(request implements a base interface which extends another)")
     void test10() {
       RequestKey<TestRequestWithAnotherBaseInterface, Integer> requestType = new RequestKey<>() {};
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -111,6 +121,7 @@ public class RequestKeyTests {
             + "(request implements other interfaces aside from Request)")
     void test11() {
       RequestKey<TestRequestWithOtherNonRequestInterface, Void> requestType = new RequestKey<>() {};
+
       assertEquals(TestRequestWithOtherNonRequestInterface.class, requestType.requestType());
     }
 
@@ -120,6 +131,7 @@ public class RequestKeyTests {
             + "(request implements other interfaces aside from Request)")
     void test12() {
       RequestKey<TestRequestWithOtherNonRequestInterface, Void> requestType = new RequestKey<>() {};
+
       assertEquals(Void.class, requestType.resultType());
     }
   }
@@ -137,6 +149,7 @@ public class RequestKeyTests {
     @DisplayName("should set request type based on request argument's type")
     void test2() {
       RequestKey<IntegerRequest, Integer> requestType = RequestKey.from(new IntegerRequest("1"));
+
       assertEquals(IntegerRequest.class, requestType.requestType());
     }
 
@@ -144,6 +157,7 @@ public class RequestKeyTests {
     @DisplayName("should set result type based on request argument's type")
     void test3() {
       RequestKey<IntegerRequest, Integer> requestType = RequestKey.from(new IntegerRequest("1"));
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -153,6 +167,7 @@ public class RequestKeyTests {
     void test4() {
       RequestKey<TestRequestWithBaseClass, Integer> requestType =
           RequestKey.from(new TestRequestWithBaseClass());
+
       assertEquals(TestRequestWithBaseClass.class, requestType.requestType());
     }
 
@@ -162,6 +177,7 @@ public class RequestKeyTests {
     void test5() {
       RequestKey<TestRequestWithBaseClass, Integer> requestType =
           RequestKey.from(new TestRequestWithBaseClass());
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -172,6 +188,7 @@ public class RequestKeyTests {
     void test6() {
       RequestKey<TestRequestWithBaseInterface, Integer> requestType =
           RequestKey.from(new TestRequestWithBaseInterface());
+
       assertEquals(TestRequestWithBaseInterface.class, requestType.requestType());
     }
 
@@ -181,6 +198,7 @@ public class RequestKeyTests {
     void test7() {
       RequestKey<TestRequestWithBaseInterface, Integer> requestType =
           RequestKey.from(new TestRequestWithBaseInterface());
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -191,6 +209,7 @@ public class RequestKeyTests {
     void test8() {
       RequestKey<TestRequestWithAnotherBaseClass, Integer> requestType =
           RequestKey.from(new TestRequestWithAnotherBaseClass());
+
       assertEquals(TestRequestWithAnotherBaseClass.class, requestType.requestType());
     }
 
@@ -201,6 +220,7 @@ public class RequestKeyTests {
     void test9() {
       RequestKey<TestRequestWithAnotherBaseClass, Integer> requestType =
           RequestKey.from(new TestRequestWithAnotherBaseClass());
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -211,6 +231,7 @@ public class RequestKeyTests {
     void test10() {
       RequestKey<TestRequestWithAnotherBaseInterface, Integer> requestType =
           RequestKey.from(new TestRequestWithAnotherBaseInterface());
+
       assertEquals(TestRequestWithAnotherBaseInterface.class, requestType.requestType());
     }
 
@@ -221,6 +242,7 @@ public class RequestKeyTests {
     void test11() {
       RequestKey<TestRequestWithAnotherBaseInterface, Integer> requestType =
           RequestKey.from(new TestRequestWithAnotherBaseInterface());
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -231,6 +253,7 @@ public class RequestKeyTests {
     void test12() {
       RequestKey<TestRequestWithOtherNonRequestInterface, Void> requestType =
           RequestKey.from(new TestRequestWithOtherNonRequestInterface());
+
       assertEquals(TestRequestWithOtherNonRequestInterface.class, requestType.requestType());
     }
 
@@ -241,6 +264,7 @@ public class RequestKeyTests {
     void test13() {
       RequestKey<TestRequestWithOtherNonRequestInterface, Void> requestType =
           RequestKey.from(new TestRequestWithOtherNonRequestInterface());
+
       assertEquals(Void.class, requestType.resultType());
     }
   }
@@ -258,6 +282,7 @@ public class RequestKeyTests {
     @DisplayName("should set request type based on request type/class argument")
     void test2() {
       RequestKey<IntegerRequest, Integer> requestType = RequestKey.from(IntegerRequest.class);
+
       assertEquals(IntegerRequest.class, requestType.requestType());
     }
 
@@ -265,6 +290,7 @@ public class RequestKeyTests {
     @DisplayName("should set result type based on request type/class argument")
     void test3() {
       RequestKey<IntegerRequest, Integer> requestType = RequestKey.from(IntegerRequest.class);
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -275,6 +301,7 @@ public class RequestKeyTests {
     void test4() {
       RequestKey<TestRequestWithBaseClass, Integer> requestType =
           RequestKey.from(TestRequestWithBaseClass.class);
+
       assertEquals(TestRequestWithBaseClass.class, requestType.requestType());
     }
 
@@ -284,6 +311,7 @@ public class RequestKeyTests {
     void test5() {
       RequestKey<TestRequestWithBaseClass, Integer> requestType =
           RequestKey.from(TestRequestWithBaseClass.class);
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -294,6 +322,7 @@ public class RequestKeyTests {
     void test6() {
       RequestKey<TestRequestWithBaseInterface, Integer> requestType =
           RequestKey.from(TestRequestWithBaseInterface.class);
+
       assertEquals(TestRequestWithBaseInterface.class, requestType.requestType());
     }
 
@@ -304,6 +333,7 @@ public class RequestKeyTests {
     void test7() {
       RequestKey<TestRequestWithBaseInterface, Integer> requestType =
           RequestKey.from(TestRequestWithBaseInterface.class);
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -314,6 +344,7 @@ public class RequestKeyTests {
     void test8() {
       RequestKey<TestRequestWithAnotherBaseClass, Integer> requestType =
           RequestKey.from(TestRequestWithAnotherBaseClass.class);
+
       assertEquals(TestRequestWithAnotherBaseClass.class, requestType.requestType());
     }
 
@@ -324,6 +355,7 @@ public class RequestKeyTests {
     void test9() {
       RequestKey<TestRequestWithAnotherBaseClass, Integer> requestType =
           RequestKey.from(TestRequestWithAnotherBaseClass.class);
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -334,6 +366,7 @@ public class RequestKeyTests {
     void test10() {
       RequestKey<TestRequestWithAnotherBaseInterface, Integer> requestType =
           RequestKey.from(TestRequestWithAnotherBaseInterface.class);
+
       assertEquals(TestRequestWithAnotherBaseInterface.class, requestType.requestType());
     }
 
@@ -344,6 +377,7 @@ public class RequestKeyTests {
     void test11() {
       RequestKey<TestRequestWithAnotherBaseInterface, Integer> requestType =
           RequestKey.from(TestRequestWithAnotherBaseInterface.class);
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -354,6 +388,7 @@ public class RequestKeyTests {
     void test12() {
       RequestKey<TestRequestWithOtherNonRequestInterface, Void> requestType =
           RequestKey.from(TestRequestWithOtherNonRequestInterface.class);
+
       assertEquals(TestRequestWithOtherNonRequestInterface.class, requestType.requestType());
     }
 
@@ -364,6 +399,7 @@ public class RequestKeyTests {
     void test13() {
       RequestKey<TestRequestWithOtherNonRequestInterface, Void> requestType =
           RequestKey.from(TestRequestWithOtherNonRequestInterface.class);
+
       assertEquals(Void.class, requestType.resultType());
     }
   }
@@ -381,6 +417,7 @@ public class RequestKeyTests {
     @DisplayName("should set request type based on request type argument")
     void test2() {
       RequestKey<?, ?> requestType = RequestKey.from((Type) IntegerRequest.class);
+
       assertEquals(IntegerRequest.class, requestType.requestType());
     }
 
@@ -388,6 +425,7 @@ public class RequestKeyTests {
     @DisplayName("should set result type based on request type argument")
     void test3() {
       RequestKey<?, ?> requestType = RequestKey.from((Type) IntegerRequest.class);
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -396,6 +434,7 @@ public class RequestKeyTests {
         "should set request type based on request type argument " + "(request has base class)")
     void test4() {
       RequestKey<?, ?> requestType = RequestKey.from((Type) TestRequestWithBaseClass.class);
+
       assertEquals(TestRequestWithBaseClass.class, requestType.requestType());
     }
 
@@ -404,6 +443,7 @@ public class RequestKeyTests {
         "should set result type based on request type argument " + "(request has base class)")
     void test5() {
       RequestKey<?, ?> requestType = RequestKey.from((Type) TestRequestWithBaseClass.class);
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -412,6 +452,7 @@ public class RequestKeyTests {
         "should set request type based on request type argument " + "(request has base interface)")
     void test6() {
       RequestKey<?, ?> requestType = RequestKey.from((Type) TestRequestWithBaseInterface.class);
+
       assertEquals(TestRequestWithBaseInterface.class, requestType.requestType());
     }
 
@@ -420,6 +461,7 @@ public class RequestKeyTests {
         "should set result type based on request type argument " + "(request has base interface)")
     void test7() {
       RequestKey<?, ?> requestType = RequestKey.from((Type) TestRequestWithBaseInterface.class);
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -429,6 +471,7 @@ public class RequestKeyTests {
             + "(request extends a base class which extends another)")
     void test8() {
       RequestKey<?, ?> requestType = RequestKey.from((Type) TestRequestWithAnotherBaseClass.class);
+
       assertEquals(TestRequestWithAnotherBaseClass.class, requestType.requestType());
     }
 
@@ -438,6 +481,7 @@ public class RequestKeyTests {
             + "(request extends base class which extends another)")
     void test9() {
       RequestKey<?, ?> requestType = RequestKey.from((Type) TestRequestWithAnotherBaseClass.class);
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -448,6 +492,7 @@ public class RequestKeyTests {
     void test10() {
       RequestKey<?, ?> requestType =
           RequestKey.from((Type) TestRequestWithAnotherBaseInterface.class);
+
       assertEquals(TestRequestWithAnotherBaseInterface.class, requestType.requestType());
     }
 
@@ -458,6 +503,7 @@ public class RequestKeyTests {
     void test11() {
       RequestKey<?, ?> requestType =
           RequestKey.from((Type) TestRequestWithAnotherBaseInterface.class);
+
       assertEquals(Integer.class, requestType.resultType());
     }
 
@@ -468,6 +514,7 @@ public class RequestKeyTests {
     void test12() {
       RequestKey<?, ?> requestType =
           RequestKey.from((Type) TestRequestWithOtherNonRequestInterface.class);
+
       assertEquals(TestRequestWithOtherNonRequestInterface.class, requestType.requestType());
     }
 
@@ -478,6 +525,7 @@ public class RequestKeyTests {
     void test13() {
       RequestKey<?, ?> requestType =
           RequestKey.from((Type) TestRequestWithOtherNonRequestInterface.class);
+
       assertEquals(Void.class, requestType.resultType());
     }
 
@@ -540,6 +588,7 @@ public class RequestKeyTests {
     void test1() {
       RequestKey<IntegerRequest, Integer> requestType1 =
           new RequestKey<IntegerRequest, Integer>() {};
+
       RequestKey<IntegerRequest, Integer> requestType2 = RequestKey.from(IntegerRequest.class);
 
       assertTrue(requestType1.equals(requestType2));
@@ -550,6 +599,7 @@ public class RequestKeyTests {
     void test2() {
       RequestKey<IntegerRequest, Integer> requestType1 =
           new RequestKey<IntegerRequest, Integer>() {};
+
       RequestKey<TestRequestWithVoidResult, Void> requestType2 =
           RequestKey.from(TestRequestWithVoidResult.class);
 
@@ -628,9 +678,9 @@ public class RequestKeyTests {
       return "Dummy";
     }
   }
-  /** Request with Void result. */
+
   static class TestRequestWithVoidResult implements Request<Void> {}
-  /** Request with Integer result. */
+
   static class TestRequestWithIntegerResult implements Request<Integer> {}
 
   abstract static class BaseRequestClass<T> implements Request<T> {}
@@ -639,6 +689,7 @@ public class RequestKeyTests {
 
   /** Request which extends a base class that implements {@link Request}. */
   static class TestRequestWithBaseClass extends BaseRequestClass<Integer> {}
+
   /**
    * Request which extends a base class that extends another class that implements {@link Request}.
    */
@@ -650,6 +701,7 @@ public class RequestKeyTests {
 
   /** Request which implements an interface that extends {@link Request}. */
   static class TestRequestWithBaseInterface implements BaseRequestInterface<Integer> {}
+
   /**
    * Request which implements an interface that extends other interfaces that extends {@link
    * Request}.

@@ -31,8 +31,8 @@ public class LambdaFactoryTests {
 
     @Test
     @DisplayName(
-        "should throw when functional interface argument is not compatible "
-            + "with the target method e.g. not the same method signature")
+        "should throw when functional interface argument is not compatible with the target method "
+            + "e.g. not the same method signature")
     void test2() throws Throwable {
       Method handlerMethod = TestRequestHandler.class.getMethod("handle", TestRequest.class);
 

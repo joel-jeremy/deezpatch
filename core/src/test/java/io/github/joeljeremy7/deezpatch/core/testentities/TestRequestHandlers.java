@@ -183,10 +183,10 @@ public class TestRequestHandlers {
   public static class IncompatibleRequestHandler {
     private IncompatibleRequestHandler() {}
 
-    // Invalid. Expected result is Integer/int but method returns a float.
+    // Invalid. Expected result is Integer/int but method returns a Float.
     @RequestHandler
-    public float incompatible(IntegerRequest request) {
-      return 1.0F;
+    public List<Integer> incompatible(IntegerRequest request) {
+      return List.of();
     }
   }
 }

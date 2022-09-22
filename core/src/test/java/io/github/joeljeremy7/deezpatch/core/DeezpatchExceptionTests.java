@@ -13,6 +13,7 @@ public class DeezpatchExceptionTests {
     @DisplayName("should set exception message")
     void test1() {
       DeezpatchException ex = new DeezpatchException("My message");
+
       assertEquals("My message", ex.getMessage());
     }
 
@@ -21,6 +22,7 @@ public class DeezpatchExceptionTests {
     void test2() {
       Throwable cause = new RuntimeException();
       DeezpatchException ex = new DeezpatchException("My message", cause);
+
       assertEquals("My message", ex.getMessage());
       assertEquals(cause, ex.getCause());
     }

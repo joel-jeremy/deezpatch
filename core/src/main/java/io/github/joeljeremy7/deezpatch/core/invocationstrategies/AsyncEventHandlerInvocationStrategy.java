@@ -54,7 +54,7 @@ public class AsyncEventHandlerInvocationStrategy implements EventHandlerInvocati
                     "Exception occurred while asynchronously dispatching event "
                         + event.getClass().getName()
                         + " to event handler "
-                        + eventHandler.getClass().getName()
+                        + eventHandler
                         + ".",
                 ex);
             exceptionHandler.handleException(event, ex);

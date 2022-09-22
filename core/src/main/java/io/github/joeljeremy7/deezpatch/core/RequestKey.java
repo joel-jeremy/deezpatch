@@ -18,8 +18,8 @@ import java.util.Objects;
  * @apiNote Factory methods are also provided for convenience:
  *     <ul>
  *       <li>{@link #from(Request)}
+ *       <li>{@link #from(Class)}
  *       <li>{@link #from(Type)}
- *       <li>{@link #from(Type, Type)}
  *     </ul>
  *
  * @param <T> The request type.

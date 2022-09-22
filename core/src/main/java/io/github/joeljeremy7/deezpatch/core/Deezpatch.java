@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-/** Checkout deezpatch! */
+/** Checkout Deezpatch! */
 public class Deezpatch implements Dispatcher, Publisher {
   private static final Logger LOGGER = System.getLogger(Deezpatch.class.getName());
 
