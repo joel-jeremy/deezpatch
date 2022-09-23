@@ -18,7 +18,6 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Optional;
 import java.util.WeakHashMap;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 /** The default request handler registry. */
 @Internal
@@ -170,6 +169,7 @@ public class DeezpatchRequestHandlerRegistry
       public Optional<Object> invoke(Request<Object> request) {
         requestHandlerMethodLambda.invoke(
             instanceProvider.getInstance(requestHandlerClass), request);
+        // Method return type is void so always return an empty result.
         return Optional.empty();
       }
 
@@ -218,41 +218,24 @@ public class DeezpatchRequestHandlerRegistry
      * returned.
      */
     @Override
-    protected @Nullable Class<?> computeValue(Class<?> type) {
-      // void
+    protected Class<?> computeValue(Class<?> type) {
       if (Void.class.equals(type)) {
         return void.class;
-      }
-      // int
-      else if (Integer.class.equals(type)) {
+      } else if (Integer.class.equals(type)) {
         return int.class;
-      }
-      // short
-      else if (Short.class.equals(type)) {
+      } else if (Short.class.equals(type)) {
         return short.class;
-      }
-      // long
-      else if (Long.class.equals(type)) {
+      } else if (Long.class.equals(type)) {
         return long.class;
-      }
-      // float
-      else if (Float.class.equals(type)) {
+      } else if (Float.class.equals(type)) {
         return float.class;
-      }
-      // double
-      else if (Double.class.equals(type)) {
+      } else if (Double.class.equals(type)) {
         return double.class;
-      }
-      // byte
-      else if (Byte.class.equals(type)) {
+      } else if (Byte.class.equals(type)) {
         return byte.class;
-      }
-      // char
-      else if (Character.class.equals(type)) {
+      } else if (Character.class.equals(type)) {
         return char.class;
-      }
-      // boolean
-      else if (Boolean.class.equals(type)) {
+      } else if (Boolean.class.equals(type)) {
         return boolean.class;
       }
       return type;

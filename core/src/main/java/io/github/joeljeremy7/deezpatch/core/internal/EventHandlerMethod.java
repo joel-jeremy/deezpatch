@@ -11,7 +11,7 @@ public interface EventHandlerMethod {
    * Invoke the actual method annotated with {@link EventHandler}.
    *
    * @param eventHandlerInstance The event handler instance.
-   * @param event The dispatched event.
+   * @param event The published event.
    */
   void invoke(Object eventHandlerInstance, Object event);
 }
