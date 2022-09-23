@@ -1,6 +1,7 @@
 # Deezpatch
 
 [![Gradle Build](https://github.com/joeljeremy7/deezpatch/actions/workflows/gradle-build.yaml/badge.svg)](https://github.com/joeljeremy7/deezpatch/actions/workflows/gradle-build.yaml)
+[![Code QL](https://github.com/joeljeremy7/deezpatch/actions/workflows/codeql.yaml/badge.svg)](https://github.com/joeljeremy7/deezpatch/actions/workflows/codeql.yaml)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.joeljeremy7.deezpatch/core/badge.svg)](https://search.maven.org/search?q=g:%22io.github.joeljeremy7.deezpatch%22)
 [![Coverage Status](https://coveralls.io/repos/github/joeljeremy7/deezpatch/badge.svg?branch=main)](https://coveralls.io/github/joeljeremy7/deezpatch?branch=main)
 [![Known Vulnerabilities](https://snyk.io/test/github/joeljeremy7/deezpatch/badge.svg)](https://snyk.io/test/github/joeljeremy7/deezpatch)
