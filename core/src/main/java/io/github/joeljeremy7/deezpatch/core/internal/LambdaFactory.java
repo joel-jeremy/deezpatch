@@ -31,15 +31,14 @@ public class LambdaFactory {
     Method samMethod = FUNCTIONAL_INTERFACE_METHOD_MAP.get(functionalInterface);
 
     try {
-      Class<?> requestHandlerClass = targetMethod.getDeclaringClass();
+      Class<?> declaringClass = targetMethod.getDeclaringClass();
 
       MethodHandles.Lookup lookup = MethodHandles.lookup();
-      MethodHandle requestHandlerMethodHandle =
-          lookup.in(requestHandlerClass).unreflect(targetMethod);
+      MethodHandle targetMethodHandle = lookup.in(declaringClass).unreflect(targetMethod);
 
       MethodType instantiatedMethodType =
           MethodType.methodType(
-              targetMethod.getReturnType(), requestHandlerClass, targetMethod.getParameterTypes());
+              targetMethod.getReturnType(), declaringClass, targetMethod.getParameterTypes());
 
       MethodType samMethodType =
           MethodType.methodType(samMethod.getReturnType(), samMethod.getParameterTypes());
@@ -50,7 +49,7 @@ public class LambdaFactory {
               samMethod.getName(),
               MethodType.methodType(functionalInterface),
               samMethodType,
-              requestHandlerMethodHandle,
+              targetMethodHandle,
               instantiatedMethodType);
 
       return (T) callSite.getTarget().invoke();

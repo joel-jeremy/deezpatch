@@ -39,7 +39,7 @@ import java.lang.annotation.Target;
  * }
  *
  * public class GetMerchantCount implements Request{@code <}Integer{@code >} {}
- *     </pre>
+ * </pre>
  *
  * </blockquote>
  *
