@@ -84,7 +84,7 @@ public class Deezpatch implements Dispatcher, Publisher {
       LOGGER.log(
           Level.ERROR,
           () ->
-              "Exception occurred while dispatching event "
+              "Exception occurred while publishing event "
                   + event.getClass().getName()
                   + " to event handlers "
                   + eventHandlers
@@ -166,7 +166,7 @@ public class Deezpatch implements Dispatcher, Publisher {
       requestConfigurers.forEach(rc -> rc.accept(requestConfiguration));
 
       var eventConfiguration = new EventConfiguration(instanceProvider);
-      eventConfigurers.forEach(rc -> rc.accept(eventConfiguration));
+      eventConfigurers.forEach(ec -> ec.accept(eventConfiguration));
 
       return new Deezpatch(
           requestConfiguration.requestHandlerRegistry,
@@ -257,7 +257,7 @@ public class Deezpatch implements Dispatcher, Publisher {
      *
      * @param <T> The request type.
      * @param <R> The result type.
-     * @param requestHandler The request handler to invoke.
+     * @param requestHandler The registered request handler to invoke.
      * @param request The dispatched request.
      * @return The request result.
      */
@@ -271,8 +271,8 @@ public class Deezpatch implements Dispatcher, Publisher {
      * Invoke all the event handlers.
      *
      * @param <T> The event type.
-     * @param eventHandlers The event handlers to invoke.
-     * @param event The dispatched event.
+     * @param eventHandlers The registered event handlers to invoke.
+     * @param event The published event.
      */
     <T extends Event> void invokeAll(List<RegisteredEventHandler<T>> eventHandlers, T event);
   }
