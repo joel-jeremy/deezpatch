@@ -50,7 +50,7 @@ module foo.bar {
 
 ## 🚀 Performance
 
-What differentiates Deezpatch from other messaging/dispatch libraries? The library takes advantage of the benefits provided by [java.lang.invoke.LambdaMetafactory](https://docs.oracle.com/javase/8/docs/api/java/lang/invoke/LambdaMetafactory.html) to avoid the cost of invoking methods reflectively. This results in performance close to directly invoking the request handler and event handler methods! 
+What differentiates Deezpatch from other messaging/dispatch libraries? The library takes advantage of the benefits provided by [java.lang.invoke.LambdaMetafactory](https://docs.oracle.com/javase/8/docs/api/java/lang/invoke/LambdaMetafactory.html) to avoid the cost of invoking methods reflectively. This results in performance close to directly invoking the request handler and event handler methods!
 
 ### [Java 11 Benchmarks](https://jmh.morethan.io/?source=https://raw.githubusercontent.com/joeljeremy7/deezpatch/main/core/src/jmh/java/io/github/joeljeremy7/deezpatch/core/benchmarks/results-java11.json)
 
