@@ -222,9 +222,9 @@ private static Object getInstance(Class<?> handlerType) {
 
 ```java
 public static void main(String[] args) {
-  ApplicationContext appContext = springApplicationContext();
+  ApplicationContext applicationContext = springApplicationContext();
   Deezpatch deezpatch = Deezpatch.builder()
-      .instanceProvider(appContext::getBean)
+      .instanceProvider(applicationContext::getBean)
       .requests(...)
       .events(...)
       .build();
