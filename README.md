@@ -14,7 +14,7 @@
 
 A simple dispatch library.
 
-This library aims to help build applications which apply the [Command Query Responsibility Segregation](https://martinfowler.com/bliki/CQRS.html) (CQRS) pattern.
+The library aims to help build applications which apply the [Command Query Responsibility Segregation](https://martinfowler.com/bliki/CQRS.html) (CQRS) pattern.
 
 ## 🛠️ Get Deezpatch
 
@@ -187,5 +187,59 @@ public static void main(String[] args) {
 
     // Publish event!
     deezpatch.publish(new GreetedEvent("Hi from Deez!"));
+}
+```
+
+## 🔩 Easy Integration with Dependency Injection (DI) Frameworks
+
+The library provides a [InstanceProvider](core/src/main/java/io/github/joeljeremy7/deezpatch/core/InstanceProvider.java) to let users customize how request/event handler instances should be instantiated. This can be as simple as `new`-ing up request/event handlers or getting instances from a DI framework such as Spring's `ApplicationContext`, Guice's `Injector`, etc.
+
+### Example with No DI frameworks
+
+```java
+// Application.java
+
+public static void main(String[] args) {
+  Deezpatch deezpatch = Deezpatch.builder()
+      .instanceProvider(Application::getInstance)
+      .requests(...)
+      .events(...)
+      .build();
+}
+
+private static Object getInstance(Class<?> handlerType) {
+  if (MyRequestHandler.class.equals(handlerType)) {
+    return new MyRequestHandler();
+  } else if (MyEventHandler.class.equals(handlerType)) {
+    return new MyEventHandler();
+  }
+
+  throw new IllegalStateException("Failed to get instance for " + handlerType.getName() + ".");
+}
+```
+
+### Example with Spring's ApplicationContext
+
+```java
+public static void main(String[] args) {
+  ApplicationContext appContext = springApplicationContext();
+  Deezpatch deezpatch = Deezpatch.builder()
+      .instanceProvider(appContext::getBean)
+      .requests(...)
+      .events(...)
+      .build();
+}
+```
+
+### Example with Guice's Injector
+
+```java
+public static void main(String[] args) {
+  Injector injector = guiceInjector();
+  Deezpatch deezpatch = Deezpatch.builder()
+      .instanceProvider(injector::getInstance)
+      .requests(...)
+      .events(...)
+      .build();
 }
 ```
