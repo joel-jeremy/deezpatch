@@ -2,15 +2,15 @@
 
 [![Gradle Build](https://github.com/joel-jeremy/deezpatch/actions/workflows/gradle-build.yaml/badge.svg)](https://github.com/joel-jeremy/deezpatch/actions/workflows/gradle-build.yaml)
 [![Code QL](https://github.com/joel-jeremy/deezpatch/actions/workflows/codeql.yaml/badge.svg)](https://github.com/joel-jeremy/deezpatch/actions/workflows/codeql.yaml)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.joeljeremy.deezpatch/core/badge.svg)](https://search.maven.org/search?q=g:%22io.github.joeljeremy.deezpatch%22)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.joel-jeremy.deezpatch/core/badge.svg)](https://search.maven.org/search?q=g:%22io.github.joel-jeremy.deezpatch%22)
 [![Coverage Status](https://coveralls.io/repos/github/joel-jeremy/deezpatch/badge.svg?branch=main)](https://coveralls.io/github/joel-jeremy/deezpatch?branch=main)
 [![Known Vulnerabilities](https://snyk.io/test/github/joel-jeremy/deezpatch/badge.svg)](https://snyk.io/test/github/joel-jeremy/deezpatch)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/joel-jeremy/deezpatch/blob/main/LICENSE)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=io.github.joeljeremy.deezpatch&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=io.github.joeljeremy.deezpatch)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joeljeremy.deezpatch&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joeljeremy.deezpatch)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joeljeremy.deezpatch&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joeljeremy.deezpatch)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joeljeremy.deezpatch&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joeljeremy.deezpatch)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=io.github.joeljeremy.deezpatch&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=io.github.joeljeremy.deezpatch)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.deezpatch&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.deezpatch&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.deezpatch&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.deezpatch&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.deezpatch&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
 [![Discord](https://img.shields.io/discord/1025648239162175578.svg?logo=discord&logoColor=white&logoWidth=20&labelColor=7289DA&label=Discord&color=17cf48)](https://discord.gg/TMmVtcfu)
 
 A simple dispatch library.
