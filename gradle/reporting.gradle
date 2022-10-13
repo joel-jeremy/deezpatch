@@ -1,6 +1,8 @@
 apply plugin: "test-report-aggregation"
 apply plugin: "jacoco-report-aggregation"
 
+def javaProjects = subprojects.findAll { new File(it.projectDir, "src").exists() }
+
 reporting {
   reports {
     testAggregateTestReport(AggregateTestReport) { 
@@ -12,17 +14,15 @@ reporting {
   }
 }
 
-def javaProjects = subprojects.findAll { new File(it.projectDir, "src").exists() }
-
-dependencies {
-  testReportAggregation javaProjects
-  jacocoAggregation javaProjects
-}
-
 afterEvaluate {
   javaProjects.each {
     it.tasks.named("check").configure {
       dependsOn reporting.reports.collect { it.reportTask }
     }
   }
+}
+
+dependencies {
+  testReportAggregation javaProjects
+  jacocoAggregation javaProjects
 }
