@@ -19,10 +19,10 @@ apply from: "${rootDir}/gradle/dependency-updates.gradle"
 allprojects {
   apply from: "${rootDir}/gradle/dependency-versions.gradle"
 
-  group = "io.github.joeljeremy7.deezpatch"
+  group = "io.github.joel-jeremy.deezpatch"
 
   def snapshotSuffix = rootProject.hasProperty("release") ? "" : "-SNAPSHOT"
-  version = "1.0.0-alpha.4" + snapshotSuffix
+  version = "1.0.0-alpha" + snapshotSuffix
 
   repositories {
     mavenLocal()

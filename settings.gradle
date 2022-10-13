@@ -14,4 +14,4 @@ pluginManagement {
 
 rootProject.name = 'deezpatch'
 
-include "core"
+include "deezpatch-core"

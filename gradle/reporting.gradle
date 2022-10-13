@@ -18,3 +18,12 @@ dependencies {
   testReportAggregation javaProjects
   jacocoAggregation javaProjects
 }
+
+afterEvaluate {
+  javaProjects.each {
+    it.tasks.named("check").configure {
+      dependsOn reporting.reports.testAggregateTestReport.reportTask,
+          reporting.reports.testCodeCoverageReport.reportTask
+    }
+  }
+}
