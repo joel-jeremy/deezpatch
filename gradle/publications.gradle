@@ -69,7 +69,7 @@ publishing {
 
 if (project.hasProperty("release")) {
   // If release property is set, do not allow publishing with SNAPSHOT dependencies.
-  Task checkSnapshotDependencies = project.tasks.create("checkSnapshotDependencies", {
+  def checkSnapshotDependencies = project.tasks.register("checkSnapshotDependencies", {
     doFirst {
       def snapshots = project.configurations.findAll {
         it.canBeResolved
@@ -83,7 +83,10 @@ if (project.hasProperty("release")) {
       }
     }
   })
-  project.tasks.publish.dependsOn checkSnapshotDependencies
+  
+  tasks.named("publish").configure {
+    dependsOn checkSnapshotDependencies
+  }
 }
 
 signing {

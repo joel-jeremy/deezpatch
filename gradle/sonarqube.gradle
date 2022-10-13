@@ -10,4 +10,6 @@ sonarqube {
   }
 }
 
-tasks.sonarqube.dependsOn(testCodeCoverageReport)
+tasks.named("sonarqube").configure {
+  dependsOn tasks.withType(JacocoCoverageReport)
+}

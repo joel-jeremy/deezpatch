@@ -22,8 +22,7 @@ dependencies {
 afterEvaluate {
   javaProjects.each {
     it.tasks.named("check").configure {
-      dependsOn reporting.reports.testAggregateTestReport.reportTask,
-          reporting.reports.testCodeCoverageReport.reportTask
+      dependsOn reporting.reports.collect { it.reportTask }
     }
   }
 }

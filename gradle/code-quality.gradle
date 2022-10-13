@@ -30,7 +30,7 @@ jacocoTestCoverageVerification {
   } 
 }
 tasks.named("check").configure {
-  finalizedBy jacocoTestCoverageVerification
+  dependsOn tasks.withType(JacocoCoverageVerification)
 }
 
 tasks.withType(JavaCompile).configureEach { task ->
