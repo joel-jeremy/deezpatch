@@ -6,10 +6,11 @@ sonarqube {
     property "sonar.organization", "joel-jeremy"
     property "sonar.login", System.getenv("SONAR_TOKEN")
     property "sonar.host.url", "https://sonarcloud.io"
-    property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
+    property "sonar.coverage.jacoco.xmlReportPaths", 
+        "${rootProject.buildDir}/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
   }
 }
 
 tasks.named("sonarqube").configure {
-  dependsOn tasks.withType(JacocoCoverageReport)
+  dependsOn tasks.withType(JacocoReport)
 }
