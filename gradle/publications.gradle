@@ -26,7 +26,7 @@ publishing {
           description = project.description
         }
         packaging = "jar"
-        url = "https://github.com/joeljeremy7/deezpatch"
+        url = "https://github.com/joel-jeremy/deezpatch"
 
         licenses {
           license {
@@ -37,7 +37,7 @@ publishing {
 
         developers {
           developer {
-            id = "joeljeremy7"
+            id = "joel-jeremy"
             name = "Joel Jeremy M. Marquez"
             email = "joeljeremy.marquez@gmail.com"
             roles = [ "owner", "developer" ]
@@ -45,9 +45,9 @@ publishing {
         }
 
         scm {
-          connection = "scm:git:https://github.com/joeljeremy7/deezpatch.git"
-          developerConnection = "scm:git:https://github.com/joeljeremy7/deezpatch.git"
-          url = "https://github.com/joeljeremy7/deezpatch"
+          connection = "scm:git:https://github.com/joel-jeremy/deezpatch.git"
+          developerConnection = "scm:git:https://github.com/joel-jeremy/deezpatch.git"
+          url = "https://github.com/joel-jeremy/deezpatch"
         }
       }
     }
@@ -56,7 +56,7 @@ publishing {
   if (project.hasProperty("github-packages")) {
     repositories {
       maven {
-        url = "https://maven.pkg.github.com/joeljeremy7/deezpatch"
+        url = "https://maven.pkg.github.com/joel-jeremy/deezpatch"
         name = "github-packages"
         credentials {
           username = System.getenv("GITHUB_ACTOR") ?: property("githubActor")
@@ -69,7 +69,7 @@ publishing {
 
 if (project.hasProperty("release")) {
   // If release property is set, do not allow publishing with SNAPSHOT dependencies.
-  Task checkSnapshotDependencies = project.tasks.create("checkSnapshotDependencies", {
+  def checkSnapshotDependencies = project.tasks.register("checkSnapshotDependencies", {
     doFirst {
       def snapshots = project.configurations.findAll {
         it.canBeResolved
@@ -83,7 +83,10 @@ if (project.hasProperty("release")) {
       }
     }
   })
-  project.tasks.publish.dependsOn checkSnapshotDependencies
+  
+  tasks.named("publish").configure {
+    dependsOn checkSnapshotDependencies
+  }
 }
 
 signing {

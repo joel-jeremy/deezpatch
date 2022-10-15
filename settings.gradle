@@ -12,6 +12,6 @@ pluginManagement {
   }
 }
 
-rootProject.name = 'deezpatch'
+rootProject.name = "Deezpatch"
 
-include "core"
+include "deezpatch-core"

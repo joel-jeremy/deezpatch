@@ -30,7 +30,7 @@ jacocoTestCoverageVerification {
   } 
 }
 tasks.named("check").configure {
-  finalizedBy jacocoTestCoverageVerification
+  dependsOn tasks.withType(JacocoCoverageVerification)
 }
 
 tasks.withType(JavaCompile).configureEach { task ->
@@ -60,7 +60,7 @@ tasks.withType(JavaCompile).configureEach { task ->
 
     nullaway {
       severity = net.ltgt.gradle.errorprone.CheckSeverity.ERROR
-      annotatedPackages.add("io.github.joeljeremy7.deezpatch")
+      annotatedPackages.add("io.github.joeljeremy.deezpatch")
       checkOptionalEmptiness = true
       suggestSuppressions = true
     }

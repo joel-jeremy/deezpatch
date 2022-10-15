@@ -7,7 +7,7 @@ def additionalTestRunsOnJvmVersions =
 additionalTestRunsOnJvmVersions.split(",").findAll({ !it.isEmpty() }).each { javaVersion ->
   def testTaskName = "testOnJava${javaVersion}"
 
-  tasks.register(testTaskName, Test) {
+  def testTask = tasks.register(testTaskName, Test) {
     useJUnitPlatform()
 
     javaLauncher = javaToolchains.launcherFor {
@@ -24,6 +24,6 @@ additionalTestRunsOnJvmVersions.split(",").findAll({ !it.isEmpty() }).each { jav
   }
 
   tasks.named("check").configure {
-    dependsOn tasks.named(testTaskName)
+    dependsOn testTask
   }
 }

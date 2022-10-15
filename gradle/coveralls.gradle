@@ -7,13 +7,14 @@ configure(javaProjects) {
 
 coveralls {
   sourceDirs = javaProjects.sourceSets.main.allSource.srcDirs.flatten()
-  jacocoReportPath = "${buildDir}/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
+  jacocoReportPath = 
+      "${rootProject.buildDir}/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
 }
 
 tasks.named("coveralls").configure {
   group = "Coverage reports"
   description = "Uploads the aggregated coverage report to Coveralls"
 
-  dependsOn testCodeCoverageReport
+  dependsOn tasks.withType(JacocoReport)
   onlyIf { System.getenv("CI") }
 }
