@@ -194,9 +194,9 @@ public static void main(String[] args) {
 
 ## 🔩 Easy Integration with Dependency Injection (DI) Frameworks
 
-The library provides a [InstanceProvider](core/src/main/java/io/github/joeljeremy/deezpatch/core/InstanceProvider.java) to let users customize how request/event handler instances should be instantiated. This can be as simple as `new`-ing up request/event handlers or getting instances from a DI framework such as Spring's `ApplicationContext`, Guice's `Injector`, etc.
+The library provides an [InstanceProvider](core/src/main/java/io/github/joeljeremy/deezpatch/core/InstanceProvider.java) interface as an extension point to let users customize how request/event handler instances should be instantiated. This can be as simple as `new`-ing up request/event handlers or getting instances from a DI framework such as Spring's `ApplicationContext`, Guice's `Injector`, etc.
 
-### Example with No DI frameworks
+### Example with No DI framework
 
 ```java
 // Application.java
