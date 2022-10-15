@@ -2,6 +2,7 @@ apply plugin: "org.sonarqube"
 
 sonarqube {
   properties {
+    property "sonar.projectName", "${rootProject.name}"
     property "sonar.projectKey", "io.github.joel-jeremy.deezpatch"
     property "sonar.organization", "joel-jeremy"
     property "sonar.login", System.getenv("SONAR_TOKEN")
