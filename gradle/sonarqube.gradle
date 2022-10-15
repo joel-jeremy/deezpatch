@@ -3,7 +3,7 @@ apply plugin: "org.sonarqube"
 sonarqube {
   properties {
     property "sonar.projectName", "${rootProject.name}"
-    property "sonar.projectKey", "io.github.joel-jeremy.deezpatch"
+    property "sonar.projectKey", "${rootProject.group}"
     property "sonar.organization", "joel-jeremy"
     property "sonar.login", System.getenv("SONAR_TOKEN")
     property "sonar.host.url", "https://sonarcloud.io"
