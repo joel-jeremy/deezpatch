@@ -22,7 +22,7 @@ allprojects {
   group = "io.github.joel-jeremy.deezpatch"
 
   def snapshotSuffix = rootProject.hasProperty("release") ? "" : "-SNAPSHOT"
-  version = "1.0.0-beta" + snapshotSuffix
+  version = "1.0.0-beta.1" + snapshotSuffix
 
   repositories {
     mavenLocal()
@@ -83,14 +83,14 @@ configure(javaProjects) {
 }
 
 if (project.hasProperty("ossrh")) {
-    nexusPublishing {
-        repositories {
-            sonatype {
-                nexusUrl = uri("https://s01.oss.sonatype.org/service/local/")
-                snapshotRepositoryUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-                username = System.getenv("OSSRH_USERNAME") ?: property("ossrhUsername")
-                password = System.getenv("OSSRH_PASSWORD") ?: property("ossrhPassword")
-            }
-        }
+  nexusPublishing {
+    repositories {
+      sonatype {
+        nexusUrl = uri("https://s01.oss.sonatype.org/service/local/")
+        snapshotRepositoryUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+        username = System.getenv("OSSRH_USERNAME") ?: property("ossrhUsername")
+        password = System.getenv("OSSRH_PASSWORD") ?: property("ossrhPassword")
+      }
     }
+  }
 }
