@@ -75,6 +75,7 @@ spotless {
     // Only format files which have changed since origin/main.
     // ratchetFrom "origin/main"
     toggleOffOn()
-    googleJavaFormat()
+    googleJavaFormat().reflowLongStrings()
+    formatAnnotations()
   }
 }

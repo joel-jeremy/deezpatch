@@ -2,6 +2,8 @@ package io.github.joeljeremy.deezpatch.core;
 
 import static java.util.Objects.requireNonNull;
 
+import io.github.joeljeremy.deezpatch.core.Deezpatch.Builder.EventConfiguration;
+import io.github.joeljeremy.deezpatch.core.Deezpatch.Builder.RequestConfiguration;
 import io.github.joeljeremy.deezpatch.core.internal.registries.DeezpatchEventHandlerRegistry;
 import io.github.joeljeremy.deezpatch.core.internal.registries.DeezpatchRequestHandlerRegistry;
 import io.github.joeljeremy.deezpatch.core.invocationstrategies.SyncEventHandlerInvocationStrategy;
@@ -25,18 +27,15 @@ public class Deezpatch implements Dispatcher, Publisher {
   /**
    * Constructor.
    *
-   * @param requestHandlerProvider The request handler provider.
-   * @param eventHandlerProvider The event handler provider.
+   * @param requestConfiguration The request configuration.
+   * @param eventHandlerProvider The event configuration.
    */
   private Deezpatch(
-      RequestHandlerProvider requestHandlerProvider,
-      RequestHandlerInvocationStrategy requestHandlerInvocationStrategy,
-      EventHandlerProvider eventHandlerProvider,
-      EventHandlerInvocationStrategy eventHandlerInvocationStrategy) {
-    this.requestHandlerProvider = requestHandlerProvider;
-    this.requestHandlerInvocationStrategy = requestHandlerInvocationStrategy;
-    this.eventHandlerProvider = eventHandlerProvider;
-    this.eventHandlerInvocationStrategy = eventHandlerInvocationStrategy;
+      RequestConfiguration requestConfiguration, EventConfiguration eventConfiguration) {
+    this.requestHandlerProvider = requestConfiguration.requestHandlerRegistry;
+    this.requestHandlerInvocationStrategy = requestConfiguration.requestHandlerInvocationStrategy;
+    this.eventHandlerProvider = eventConfiguration.eventHandlerRegistry;
+    this.eventHandlerInvocationStrategy = eventConfiguration.eventHandlerInvocationStrategy;
   }
 
   /** {@inheritDoc} */
@@ -168,11 +167,7 @@ public class Deezpatch implements Dispatcher, Publisher {
       var eventConfiguration = new EventConfiguration(instanceProvider);
       eventConfigurers.forEach(ec -> ec.accept(eventConfiguration));
 
-      return new Deezpatch(
-          requestConfiguration.requestHandlerRegistry,
-          requestConfiguration.requestHandlerInvocationStrategy,
-          eventConfiguration.eventHandlerRegistry,
-          eventConfiguration.eventHandlerInvocationStrategy);
+      return new Deezpatch(requestConfiguration, eventConfiguration);
     }
 
     /** Request handling configuration. */

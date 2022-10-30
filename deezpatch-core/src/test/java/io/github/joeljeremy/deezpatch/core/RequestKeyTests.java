@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.github.joeljeremy.deezpatch.core.testentities.IntegerRequest;
-import io.github.joeljeremy.deezpatch.core.testentities.ListRequest;
-import io.github.joeljeremy.deezpatch.core.testentities.TestRequest;
-import io.github.joeljeremy.deezpatch.core.testentities.TestResult;
+import io.github.joeljeremy.deezpatch.core.testfixtures.IntegerRequest;
+import io.github.joeljeremy.deezpatch.core.testfixtures.ListRequest;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequest;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestResult;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;

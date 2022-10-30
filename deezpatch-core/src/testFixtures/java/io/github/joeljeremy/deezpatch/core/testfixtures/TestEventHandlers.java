@@ -1,4 +1,4 @@
-package io.github.joeljeremy.deezpatch.core.testentities;
+package io.github.joeljeremy.deezpatch.core.testfixtures;
 
 import io.github.joeljeremy.deezpatch.core.EventHandler;
 import java.util.concurrent.CountDownLatch;

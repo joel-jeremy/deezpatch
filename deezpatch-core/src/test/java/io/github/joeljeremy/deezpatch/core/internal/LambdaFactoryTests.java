@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.github.joeljeremy.deezpatch.core.DeezpatchException;
-import io.github.joeljeremy.deezpatch.core.testentities.TestRequest;
-import io.github.joeljeremy.deezpatch.core.testentities.TestRequestHandlers;
-import io.github.joeljeremy.deezpatch.core.testentities.TestRequestHandlers.TestRequestHandler;
-import io.github.joeljeremy.deezpatch.core.testentities.TestResult;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequest;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequestHandlers;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequestHandlers.TestRequestHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestResult;
 import java.lang.reflect.Method;
 import java.util.function.Supplier;
 import org.junit.jupiter.api.DisplayName;

@@ -1,11 +1,12 @@
-package io.github.joeljeremy.deezpatch.core.testentities;
+package io.github.joeljeremy.deezpatch.core.testfixtures;
 
 import io.github.joeljeremy.deezpatch.core.Request;
+import java.util.List;
 
-public class BooleanRequest implements Request<Boolean> {
+public class ListRequest implements Request<List<String>> {
   private final String parameter;
 
-  public BooleanRequest(String parameter) {
+  public ListRequest(String parameter) {
     this.parameter = parameter;
   }
 

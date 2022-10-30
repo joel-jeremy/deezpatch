@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.github.joeljeremy.deezpatch.core.RegisteredEventHandler;
-import io.github.joeljeremy.deezpatch.core.testentities.TestEvent;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestEvent;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
