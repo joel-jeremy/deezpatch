@@ -17,6 +17,7 @@ apply from: "${rootDir}/gradle/sonarqube.gradle"
 apply from: "${rootDir}/gradle/dependency-updates.gradle"
 
 allprojects {
+  apply plugin: "eclipse"
   apply from: "${rootDir}/gradle/dependency-versions.gradle"
 
   group = "io.github.joel-jeremy.deezpatch"

@@ -1,0 +1,211 @@
+package io.github.joeljeremy.deezpatch.core.internal.registries;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import io.github.joeljeremy.deezpatch.core.EventHandler;
+import io.github.joeljeremy.deezpatch.core.RegisteredEventHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestEvent;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestEventHandlers;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestEventHandlers.CountDownLatchEventHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestEventHandlers.InvalidArgEventHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestEventHandlers.InvalidReturnTypeEventHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestEventHandlers.NoArgEventHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestEventHandlers.TestEventHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestInstanceProviders;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TrackableHandler;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+public class EventHandlerRegistryTests {
+  @Nested
+  class Constructors {
+    @Test
+    @DisplayName("should throw when event instance provider argument is null")
+    void test1() {
+      assertThrows(NullPointerException.class, () -> new EventHandlerRegistry(null));
+    }
+  }
+
+  @Nested
+  class RegisterMethod {
+    @Test
+    @DisplayName("should throw when event handler class argument is null")
+    void test1() {
+      EventHandlerRegistry eventHandlerRegistry =
+          eventHandlerRegistry(TestEventHandlers.testEventHandler());
+
+      assertThrows(
+          NullPointerException.class, () -> eventHandlerRegistry.register((Class<?>[]) null));
+    }
+
+    @Test
+    @DisplayName("should detect and register methods annotated with @EventHandler")
+    void test2() {
+      EventHandlerRegistry eventHandlerRegistry =
+          eventHandlerRegistry(TestEventHandlers.testEventHandler());
+
+      eventHandlerRegistry.register(TestEventHandler.class);
+
+      List<RegisteredEventHandler<TestEvent>> eventHandlers =
+          eventHandlerRegistry.getEventHandlersFor(TestEvent.class);
+
+      assertNotNull(eventHandlers);
+
+      int numberOfEventHandlers =
+          (int)
+              Arrays.stream(TestEventHandler.class.getMethods())
+                  .filter(m -> m.isAnnotationPresent(EventHandler.class))
+                  .count();
+
+      assertEquals(numberOfEventHandlers, eventHandlers.size());
+    }
+
+    @Test
+    @DisplayName(
+        "should throw when a method annotated with @EventHandler does not have a parameter")
+    void test3() {
+      EventHandlerRegistry eventHandlerRegistry =
+          eventHandlerRegistry(TestEventHandlers.noArgEventHandler());
+
+      assertThrows(
+          IllegalArgumentException.class,
+          () -> eventHandlerRegistry.register(NoArgEventHandler.class));
+    }
+
+    @Test
+    @DisplayName(
+        "should ignore method with correct method signature but not annotated with @EventHandler")
+    void test4() {
+      var eventHandler =
+          new TrackableHandler() {
+            @SuppressWarnings("unused")
+            public void handle(TestEvent event) {
+              track(event);
+            }
+          };
+
+      EventHandlerRegistry eventHandlerRegistry = eventHandlerRegistry(eventHandler);
+
+      eventHandlerRegistry.register(eventHandler.getClass());
+
+      assertTrue(eventHandlerRegistry.getEventHandlersFor(TestEvent.class).isEmpty());
+    }
+
+    @Test
+    @DisplayName("should throw when a method annotated with @EventHandler does not return void")
+    void test5() {
+      EventHandlerRegistry eventHandlerRegistry =
+          eventHandlerRegistry(TestEventHandlers.invalidReturnTypeEventHandler());
+
+      assertThrows(
+          IllegalArgumentException.class,
+          () -> eventHandlerRegistry.register(InvalidReturnTypeEventHandler.class));
+    }
+
+    @Test
+    @DisplayName(
+        "should throw when a method annotated with @EventHandler has an invalid parameter "
+            + "(parameter does not implement Event)")
+    void test6() {
+      EventHandlerRegistry eventHandlerRegistry =
+          eventHandlerRegistry(TestEventHandlers.invalidArgEventHandler());
+
+      assertThrows(
+          IllegalArgumentException.class,
+          () -> eventHandlerRegistry.register(InvalidArgEventHandler.class));
+    }
+  }
+
+  @Nested
+  class GetEventHandlersForMethod {
+    @Test
+    @DisplayName("should throw when event type argument is null")
+    void test1() {
+      EventHandlerRegistry eventHandlerRegistry =
+          eventHandlerRegistry(TestEventHandlers.testEventHandler())
+              .register(TestEventHandler.class);
+
+      assertThrows(
+          NullPointerException.class, () -> eventHandlerRegistry.getEventHandlersFor(null));
+    }
+
+    @Test
+    @DisplayName("should return registered event handler for event type")
+    void test2() {
+      var testEventHandler = TestEventHandlers.testEventHandler();
+      EventHandlerRegistry eventHandlerRegistry =
+          eventHandlerRegistry(testEventHandler).register(testEventHandler.getClass());
+
+      List<RegisteredEventHandler<TestEvent>> resolved =
+          eventHandlerRegistry.getEventHandlersFor(TestEvent.class);
+
+      assertNotNull(resolved);
+      assertFalse(resolved.isEmpty());
+
+      var testEvent = new TestEvent("Test");
+      resolved.forEach(h -> h.invoke(testEvent));
+
+      assertTrue(testEventHandler.hasHandled(testEvent));
+    }
+
+    @Test
+    @DisplayName(
+        "should return empty list when there is no registered event handler for event type")
+    void test3() {
+      EventHandlerRegistry eventHandlerRegistry =
+          eventHandlerRegistry(TestEventHandlers.testEventHandler());
+
+      // No registrations...
+
+      List<RegisteredEventHandler<EventWithNoHandlers>> resolved =
+          eventHandlerRegistry.getEventHandlersFor(EventWithNoHandlers.class);
+
+      assertNotNull(resolved);
+      assertTrue(resolved.isEmpty());
+    }
+
+    @Test
+    @DisplayName(
+        "should return registered event handlers whose toString() method "
+            + "returns the event handler method string")
+    void test4() {
+      var countDownLatch = new CountDownLatch(1);
+      var testEventHandler = TestEventHandlers.countDownLatchEventHandler(countDownLatch);
+
+      EventHandlerRegistry eventHandlerRegistry =
+          eventHandlerRegistry(testEventHandler).register(testEventHandler.getClass());
+
+      List<RegisteredEventHandler<TestEvent>> resolved =
+          eventHandlerRegistry.getEventHandlersFor(TestEvent.class);
+
+      assertNotNull(resolved);
+      assertFalse(resolved.isEmpty());
+
+      // TestEventHandler only has one @EventHandler method so this should be safe.
+      Method eventHandlerMethod =
+          Stream.of(CountDownLatchEventHandler.class.getMethods())
+              .filter(m -> m.isAnnotationPresent(EventHandler.class))
+              .findFirst()
+              .orElseThrow();
+
+      RegisteredEventHandler<TestEvent> eventHandler = resolved.get(0);
+      assertEquals(eventHandlerMethod.toGenericString(), eventHandler.toString());
+    }
+  }
+
+  static EventHandlerRegistry eventHandlerRegistry(Object... eventHandlers) {
+    return new EventHandlerRegistry(TestInstanceProviders.of(eventHandlers));
+  }
+
+  public static class EventWithNoHandlers {}
+}

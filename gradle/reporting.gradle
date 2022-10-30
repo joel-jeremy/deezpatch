@@ -5,11 +5,26 @@ def javaProjects = subprojects.findAll { new File(it.projectDir, "src").exists()
 
 reporting {
   reports {
+    allCodeCoverageReport(JacocoCoverageReport) { 
+      testType = "all"
+      reportTask.configure {
+        def testTasks = javaProjects.stream()
+            .flatMap { it.tasks.withType(Test).stream() }
+            .toList()
+
+        def execFiles = javaProjects.stream()
+            .flatMap { fileTree(it.buildDir).include("/jacoco/*.exec").stream() }
+            .toList()
+
+        dependsOn testTasks
+        executionData execFiles
+      }
+    }
     testAggregateTestReport(AggregateTestReport) { 
       testType = TestSuiteType.UNIT_TEST
     }
-    testCodeCoverageReport(JacocoCoverageReport) { 
-      testType = TestSuiteType.UNIT_TEST
+    integrationTestAggregateTestReport(AggregateTestReport) { 
+      testType = TestSuiteType.INTEGRATION_TEST
     }
   }
 }

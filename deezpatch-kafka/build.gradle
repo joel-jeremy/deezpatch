@@ -1,0 +1,40 @@
+description = "Deezpatch Kafka Integration"
+
+jar {
+  manifest {
+    attributes(
+      "Automatic-Module-Name": "io.github.joeljeremy.deezpatch.kafka"
+    )
+  }
+}
+
+dependencies {
+  implementation project(":deezpatch-core")
+  implementation "org.apache.kafka:kafka-clients:${versions.kafka}"
+
+  testImplementation testFixtures(project(":deezpatch-core"))
+}
+
+testing {
+  suites {
+    integrationTest(JvmTestSuite) {
+      testType = TestSuiteType.INTEGRATION_TEST
+      dependencies {
+        implementation project
+        implementation project(":deezpatch-core")
+        // Fix when https://github.com/gradle/gradle/issues/19192 is resolved.
+        // Update: To be fixed in Gradle 7.6.
+        implementation project.dependencies.testFixtures(project(":deezpatch-core"))
+        implementation "org.apache.kafka:kafka-clients:${versions.kafka}"
+        // Fix when https://github.com/gradle/gradle/issues/19065 is resolved.
+        // Update: To be fixed in Gradle 7.6.
+        implementation project.dependencies.platform("org.testcontainers:testcontainers-bom:1.17.5")
+        implementation project.dependencies.platform("com.fasterxml.jackson:jackson-bom:2.13.4")
+        implementation "org.testcontainers:junit-jupiter"
+        implementation "org.testcontainers:kafka"
+        implementation "com.fasterxml.jackson.core:jackson-core"
+        implementation "com.fasterxml.jackson.core:jackson-databind"
+      }
+    }
+  }
+}

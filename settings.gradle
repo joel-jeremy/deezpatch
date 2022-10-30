@@ -15,3 +15,4 @@ pluginManagement {
 rootProject.name = "deezpatch"
 
 include "deezpatch-core"
+include "deezpatch-kafka"

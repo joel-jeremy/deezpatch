@@ -14,14 +14,14 @@ import io.github.joeljeremy.deezpatch.core.Deezpatch.EventHandlerInvocationStrat
 import io.github.joeljeremy.deezpatch.core.Deezpatch.RequestHandlerInvocationStrategy;
 import io.github.joeljeremy.deezpatch.core.invocationstrategies.SyncEventHandlerInvocationStrategy;
 import io.github.joeljeremy.deezpatch.core.invocationstrategies.SyncRequestHandlerInvocationStrategy;
-import io.github.joeljeremy.deezpatch.core.testentities.IntegerRequest;
-import io.github.joeljeremy.deezpatch.core.testentities.TestEvent;
-import io.github.joeljeremy.deezpatch.core.testentities.TestEventHandlers;
-import io.github.joeljeremy.deezpatch.core.testentities.TestEventHandlers.TestEventHandler;
-import io.github.joeljeremy.deezpatch.core.testentities.TestInstanceProviders;
-import io.github.joeljeremy.deezpatch.core.testentities.TestRequestHandlers;
-import io.github.joeljeremy.deezpatch.core.testentities.TestRequestHandlers.TestRequestHandler;
-import io.github.joeljeremy.deezpatch.core.testentities.VoidRequest;
+import io.github.joeljeremy.deezpatch.core.testfixtures.IntegerRequest;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestEvent;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestEventHandlers;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestEventHandlers.TestEventHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestInstanceProviders;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequestHandlers;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequestHandlers.TestRequestHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.VoidRequest;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -83,12 +83,12 @@ public class DeezpatchTests {
       @Nested
       class RequestConfigurationTests {
         @Nested
-        class RegisterTests {
+        class RequestHandlersTests {
           @Test
           @DisplayName("should throw when request handler classes argument is null")
           void test1() {
             Consumer<RequestConfiguration> configurer =
-                config -> config.register((Class<?>[]) null);
+                config -> config.requestHandlers((Class<?>[]) null);
 
             Deezpatch.Builder builder =
                 Deezpatch.builder()
@@ -102,7 +102,7 @@ public class DeezpatchTests {
           @DisplayName("should throw when request handler classes contains null")
           void test2() {
             Consumer<RequestConfiguration> configurer =
-                config -> config.register(new Class<?>[] {TestRequestHandler.class, null});
+                config -> config.requestHandlers(new Class<?>[] {TestRequestHandler.class, null});
 
             Deezpatch.Builder builder =
                 Deezpatch.builder()
@@ -133,11 +133,12 @@ public class DeezpatchTests {
       @Nested
       class EventConfigurationTests {
         @Nested
-        class RegisterTests {
+        class EventHandlersTests {
           @Test
           @DisplayName("should throw when event handler classes argument is null")
           void test1() {
-            Consumer<EventConfiguration> configurer = config -> config.register((Class<?>[]) null);
+            Consumer<EventConfiguration> configurer =
+                config -> config.eventHandlers((Class<?>[]) null);
 
             Deezpatch.Builder builder =
                 Deezpatch.builder().instanceProvider(TestInstanceProviders.of()).events(configurer);
@@ -149,7 +150,34 @@ public class DeezpatchTests {
           @DisplayName("should throw when event handler classes contains null")
           void test2() {
             Consumer<EventConfiguration> configurer =
-                config -> config.register(new Class<?>[] {TestEventHandler.class, null});
+                config -> config.eventHandlers(new Class<?>[] {TestEventHandler.class, null});
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder().instanceProvider(TestInstanceProviders.of()).events(configurer);
+
+            assertThrows(NullPointerException.class, () -> builder.build());
+          }
+        }
+
+        @Nested
+        class EventSourcesTests {
+          @Test
+          @DisplayName("should throw when event source classes argument is null")
+          void test1() {
+            Consumer<EventConfiguration> configurer =
+                config -> config.eventSources((Class<?>[]) null);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder().instanceProvider(TestInstanceProviders.of()).events(configurer);
+
+            assertThrows(NullPointerException.class, () -> builder.build());
+          }
+
+          @Test
+          @DisplayName("should throw when event source classes contains null")
+          void test2() {
+            Consumer<EventConfiguration> configurer =
+                config -> config.eventSources(new Class<?>[] {TestEventHandler.class, null});
 
             Deezpatch.Builder builder =
                 Deezpatch.builder().instanceProvider(TestInstanceProviders.of()).events(configurer);
@@ -424,12 +452,14 @@ public class DeezpatchTests {
         .requests(
             config ->
                 config
-                    .register(requestHandlers.stream().map(Object::getClass).toArray(Class[]::new))
+                    .requestHandlers(
+                        requestHandlers.stream().map(Object::getClass).toArray(Class[]::new))
                     .invocationStrategy(requestHandlerInvocationStrategy))
         .events(
             config ->
                 config
-                    .register(eventHandlers.stream().map(Object::getClass).toArray(Class[]::new))
+                    .eventHandlers(
+                        eventHandlers.stream().map(Object::getClass).toArray(Class[]::new))
                     .invocationStrategy(eventHandlerInvocationStrategy))
         .build();
   }
