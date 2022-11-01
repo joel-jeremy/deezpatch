@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import io.github.joeljeremy.deezpatch.core.Event;
 import io.github.joeljeremy.deezpatch.core.EventHandler;
 import io.github.joeljeremy.deezpatch.core.RegisteredEventHandler;
 import io.github.joeljeremy.deezpatch.core.testfixtures.TestEvent;
@@ -161,5 +162,5 @@ public class DeezpatchEventHandlerRegistryTests {
     return new DeezpatchEventHandlerRegistry(TestInstanceProviders.of(eventHandlers));
   }
 
-  public static class EventWithNoHandlers {}
+  public static class EventWithNoHandlers implements Event {}
 }

@@ -60,7 +60,8 @@ public class DeezpatchRequestHandlerRegistryTests {
 
     @Test
     @DisplayName(
-        "should support methods which declares primitive method return types in lieu of wrapper types")
+        "should support methods which declares primitive method return types in lieu of wrapper"
+            + " types")
     void test3() {
       DeezpatchRequestHandlerRegistry requestHandlerRegistry =
           buildRequestHandlerRegistry(TestRequestHandlers.primitiveRequestHandler());

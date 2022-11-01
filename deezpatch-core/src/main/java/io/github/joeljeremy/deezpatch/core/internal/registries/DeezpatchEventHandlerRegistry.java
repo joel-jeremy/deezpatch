@@ -2,6 +2,7 @@ package io.github.joeljeremy.deezpatch.core.internal.registries;
 
 import static java.util.Objects.requireNonNull;
 
+import io.github.joeljeremy.deezpatch.core.Event;
 import io.github.joeljeremy.deezpatch.core.EventHandler;
 import io.github.joeljeremy.deezpatch.core.EventHandlerProvider;
 import io.github.joeljeremy.deezpatch.core.EventHandlerRegistry;
@@ -60,7 +61,7 @@ public class DeezpatchEventHandlerRegistry implements EventHandlerRegistry, Even
 
   /** {@inheritDoc} */
   @Override
-  public <T> List<RegisteredEventHandler<T>> getEventHandlersFor(Class<T> eventType) {
+  public <T extends Event> List<RegisteredEventHandler<T>> getEventHandlersFor(Class<T> eventType) {
     requireNonNull(eventType);
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -91,9 +92,9 @@ public class DeezpatchEventHandlerRegistry implements EventHandlerRegistry, Even
     final String eventHandlerString = eventHandlerMethod.toGenericString();
 
     // Only request event handler instance when invoked instead of during registration time.
-    return new RegisteredEventHandler<Object>() {
+    return new RegisteredEventHandler<Event>() {
       @Override
-      public void invoke(Object event) {
+      public void invoke(Event event) {
         eventHandlerMethodLambda.invoke(instanceProvider.getInstance(eventHandlerClass), event);
       }
 
@@ -107,7 +108,8 @@ public class DeezpatchEventHandlerRegistry implements EventHandlerRegistry, Even
   private static void validateMethodParameters(Method method) {
     if (method.getParameterCount() != 1) {
       throw new IllegalArgumentException(
-          "Methods marked with @EventHandler must accept a single parameter which is the event object.");
+          "Methods marked with @EventHandler must accept a single parameter which is the event"
+              + " object.");
     }
   }
 

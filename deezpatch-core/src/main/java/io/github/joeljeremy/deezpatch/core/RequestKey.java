@@ -13,7 +13,7 @@ import java.util.Objects;
  * Uniquely identifies a request based on the combination of the request type and the result type.
  *
  * @apiNote This needs to be instantiated as an anonymous class in order for the type parameters to
- *     be detected e.g. <code>new RequestType{@literal <}GetMerchantById, Merchant{@literal >}() {}
+ *     be detected e.g. <code>new RequestType{@literal <}GetOrderById, Order{@literal >}() {}
  *     </code> (Note the trailing <code>{}</code>).
  * @apiNote Factory methods are also provided for convenience:
  *     <ul>

@@ -14,31 +14,31 @@ import java.lang.annotation.Target;
  * <blockquote>
  *
  * <pre>
- * public class CreateMerchant implements Request{@code <}Void{@code >} {
- *   private final String merchantName;
+ * public class PlaceOrder implements Request{@literal <}Void{@literal >} {
+ *   private final OrderItems orderItems;
  *
- *   public CreateMerchant(String merchantName) {
- *     this.merchantName = merchantName;
+ *   public PlaceOrder(OrderItems orderItems) {
+ *     this.orderItems = orderItems;
  *   }
  *
- *   public String merchantName() {
- *     return merchantName;
- *   }
- * }
- *
- * public class GetMerchantById implements Request{@code <}Merchant{@code >} {
- *   private final String merchantId;
- *
- *   public GetMerchantById(String merchantId) {
- *     this.merchantId = merchantId;
- *   }
- *
- *   public String merchantId() {
- *     return merchantId;
+ *   public OrderItems orderItems() {
+ *     return orderItems;
  *   }
  * }
  *
- * public class GetMerchantCount implements Request{@code <}Integer{@code >} {}
+ * public class GetOrderById implements Request{@literal <}Order{@literal >} {
+ *   private final String orderId;
+ *
+ *   public GetOrderById(String orderId) {
+ *     this.orderId = orderId;
+ *   }
+ *
+ *   public String orderId() {
+ *     return orderId;
+ *   }
+ * }
+ *
+ * public class GetOrderCount implements Request{@literal <}Integer{@literal >} {}
  * </pre>
  *
  * </blockquote>
@@ -49,26 +49,25 @@ import java.lang.annotation.Target;
  *
  * <pre>
  * public class RequestHandlers {
- *   {@code // CreateMerchant request has Void result type.}
- *   {@code // Method return type must either be Void or void.}
- *   {@code // (void is recommended since you won't need to return null.)}
+ *   {@code // PlaceOrder request has Void result type.}
+ *   {@code // Method return type must either be void.}
  *   {@code @}RequestHandler
- *   public void handle(CreateMerchant request) {
- *     merchantRepository.save(createMerchant(request));
+ *   public void handle(PlaceOrder request) {
+ *     placeOrder(request);
  *   }
  *
- *   {@code // GetMerchantById request has Merchant result type.}
- *   {@code // Method return type must be Merchant.}
+ *   {@code // GetOrderById request has Order result type.}
+ *   {@code // Method return type must be Order.}
  *   {@code @}RequestHandler
- *   public Merchant handle(GetMerchantById request) {
- *     return merchantRepository.getById(request.merchantId());
+ *   public Order handle(GetOrderById request) {
+ *     return getOrder(request.orderId());
  *   }
  *
- *   {@code // GetMerchantCount request has Integer result type.}
+ *   {@code // GetOrderCount request has Integer result type.}
  *   {@code // Method return type must either be Integer or int.}
  *   {@code @}RequestHandler
- *   public int handle(GetMerchantCount request) {
- *     return merchantRepository.count();
+ *   public int handle(GetOrderCount request) {
+ *     return countOrders();
  *   }
  * }
  * </pre>

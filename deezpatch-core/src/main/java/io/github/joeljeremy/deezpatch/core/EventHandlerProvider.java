@@ -11,5 +11,5 @@ public interface EventHandlerProvider {
    * @param eventType The event type.
    * @return The list of event handlers, if any are registered. Otherwise, an empty {@code List}.
    */
-  <T> List<RegisteredEventHandler<T>> getEventHandlersFor(Class<T> eventType);
+  <T extends Event> List<RegisteredEventHandler<T>> getEventHandlersFor(Class<T> eventType);
 }

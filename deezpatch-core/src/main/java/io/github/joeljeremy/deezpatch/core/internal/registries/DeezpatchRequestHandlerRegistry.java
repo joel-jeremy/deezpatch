@@ -183,7 +183,8 @@ public class DeezpatchRequestHandlerRegistry
   private static void validateMethodParameters(Method method) {
     if (method.getParameterCount() != 1) {
       throw new IllegalArgumentException(
-          "Methods marked with @RequestHandler must accept a single parameter which is the request object.");
+          "Methods marked with @RequestHandler must accept a single parameter which is the request"
+              + " object.");
     }
   }
 

@@ -28,7 +28,7 @@ public class Deezpatch implements Dispatcher, Publisher {
    * Constructor.
    *
    * @param requestConfiguration The request configuration.
-   * @param eventHandlerProvider The event configuration.
+   * @param eventConfiguration The event configuration.
    */
   private Deezpatch(
       RequestConfiguration requestConfiguration, EventConfiguration eventConfiguration) {

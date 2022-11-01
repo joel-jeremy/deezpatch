@@ -14,27 +14,27 @@ import java.lang.annotation.Target;
  * <blockquote>
  *
  * <pre>
- * public class MerchantCreated implements Event {
- *   private final String merchantId;
+ * public class OrderPlaced implements Event {
+ *   private final String orderId;
  *
- *   public MerchantCreated(String merchantId) {
- *     this.merchantId = merchantId;
+ *   public OrderPlaced(String orderId) {
+ *     this.orderId = orderId;
  *   }
  *
- *   public String merchantId() {
- *     return merchantId;
+ *   public String orderId() {
+ *     return orderId;
  *   }
  * }
  *
- * public class MerchantSuspended implements Event {
- *   private final String merchantId;
+ * public class OrderCancelled implements Event {
+ *   private final String orderId;
  *
- *   public MerchantCreated(String merchantId) {
- *     this.merchantId = merchantId;
+ *   public OrderCancelled(String orderId) {
+ *     this.orderId = orderId;
  *   }
  *
- *   public String merchantId() {
- *     return merchantId;
+ *   public String orderId() {
+ *     return orderId;
  *   }
  * }
  * </pre>
@@ -48,12 +48,12 @@ import java.lang.annotation.Target;
  * <pre>
  * public class EventHandlers {
  *   {@code @}EventHandler
- *   public void handle(MerchantCreated event) {
+ *   public void handle(OrderPlaced event) {
  *     {@code // Handle}
  *   }
  *
  *   {@code @}EventHandler
- *   public void handle(MerchantSuspended event) {
+ *   public void handle(OrderCancelled event) {
  *     {@code // Handle}
  *   }
  * }
