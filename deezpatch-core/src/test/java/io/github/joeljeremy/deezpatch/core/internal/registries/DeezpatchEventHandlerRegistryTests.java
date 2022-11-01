@@ -89,10 +89,10 @@ public class DeezpatchEventHandlerRegistryTests {
         "should detect and register methods annotated with custom event handler annotation")
     void test3() {
       Class<CustomEventHandler> customEventHandlerAnnotation = CustomEventHandler.class;
-      CustomAnnotationEventHandler customAnnotationEventHandler = 
+      CustomAnnotationEventHandler customAnnotationEventHandler =
           TestEventHandlers.customAnnotationEventHandler();
-      
-      DeezpatchEventHandlerRegistry eventHandlerRegistry = 
+
+      DeezpatchEventHandlerRegistry eventHandlerRegistry =
           buildEventHandlerRegistry(
               Set.of(customEventHandlerAnnotation), customAnnotationEventHandler);
 
@@ -212,8 +212,7 @@ public class DeezpatchEventHandlerRegistryTests {
   }
 
   private DeezpatchEventHandlerRegistry buildEventHandlerRegistry(
-      Set<Class<? extends Annotation>> eventHandlerAnnotations,  
-      Object... eventHandlers) {
+      Set<Class<? extends Annotation>> eventHandlerAnnotations, Object... eventHandlers) {
     return new DeezpatchEventHandlerRegistry(
         TestInstanceProviders.of(eventHandlers), eventHandlerAnnotations);
   }

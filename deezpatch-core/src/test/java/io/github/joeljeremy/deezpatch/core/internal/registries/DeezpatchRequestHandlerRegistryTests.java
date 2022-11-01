@@ -84,7 +84,7 @@ public class DeezpatchRequestHandlerRegistryTests {
     @DisplayName(
         "should detect and register methods annotated with custom request handler annotation")
     void test3() {
-      CustomAnnotationRequestHandler customAnnotationRequestHandler = 
+      CustomAnnotationRequestHandler customAnnotationRequestHandler =
           TestRequestHandlers.customAnnotationRequestHandler();
       DeezpatchRequestHandlerRegistry requestHandlerRegistry =
           buildRequestHandlerRegistry(
@@ -266,8 +266,7 @@ public class DeezpatchRequestHandlerRegistryTests {
   }
 
   private static DeezpatchRequestHandlerRegistry buildRequestHandlerRegistry(
-      Set<Class<? extends Annotation>> requestHandlerAnnotations,
-      Object... requestHandlers) {
+      Set<Class<? extends Annotation>> requestHandlerAnnotations, Object... requestHandlers) {
     return new DeezpatchRequestHandlerRegistry(
         TestInstanceProviders.of(requestHandlers), requestHandlerAnnotations);
   }

@@ -205,6 +205,8 @@ public class Deezpatch implements Dispatcher, Publisher {
        * annotations will be treated as request handlers. The {@link RequestHandler} annotation is
        * supported by default.
        *
+       * @apiNote Annotations must have runtime retention policy i.e. must be annotated with
+       *     {@code @Retention(RetentionPolicy.RUNTIME)}
        * @param requestHandlerAnnotations The request handler annotations to support.
        * @return Deez request configuration.
        */
@@ -221,6 +223,8 @@ public class Deezpatch implements Dispatcher, Publisher {
        * annotations will be treated as request handlers. The {@link RequestHandler} annotation is
        * supported by default.
        *
+       * @apiNote Annotations must have runtime retention policy i.e. must be annotated with
+       *     {@code @Retention(RetentionPolicy.RUNTIME)}
        * @param requestHandlerAnnotations The request handler annotations to support.
        * @return Deez request configuration.
        */
@@ -290,6 +294,8 @@ public class Deezpatch implements Dispatcher, Publisher {
        * Register supported event handler annotations. Methods annotated with these annotations will
        * be treated as event handlers. The {@link EventHandler} annotation is supported by default.
        *
+       * @apiNote Annotations must have runtime retention policy i.e. must be annotated with
+       *     {@code @Retention(RetentionPolicy.RUNTIME)}
        * @param eventHandlerAnnotations The event handler annotations to support. The {@link
        *     EventHandler} annotation is supported by default.
        * @return Deez request configuration.
@@ -306,6 +312,8 @@ public class Deezpatch implements Dispatcher, Publisher {
        * Register supported event handler annotations. Methods annotated with these annotations will
        * be treated as event handlers. The {@link EventHandler} annotation is supported by default.
        *
+       * @apiNote Annotations must have runtime retention policy i.e. must be annotated with
+       *     {@code @Retention(RetentionPolicy.RUNTIME)}
        * @param eventHandlerAnnotations The event handler annotations to support. The {@link
        *     EventHandler} annotation is supported by default.
        * @return Deez request configuration.
