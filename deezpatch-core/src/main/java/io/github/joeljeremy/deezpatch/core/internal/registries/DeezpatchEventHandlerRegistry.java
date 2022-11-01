@@ -11,10 +11,13 @@ import io.github.joeljeremy.deezpatch.core.RegisteredEventHandler;
 import io.github.joeljeremy.deezpatch.core.internal.EventHandlerMethod;
 import io.github.joeljeremy.deezpatch.core.internal.Internal;
 import io.github.joeljeremy.deezpatch.core.internal.LambdaFactory;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /** The default event handler registry. */
 @Internal
@@ -24,14 +27,18 @@ public class DeezpatchEventHandlerRegistry implements EventHandlerRegistry, Even
       new RegisteredEventHandlersByEventType();
 
   private final InstanceProvider instanceProvider;
+  private final Set<Class<? extends Annotation>> eventHandlerAnnotations;
 
   /**
    * Constructor.
    *
    * @param instanceProvider The instance provider.
+   * @param eventHandlerAnnotations The supported event handler annotations.
    */
-  public DeezpatchEventHandlerRegistry(InstanceProvider instanceProvider) {
+  public DeezpatchEventHandlerRegistry(
+      InstanceProvider instanceProvider, Set<Class<? extends Annotation>> eventHandlerAnnotations) {
     this.instanceProvider = requireNonNull(instanceProvider);
+    this.eventHandlerAnnotations = withNativeEventHandler(requireNonNull(eventHandlerAnnotations));
   }
 
   /** {@inheritDoc} */
@@ -43,16 +50,15 @@ public class DeezpatchEventHandlerRegistry implements EventHandlerRegistry, Even
       Method[] methods = eventHandlerClass.getMethods();
       // Register all methods marked with @EventHandler.
       for (Method method : methods) {
-        if (!method.isAnnotationPresent(EventHandler.class)) {
+        if (!isEventHandler(method)) {
           continue;
         }
 
         validateMethodParameters(method);
         validateReturnType(method);
 
-        register(
-            // First parameter in the method is the event object.
-            method.getParameterTypes()[0], method);
+        // First parameter in the method is the event object.
+        register(method.getParameterTypes()[0], method);
       }
     }
 
@@ -78,6 +84,15 @@ public class DeezpatchEventHandlerRegistry implements EventHandlerRegistry, Even
     List<RegisteredEventHandler<?>> handlers = eventHandlersByEventType.get(eventType);
 
     handlers.add(buildEventHandler(eventHandlerMethod, instanceProvider));
+  }
+
+  private boolean isEventHandler(Method method) {
+    for (Annotation annotation : method.getAnnotations()) {
+      if (eventHandlerAnnotations.contains(annotation.annotationType())) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private static RegisteredEventHandler<?> buildEventHandler(
@@ -113,11 +128,19 @@ public class DeezpatchEventHandlerRegistry implements EventHandlerRegistry, Even
     }
   }
 
-  private void validateReturnType(Method method) {
+  private static void validateReturnType(Method method) {
     if (!void.class.equals(method.getReturnType())) {
       throw new IllegalArgumentException(
           "Methods marked with @EventHandler must have a void return type.");
     }
+  }
+
+  private static Set<Class<? extends Annotation>> withNativeEventHandler(
+      Set<Class<? extends Annotation>> eventHandlerAnnotations) {
+    Set<Class<? extends Annotation>> merged = new HashSet<>(eventHandlerAnnotations);
+    // The native @EventHandler annotation.
+    merged.add(EventHandler.class);
+    return Collections.unmodifiableSet(merged);
   }
 
   private static class RegisteredEventHandlersByEventType

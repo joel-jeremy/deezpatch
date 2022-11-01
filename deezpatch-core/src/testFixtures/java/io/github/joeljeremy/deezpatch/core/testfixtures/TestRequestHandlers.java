@@ -43,6 +43,10 @@ public class TestRequestHandlers {
     return new IncompatibleRequestHandler();
   }
 
+  public static CustomAnnotationRequestHandler customAnnotationRequestHandler() {
+    return new CustomAnnotationRequestHandler();
+  }
+
   public static class PrimitiveRequestHandler extends TrackableHandler {
     private PrimitiveRequestHandler() {}
 
@@ -187,6 +191,16 @@ public class TestRequestHandlers {
     @RequestHandler
     public List<Integer> incompatible(IntegerRequest request) {
       return List.of();
+    }
+  }
+
+  public static class CustomAnnotationRequestHandler extends TrackableHandler {
+    private CustomAnnotationRequestHandler() {}
+
+    @CustomRequestHandler
+    public TestResult handle(TestRequest request) {
+      track(request);
+      return new TestResult(request.parameter());
     }
   }
 }

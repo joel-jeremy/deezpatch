@@ -27,6 +27,10 @@ public class TestEventHandlers {
     return new CountDownLatchEventHandler(countDownLatch);
   }
 
+  public static CustomAnnotationEventHandler customAnnotationEventHandler() {
+    return new CustomAnnotationEventHandler();
+  }
+
   public static class TestEventHandler extends TrackableHandler {
     private TestEventHandler() {}
 
@@ -84,6 +88,15 @@ public class TestEventHandlers {
     public void handle(TestEvent event) {
       track(event);
       countDownLatch.countDown();
+    }
+  }
+
+  public static class CustomAnnotationEventHandler extends TrackableHandler {
+    private CustomAnnotationEventHandler() {}
+
+    @CustomEventHandler
+    public void handle(TestEvent event) {
+      track(event);
     }
   }
 }

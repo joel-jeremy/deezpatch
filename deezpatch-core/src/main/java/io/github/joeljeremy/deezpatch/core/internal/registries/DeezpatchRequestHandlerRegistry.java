@@ -13,10 +13,14 @@ import io.github.joeljeremy.deezpatch.core.internal.Internal;
 import io.github.joeljeremy.deezpatch.core.internal.LambdaFactory;
 import io.github.joeljeremy.deezpatch.core.internal.RequestHandlerMethod;
 import io.github.joeljeremy.deezpatch.core.internal.VoidRequestHandlerMethod;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 /** The default request handler registry. */
@@ -34,14 +38,20 @@ public class DeezpatchRequestHandlerRegistry
       new WeakHashMap<>();
 
   private final InstanceProvider instanceProvider;
+  private final Set<Class<? extends Annotation>> requestHandlerAnnotations;
 
   /**
    * Constructor.
    *
    * @param instanceProvider The instance provider.
+   * @param requestHandlerAnnotations The supported request handler annotations.
    */
-  public DeezpatchRequestHandlerRegistry(InstanceProvider instanceProvider) {
+  public DeezpatchRequestHandlerRegistry(
+      InstanceProvider instanceProvider,
+      Set<Class<? extends Annotation>> requestHandlerAnnotations) {
     this.instanceProvider = requireNonNull(instanceProvider);
+    this.requestHandlerAnnotations =
+        withNativeRequestHandler(requireNonNull(requestHandlerAnnotations));
   }
 
   /** {@inheritDoc} */
@@ -52,20 +62,19 @@ public class DeezpatchRequestHandlerRegistry
     for (Class<?> requestHandlerClass : requestHandlerClasses) {
       Method[] methods = requestHandlerClass.getMethods();
       // Register all methods marked with @RequestHandler.
-      for (Method requestHandlerMethod : methods) {
-        if (!requestHandlerMethod.isAnnotationPresent(RequestHandler.class)) {
+      for (Method method : methods) {
+        if (!isRequestHandler(method)) {
           continue;
         }
 
-        validateMethodParameters(requestHandlerMethod);
+        validateMethodParameters(method);
 
         // First parameter in the method is the request object.
-        RequestKey<?, ?> requestType =
-            RequestKey.from(requestHandlerMethod.getGenericParameterTypes()[0]);
+        RequestKey<?, ?> requestType = RequestKey.from(method.getGenericParameterTypes()[0]);
 
-        validateMethodReturnType(requestHandlerMethod, requestType);
+        validateMethodReturnType(method, requestType);
 
-        register(requestType, requestHandlerMethod);
+        register(requestType, method);
       }
     }
 
@@ -110,6 +119,15 @@ public class DeezpatchRequestHandlerRegistry
               + ". Please note that primitive and wrapper result types "
               + "are considered the same.");
     }
+  }
+
+  private boolean isRequestHandler(Method method) {
+    for (Annotation annotation : method.getAnnotations()) {
+      if (requestHandlerAnnotations.contains(annotation.annotationType())) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private static RegisteredRequestHandler<?, ?> buildRequestHandler(
@@ -211,6 +229,14 @@ public class DeezpatchRequestHandlerRegistry
                   + "handler method's return type '%s'. Please adjust accordingly.",
               resultType.getTypeName(), requestHandlerMethod.getGenericReturnType().getTypeName()));
     }
+  }
+
+  private static Set<Class<? extends Annotation>> withNativeRequestHandler(
+      Set<Class<? extends Annotation>> requestHandlerAnnotations) {
+    Set<Class<? extends Annotation>> merged = new HashSet<>(requestHandlerAnnotations);
+    // The native @RequestHandler annotation.
+    merged.add(RequestHandler.class);
+    return Collections.unmodifiableSet(merged);
   }
 
   private static class PrimitiveTypeMap extends ClassValue<Class<?>> {
