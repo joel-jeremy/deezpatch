@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.github.joeljeremy.deezpatch.core.Event;
 import io.github.joeljeremy.deezpatch.core.RegisteredEventHandler;
-import io.github.joeljeremy.deezpatch.core.testentities.TestEvent;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestEvent;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;

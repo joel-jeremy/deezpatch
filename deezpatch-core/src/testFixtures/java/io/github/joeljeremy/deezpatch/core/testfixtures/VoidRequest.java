@@ -1,11 +1,11 @@
-package io.github.joeljeremy.deezpatch.core.testentities;
+package io.github.joeljeremy.deezpatch.core.testfixtures;
 
 import io.github.joeljeremy.deezpatch.core.Request;
 
-public class TestRequest implements Request<TestResult> {
+public class VoidRequest implements Request<Void> {
   private final String parameter;
 
-  public TestRequest(String parameter) {
+  public VoidRequest(String parameter) {
     this.parameter = parameter;
   }
 

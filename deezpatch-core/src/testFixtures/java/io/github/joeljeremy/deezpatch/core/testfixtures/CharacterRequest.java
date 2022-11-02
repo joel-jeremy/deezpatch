@@ -1,11 +1,11 @@
-package io.github.joeljeremy.deezpatch.core.testentities;
+package io.github.joeljeremy.deezpatch.core.testfixtures;
 
 import io.github.joeljeremy.deezpatch.core.Request;
 
-public class ByteRequest implements Request<Byte> {
+public class CharacterRequest implements Request<Character> {
   private final String parameter;
 
-  public ByteRequest(String parameter) {
+  public CharacterRequest(String parameter) {
     this.parameter = parameter;
   }
 

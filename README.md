@@ -113,20 +113,24 @@ Requests are dispatched to a single request handler and this can be done through
 
 ```java
 public static void main(String[] args) {
+    // Use Spring's application context as InstanceProvider in this example
+    // but any other DI framework can be used e.g. Guice, Dagger, etc.
+    ApplicationContext applicationContext = springApplicationContext();
+
     // Deezpatch implements the Dispatcher interface.
-    Deezpatch deezpatch = Deezpatch.builder()
+    Dispatcher dispatcher = Deezpatch.builder()
         .instanceProvider(applicationContext::getBean)
-        .requests(config -> config.register(
+        .requests(config -> config.handlers(
             GreetCommandHandler.java,
             PingQueryHandler.java
         ))
         .build();
 
     // Send command!
-    deezpatch.send(new GreetCommand("Deez"));
+    dispatcher.send(new GreetCommand("Deez"));
 
     // Send query!
-    Optional<Pong> pong = deezpatch.send(new PingQuery());
+    Optional<Pong> pong = dispatcher.send(new PingQuery());
 }
 ```
 
@@ -179,16 +183,20 @@ Events are dispatched to zero or more event handlers and this can be done throug
 
 ```java
 public static void main(String[] args) {
+    // Use Spring's application context as InstanceProvider in this example
+    // but any other DI framework can be used e.g. Guice, Dagger, etc.
+    ApplicationContext applicationContext = springApplicationContext();
+
     // Deezpatch implements the Publisher interface.
-    Deezpatch deezpatch = Deezpatch.builder()
+    Publisher publisher = Deezpatch.builder()
         .instanceProvider(applicationContext::getBean)
-        .events(config -> config.register(
+        .events(config -> config.handlers(
             GreetedEventHandler.java
         ))
         .build();
 
     // Publish event!
-    deezpatch.publish(new GreetedEvent("Hi from Deez!"));
+    publisher.publish(new GreetedEvent("Hi from Deez!"));
 }
 ```
 
@@ -242,6 +250,57 @@ public static void main(String[] args) {
       .instanceProvider(injector::getInstance)
       .requests(...)
       .events(...)
+      .build();
+}
+```
+
+## 🎛️ Custom Request/Event Handler Annotations
+
+In cases where a project is built in such a way that bringing in external dependencies is considered a bad practice (e.g. domain layer/package in a Hexagonal (Ports and Adapters) architecture), Deezpatch provides a way to use custom/user-defined request/event handler annotations (in addition to the built-in [RequestHandler](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/RequestHandler.java) and [EventHandler](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/EventHandler.java) annotations) to annotate request/event handlers.
+
+This way, Deezpatch can still be used without adding the core Deezpatch library as a dependency of a project's domain layer/package. Instead, it may be used in the outer layers/packages to wire things up.
+
+```java
+// Let's say below classes are declared in a project's core/domain package:
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface MyCustomRequestHandlerAnnotation {}
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface MyCustomEventHandlerAnnotation {}
+
+public class MyRequestHandler {
+  @MyCustomRequestHandlerAnnotation
+  public void handle(TestRequest request) {
+    // Handle.
+  }
+}
+
+public class MyEventHandler {
+  @MyCustomRequestHandlerAnnotation
+  public void handle(TestEvent event) {
+    // Handle.
+  }
+}
+
+// To wire things up:
+
+public static void main(String[] args) {
+  // Use Spring's application context as InstanceProvider in this example
+  // but any other DI framework can be used e.g. Guice, Dagger, etc.
+  ApplicationContext applicationContext = springApplicationContext();
+
+  // Register handlers and custom annotations.
+  Deezpatch deezpatch = Deezpatch.builder()
+      .instanceProvider(applicationContext::getBean)
+      .requests(config -> 
+          config.handlerAnnotations(MyCustomRequestHandlerAnnotation.class)
+              .handlers(MyRequestHandler.class))
+      .events(config -> 
+          config.handlerAnnotations(MyCustomEventHandlerAnnotation.java)
+              .handlers(MyEventHandler.class))
       .build();
 }
 ```

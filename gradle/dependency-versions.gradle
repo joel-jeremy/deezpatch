@@ -3,7 +3,7 @@ ext {
     junitJupiter: "5.9.1",
     jacoco: "0.8.8",
     errorprone: "2.15.0",
-    nullaway: "0.10.2",
-    checkerframework: "3.25.0"
+    nullaway: "0.10.3",
+    checkerframework: "3.26.0"
   ]
 }

@@ -1,4 +1,4 @@
-package io.github.joeljeremy.deezpatch.core.testentities;
+package io.github.joeljeremy.deezpatch.core.testfixtures;
 
 import io.github.joeljeremy.deezpatch.core.EventHandler;
 import java.util.concurrent.CountDownLatch;
@@ -25,6 +25,10 @@ public class TestEventHandlers {
   public static CountDownLatchEventHandler countDownLatchEventHandler(
       CountDownLatch countDownLatch) {
     return new CountDownLatchEventHandler(countDownLatch);
+  }
+
+  public static CustomAnnotationEventHandler customAnnotationEventHandler() {
+    return new CustomAnnotationEventHandler();
   }
 
   public static class TestEventHandler extends TrackableHandler {
@@ -84,6 +88,15 @@ public class TestEventHandlers {
     public void handle(TestEvent event) {
       track(event);
       countDownLatch.countDown();
+    }
+  }
+
+  public static class CustomAnnotationEventHandler extends TrackableHandler {
+    private CustomAnnotationEventHandler() {}
+
+    @CustomEventHandler
+    public void handle(TestEvent event) {
+      track(event);
     }
   }
 }

@@ -1,12 +1,11 @@
-package io.github.joeljeremy.deezpatch.core.testentities;
+package io.github.joeljeremy.deezpatch.core.testfixtures;
 
 import io.github.joeljeremy.deezpatch.core.Request;
-import java.util.List;
 
-public class ListRequest implements Request<List<String>> {
+public class ByteRequest implements Request<Byte> {
   private final String parameter;
 
-  public ListRequest(String parameter) {
+  public ByteRequest(String parameter) {
     this.parameter = parameter;
   }
 

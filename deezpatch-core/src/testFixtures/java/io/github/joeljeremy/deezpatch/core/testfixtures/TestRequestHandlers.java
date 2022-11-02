@@ -1,4 +1,4 @@
-package io.github.joeljeremy.deezpatch.core.testentities;
+package io.github.joeljeremy.deezpatch.core.testfixtures;
 
 import io.github.joeljeremy.deezpatch.core.RequestHandler;
 import java.util.List;
@@ -41,6 +41,10 @@ public class TestRequestHandlers {
 
   public static IncompatibleRequestHandler incompatibleRequestHandler() {
     return new IncompatibleRequestHandler();
+  }
+
+  public static CustomAnnotationRequestHandler customAnnotationRequestHandler() {
+    return new CustomAnnotationRequestHandler();
   }
 
   public static class PrimitiveRequestHandler extends TrackableHandler {
@@ -187,6 +191,16 @@ public class TestRequestHandlers {
     @RequestHandler
     public List<Integer> incompatible(IntegerRequest request) {
       return List.of();
+    }
+  }
+
+  public static class CustomAnnotationRequestHandler extends TrackableHandler {
+    private CustomAnnotationRequestHandler() {}
+
+    @CustomRequestHandler
+    public TestResult handle(TestRequest request) {
+      track(request);
+      return new TestResult(request.parameter());
     }
   }
 }

@@ -8,28 +8,31 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.github.joeljeremy.deezpatch.core.Deezpatch.Builder.EventConfiguration;
-import io.github.joeljeremy.deezpatch.core.Deezpatch.Builder.RequestConfiguration;
 import io.github.joeljeremy.deezpatch.core.Deezpatch.EventHandlerInvocationStrategy;
+import io.github.joeljeremy.deezpatch.core.Deezpatch.EventHandlingConfigurator;
 import io.github.joeljeremy.deezpatch.core.Deezpatch.RequestHandlerInvocationStrategy;
+import io.github.joeljeremy.deezpatch.core.Deezpatch.RequestHandlingConfigurator;
 import io.github.joeljeremy.deezpatch.core.invocationstrategies.SyncEventHandlerInvocationStrategy;
-import io.github.joeljeremy.deezpatch.core.invocationstrategies.SyncRequestHandlerInvocationStrategy;
-import io.github.joeljeremy.deezpatch.core.testentities.IntegerRequest;
-import io.github.joeljeremy.deezpatch.core.testentities.TestEvent;
-import io.github.joeljeremy.deezpatch.core.testentities.TestEventHandlers;
-import io.github.joeljeremy.deezpatch.core.testentities.TestEventHandlers.TestEventHandler;
-import io.github.joeljeremy.deezpatch.core.testentities.TestInstanceProviders;
-import io.github.joeljeremy.deezpatch.core.testentities.TestRequestHandlers;
-import io.github.joeljeremy.deezpatch.core.testentities.TestRequestHandlers.TestRequestHandler;
-import io.github.joeljeremy.deezpatch.core.testentities.VoidRequest;
+import io.github.joeljeremy.deezpatch.core.testfixtures.CustomEventHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.CustomRequestHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.IntegerRequest;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestEvent;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestEventHandlers;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestEventHandlers.CountDownLatchEventHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestEventHandlers.TestEventHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestInstanceProviders;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequest;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequestHandlers;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequestHandlers.TestRequestHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequestHandlers.VoidRequestHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestResult;
+import io.github.joeljeremy.deezpatch.core.testfixtures.VoidRequest;
+import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -51,7 +54,7 @@ public class DeezpatchTests {
     @Nested
     class RequestsMethod {
       @Test
-      @DisplayName("should throw when request configurer argument is null")
+      @DisplayName("should throw when request configurator argument is null")
       void test1() {
         Deezpatch.Builder builder = Deezpatch.builder();
 
@@ -62,7 +65,7 @@ public class DeezpatchTests {
     @Nested
     class EventsMethod {
       @Test
-      @DisplayName("should throw when event configurer argument is null")
+      @DisplayName("should throw when event configurator argument is null")
       void test1() {
         Deezpatch.Builder builder = Deezpatch.builder();
 
@@ -81,49 +84,227 @@ public class DeezpatchTests {
       }
 
       @Nested
-      class RequestConfigurationTests {
+      class RequestHandlingConfigurationTests {
         @Nested
-        class RegisterTests {
+        class HandlerAnnotationsMethod {
           @Test
-          @DisplayName("should throw when request handler classes argument is null")
+          @DisplayName("should throw when request handler annotations argument is null")
           void test1() {
-            Consumer<RequestConfiguration> configurer =
-                config -> config.register((Class<?>[]) null);
+            RequestHandlingConfigurator configurator =
+                config -> config.handlerAnnotations((Class<? extends Annotation>[]) null);
 
             Deezpatch.Builder builder =
                 Deezpatch.builder()
                     .instanceProvider(TestInstanceProviders.of())
-                    .requests(configurer);
+                    .requests(configurator);
 
             assertThrows(NullPointerException.class, () -> builder.build());
           }
 
           @Test
-          @DisplayName("should throw when request handler classes contains null")
+          @DisplayName("should throw when request handler annotations argument contains null")
           void test2() {
-            Consumer<RequestConfiguration> configurer =
-                config -> config.register(new Class<?>[] {TestRequestHandler.class, null});
+            @SuppressWarnings("unchecked")
+            Class<? extends Annotation>[] requestHandlerAnnotations =
+                (Class<? extends Annotation>[]) new Class<?>[] {CustomRequestHandler.class, null};
+
+            RequestHandlingConfigurator configurator =
+                config -> config.handlerAnnotations(requestHandlerAnnotations);
 
             Deezpatch.Builder builder =
                 Deezpatch.builder()
                     .instanceProvider(TestInstanceProviders.of())
-                    .requests(configurer);
+                    .requests(configurator);
 
             assertThrows(NullPointerException.class, () -> builder.build());
+          }
+
+          @Test
+          @DisplayName(
+              "should not throw when request handler annotations argument contains valid items")
+          void test3() {
+            @SuppressWarnings("unchecked")
+            Class<? extends Annotation>[] requestHandlerAnnotations =
+                (Class<? extends Annotation>[])
+                    new Class<?>[] {CustomRequestHandler.class, RequestHandler.class};
+
+            RequestHandlingConfigurator configurator =
+                config -> config.handlerAnnotations(requestHandlerAnnotations);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .requests(configurator);
+
+            assertDoesNotThrow(() -> builder.build());
           }
         }
 
         @Nested
-        class InvocationStrategyTests {
+        class HandlerAnnotationsMethodWithCollectionOverload {
           @Test
-          @DisplayName("should throw when request handler invocation strategy argument is null")
+          @DisplayName("should throw when request handler annotations argument is null")
           void test1() {
-            Consumer<RequestConfiguration> configurer = config -> config.invocationStrategy(null);
+            RequestHandlingConfigurator configurator =
+                config -> config.handlerAnnotations((Collection<Class<? extends Annotation>>) null);
 
             Deezpatch.Builder builder =
                 Deezpatch.builder()
                     .instanceProvider(TestInstanceProviders.of())
-                    .requests(configurer);
+                    .requests(configurator);
+
+            assertThrows(NullPointerException.class, () -> builder.build());
+          }
+
+          @Test
+          @DisplayName("should throw when request handler annotations argument contains null")
+          void test2() {
+            Collection<Class<? extends Annotation>> requestHandlerAnnotations =
+                Arrays.asList(CustomRequestHandler.class, null);
+
+            RequestHandlingConfigurator configurator =
+                config -> config.handlerAnnotations(requestHandlerAnnotations);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .requests(configurator);
+
+            assertThrows(NullPointerException.class, () -> builder.build());
+          }
+
+          @Test
+          @DisplayName(
+              "should not throw when request handler annotations argument contains valid items")
+          void test3() {
+            Collection<Class<? extends Annotation>> requestHandlerAnnotations =
+                Arrays.asList(CustomRequestHandler.class, RequestHandler.class);
+
+            RequestHandlingConfigurator configurator =
+                config -> config.handlerAnnotations(requestHandlerAnnotations);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .requests(configurator);
+
+            assertDoesNotThrow(() -> builder.build());
+          }
+        }
+
+        @Nested
+        class HandlersMethod {
+          @Test
+          @DisplayName("should throw when request handler classes argument is null")
+          void test1() {
+            RequestHandlingConfigurator configurator = config -> config.handlers((Class<?>[]) null);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .requests(configurator);
+
+            assertThrows(NullPointerException.class, () -> builder.build());
+          }
+
+          @Test
+          @DisplayName("should throw when request handler classes argument contains null")
+          void test2() {
+            Class<?>[] requestHandlerClasses = new Class<?>[] {TestRequestHandler.class, null};
+
+            RequestHandlingConfigurator configurator =
+                config -> config.handlers(requestHandlerClasses);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .requests(configurator);
+
+            assertThrows(NullPointerException.class, () -> builder.build());
+          }
+
+          @Test
+          @DisplayName(
+              "should not throw when request handler classes argument contains valid items")
+          void test3() {
+            Class<?>[] requestHandlerClasses =
+                new Class<?>[] {TestRequestHandler.class, VoidRequestHandler.class};
+
+            RequestHandlingConfigurator configurator =
+                config -> config.handlers(requestHandlerClasses);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .requests(configurator);
+
+            assertDoesNotThrow(() -> builder.build());
+          }
+        }
+
+        @Nested
+        class HandlersMethodWithCollectionOverload {
+          @Test
+          @DisplayName("should throw when request handler classes argument is null")
+          void test1() {
+            RequestHandlingConfigurator configurator =
+                config -> config.handlers((Collection<Class<?>>) null);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .requests(configurator);
+
+            assertThrows(NullPointerException.class, () -> builder.build());
+          }
+
+          @Test
+          @DisplayName("should throw when request handler classes argument contains null")
+          void test2() {
+            Collection<Class<?>> requestHandlerClasses =
+                Arrays.asList(TestRequestHandler.class, null);
+
+            RequestHandlingConfigurator configurator =
+                config -> config.handlers(requestHandlerClasses);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .requests(configurator);
+
+            assertThrows(NullPointerException.class, () -> builder.build());
+          }
+
+          @Test
+          @DisplayName(
+              "should not throw when request handler classes argument contains valid items")
+          void test3() {
+            Collection<Class<?>> requestHandlerClasses =
+                Arrays.asList(TestRequestHandler.class, VoidRequestHandler.class);
+
+            RequestHandlingConfigurator configurator =
+                config -> config.handlers(requestHandlerClasses);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .requests(configurator);
+
+            assertDoesNotThrow(() -> builder.build());
+          }
+        }
+
+        @Nested
+        class InvocationStrategyMethod {
+          @Test
+          @DisplayName("should throw when request handler invocation strategy argument is null")
+          void test1() {
+            RequestHandlingConfigurator configurator = config -> config.invocationStrategy(null);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .requests(configurator);
 
             assertThrows(NullPointerException.class, () -> builder.build());
           }
@@ -131,44 +312,236 @@ public class DeezpatchTests {
       }
 
       @Nested
-      class EventConfigurationTests {
+      class EventHandlingConfigurationTests {
         @Nested
-        class RegisterTests {
+        class HandlerAnnotationsMethod {
           @Test
-          @DisplayName("should throw when event handler classes argument is null")
+          @DisplayName("should throw when event handler annotations argument is null")
           void test1() {
-            Consumer<EventConfiguration> configurer = config -> config.register((Class<?>[]) null);
+            EventHandlingConfigurator configurator =
+                config -> config.handlerAnnotations((Class<? extends Annotation>[]) null);
 
             Deezpatch.Builder builder =
-                Deezpatch.builder().instanceProvider(TestInstanceProviders.of()).events(configurer);
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .events(configurator);
 
             assertThrows(NullPointerException.class, () -> builder.build());
           }
 
           @Test
-          @DisplayName("should throw when event handler classes contains null")
+          @DisplayName("should throw when event handler annotations argument contains null")
           void test2() {
-            Consumer<EventConfiguration> configurer =
-                config -> config.register(new Class<?>[] {TestEventHandler.class, null});
+            @SuppressWarnings("unchecked")
+            Class<? extends Annotation>[] eventHandlerAnnotations =
+                (Class<? extends Annotation>[]) new Class<?>[] {CustomEventHandler.class, null};
+
+            EventHandlingConfigurator configurator =
+                config -> config.handlerAnnotations(eventHandlerAnnotations);
 
             Deezpatch.Builder builder =
-                Deezpatch.builder().instanceProvider(TestInstanceProviders.of()).events(configurer);
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .events(configurator);
 
             assertThrows(NullPointerException.class, () -> builder.build());
+          }
+
+          @Test
+          @DisplayName(
+              "should not throw when event handler annotations argument contains valid items")
+          void test3() {
+            @SuppressWarnings("unchecked")
+            Class<? extends Annotation>[] eventHandlerAnnotations =
+                (Class<? extends Annotation>[])
+                    new Class<?>[] {CustomEventHandler.class, EventHandler.class};
+
+            EventHandlingConfigurator configurator =
+                config -> config.handlerAnnotations(eventHandlerAnnotations);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .events(configurator);
+
+            assertDoesNotThrow(() -> builder.build());
           }
         }
 
         @Nested
-        class InvocationStrategyTests {
+        class HandlerAnnotationsMethodWithCollectionOverload {
+          @Test
+          @DisplayName("should throw when event handler annotations argument is null")
+          void test1() {
+            EventHandlingConfigurator configurator =
+                config -> config.handlerAnnotations((Collection<Class<? extends Annotation>>) null);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .events(configurator);
+
+            assertThrows(NullPointerException.class, () -> builder.build());
+          }
+
+          @Test
+          @DisplayName("should throw when event handler annotations argument contains null")
+          void test2() {
+            Collection<Class<? extends Annotation>> eventHandlerAnnotations =
+                Arrays.asList(CustomEventHandler.class, null);
+
+            EventHandlingConfigurator configurator =
+                config -> config.handlerAnnotations(eventHandlerAnnotations);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .events(configurator);
+
+            assertThrows(NullPointerException.class, () -> builder.build());
+          }
+
+          @Test
+          @DisplayName(
+              "should not throw when event handler annotations argument contains valid items")
+          void test3() {
+            Collection<Class<? extends Annotation>> eventHandlerAnnotations =
+                Arrays.asList(CustomEventHandler.class, EventHandler.class);
+
+            EventHandlingConfigurator configurator =
+                config -> config.handlerAnnotations(eventHandlerAnnotations);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .events(configurator);
+
+            assertDoesNotThrow(() -> builder.build());
+          }
+        }
+
+        @Nested
+        class HandlersMethod {
+          @Test
+          @DisplayName("should throw when event handler classes argument is null")
+          void test1() {
+            EventHandlingConfigurator configurator = config -> config.handlers((Class<?>[]) null);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .events(configurator);
+
+            assertThrows(NullPointerException.class, () -> builder.build());
+          }
+
+          @Test
+          @DisplayName("should throw when event handler classes argument contains null")
+          void test2() {
+            Class<?>[] eventHandlerClasses = new Class<?>[] {TestEventHandler.class, null};
+
+            EventHandlingConfigurator configurator = config -> config.handlers(eventHandlerClasses);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .events(configurator);
+
+            assertThrows(NullPointerException.class, () -> builder.build());
+          }
+
+          @Test
+          @DisplayName("should not throw when event handler classes argument contains valid items")
+          void test3() {
+            Class<?>[] eventHandlerClasses =
+                new Class<?>[] {TestEventHandler.class, CountDownLatchEventHandler.class};
+
+            EventHandlingConfigurator configurator = config -> config.handlers(eventHandlerClasses);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .events(configurator);
+
+            assertDoesNotThrow(() -> builder.build());
+          }
+        }
+
+        @Nested
+        class HandlersMethodWithCollectionOverload {
+          @Test
+          @DisplayName("should throw when event handler classes argument is null")
+          void test1() {
+            EventHandlingConfigurator configurator =
+                config -> config.handlers((Collection<Class<?>>) null);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .events(configurator);
+
+            assertThrows(NullPointerException.class, () -> builder.build());
+          }
+
+          @Test
+          @DisplayName("should throw when event handler classes argument contains null")
+          void test2() {
+            Collection<Class<?>> eventHandlerClasses = Arrays.asList(TestEventHandler.class, null);
+
+            EventHandlingConfigurator configurator = config -> config.handlers(eventHandlerClasses);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .events(configurator);
+
+            assertThrows(NullPointerException.class, () -> builder.build());
+          }
+
+          @Test
+          @DisplayName("should not throw when event handler classes argument contain valid items")
+          void test3() {
+            Collection<Class<?>> eventHandlerClasses =
+                Arrays.asList(TestEventHandler.class, CountDownLatchEventHandler.class);
+
+            EventHandlingConfigurator configurator = config -> config.handlers(eventHandlerClasses);
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .events(configurator);
+
+            assertDoesNotThrow(() -> builder.build());
+          }
+        }
+
+        @Nested
+        class InvocationStrategyMethod {
           @Test
           @DisplayName("should throw when event handler invocation strategy argument is null")
           void test1() {
-            Consumer<EventConfiguration> configurer = config -> config.invocationStrategy(null);
+            EventHandlingConfigurator configurator = config -> config.invocationStrategy(null);
 
             Deezpatch.Builder builder =
-                Deezpatch.builder().instanceProvider(TestInstanceProviders.of()).events(configurer);
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .events(configurator);
 
             assertThrows(NullPointerException.class, () -> builder.build());
+          }
+
+          @Test
+          @DisplayName("should not when event handler invocation strategy argument is valid")
+          void test2() {
+            EventHandlingConfigurator configurator =
+                config -> config.invocationStrategy(new SyncEventHandlerInvocationStrategy());
+
+            Deezpatch.Builder builder =
+                Deezpatch.builder()
+                    .instanceProvider(TestInstanceProviders.of())
+                    .events(configurator);
+
+            assertDoesNotThrow(() -> builder.build());
           }
         }
       }
@@ -189,9 +562,13 @@ public class DeezpatchTests {
     @Test
     @DisplayName("should throw when request argument is null")
     void test1() {
+      var requestHandler = TestRequestHandlers.primitiveRequestHandler();
+      var instanceProvider = TestInstanceProviders.of(requestHandler);
       var deezpatch =
-          buildDeezpatch(
-              List.of(TestRequestHandlers.primitiveRequestHandler()), Collections.emptyList());
+          Deezpatch.builder()
+              .instanceProvider(instanceProvider)
+              .requests(config -> config.handlers(requestHandler.getClass()))
+              .build();
 
       assertThrows(NullPointerException.class, () -> deezpatch.send(null));
     }
@@ -200,7 +577,12 @@ public class DeezpatchTests {
     @DisplayName("should send request to registered request handler")
     void test2() {
       var requestHandler = TestRequestHandlers.primitiveRequestHandler();
-      var deezpatch = buildDeezpatch(List.of(requestHandler), Collections.emptyList());
+      var instanceProvider = TestInstanceProviders.of(requestHandler);
+      var deezpatch =
+          Deezpatch.builder()
+              .instanceProvider(instanceProvider)
+              .requests(config -> config.handlers(requestHandler.getClass()))
+              .build();
 
       var request = new IntegerRequest("1");
       Optional<Integer> result = deezpatch.send(request);
@@ -214,12 +596,38 @@ public class DeezpatchTests {
     }
 
     @Test
-    @DisplayName("should throw when no request handler is registered")
+    @DisplayName(
+        "should send request to registered request handler (custom request handler annotation)")
     void test3() {
+      var customAnnotationRequestHandler = TestRequestHandlers.customAnnotationRequestHandler();
+      var instanceProvider = TestInstanceProviders.of(customAnnotationRequestHandler);
       var deezpatch =
-          buildDeezpatch(
-              Collections.emptyList(), // No request handlers.
-              Collections.emptyList());
+          Deezpatch.builder()
+              .instanceProvider(instanceProvider)
+              .requests(
+                  config ->
+                      config
+                          .handlers(customAnnotationRequestHandler.getClass())
+                          .handlerAnnotations(CustomRequestHandler.class))
+              .build();
+
+      var request = new TestRequest("test3");
+      Optional<TestResult> result = deezpatch.send(request);
+
+      assertEquals(1, customAnnotationRequestHandler.handledMessages().size());
+      assertTrue(customAnnotationRequestHandler.hasHandled(request));
+
+      assertNotNull(result);
+      assertTrue(result.isPresent());
+      // The handler just returns the parameter value. Let's assert that.
+      assertEquals(request.parameter(), result.get().value());
+    }
+
+    @Test
+    @DisplayName("should throw when no request handler is registered")
+    void test4() {
+      var instanceProvider = TestInstanceProviders.of();
+      var deezpatch = Deezpatch.builder().instanceProvider(instanceProvider).build();
 
       var unhandledRequest = new UnhandledRequest();
 
@@ -229,10 +637,15 @@ public class DeezpatchTests {
     @Test
     @DisplayName("should propagate exception thrown by request handler")
     // This test is true unless a custom request handler invocation strategy is used.
-    void test4() {
+    void test5() {
       var exception = new RuntimeException("Oops!");
       var throwingRequestHandler = TestRequestHandlers.throwingIntegerRequestHandler(exception);
-      var deezpatch = buildDeezpatch(List.of(throwingRequestHandler), Collections.emptyList());
+      var instanceProvider = TestInstanceProviders.of(throwingRequestHandler);
+      var deezpatch =
+          Deezpatch.builder()
+              .instanceProvider(instanceProvider)
+              .requests(config -> config.handlers(throwingRequestHandler.getClass()))
+              .build();
 
       var request = new IntegerRequest("This will throw.");
       RuntimeException thrown = assertThrows(RuntimeException.class, () -> deezpatch.send(request));
@@ -243,7 +656,7 @@ public class DeezpatchTests {
 
     @Test
     @DisplayName("should use request handler invocation strategy when sending requests")
-    void test5() {
+    void test6() {
       var requestHandler = TestRequestHandlers.primitiveRequestHandler();
       var invocationStrategyInvoked = new AtomicBoolean();
 
@@ -257,12 +670,17 @@ public class DeezpatchTests {
             }
           };
 
+      var instanceProvider = TestInstanceProviders.of(requestHandler);
+
       var deezpatch =
-          buildDeezpatch(
-              List.of(requestHandler),
-              Collections.emptyList(),
-              invocationStrategy, // Custom request handler invocation strategy
-              new SyncEventHandlerInvocationStrategy());
+          Deezpatch.builder()
+              .instanceProvider(instanceProvider)
+              .requests(
+                  config ->
+                      config
+                          .handlers(requestHandler.getClass())
+                          .invocationStrategy(invocationStrategy))
+              .build();
 
       var request = new IntegerRequest("1");
       Optional<Integer> result = deezpatch.send(request);
@@ -277,9 +695,14 @@ public class DeezpatchTests {
 
     @Test
     @DisplayName("should return empty Optional when registered request handler has void result")
-    void test6() {
+    void test7() {
       var voidRequestHandler = TestRequestHandlers.voidRequestHandler();
-      var deezpatch = buildDeezpatch(List.of(voidRequestHandler), Collections.emptyList());
+      var instanceProvider = TestInstanceProviders.of(voidRequestHandler);
+      var deezpatch =
+          Deezpatch.builder()
+              .instanceProvider(instanceProvider)
+              .requests(config -> config.handlers(voidRequestHandler.getClass()))
+              .build();
 
       var request = new VoidRequest("Fire!");
       Optional<Void> result = deezpatch.send(request);
@@ -294,10 +717,15 @@ public class DeezpatchTests {
     @Test
     @DisplayName("should propagate exception thrown by request handler that has void result")
     // This test is true unless a custom request handler invocation strategy is used.
-    void test7() {
+    void test8() {
       var exception = new RuntimeException("Oops!");
       var throwingVoidRequestHandler = TestRequestHandlers.throwingVoidRequestHandler(exception);
-      var deezpatch = buildDeezpatch(List.of(throwingVoidRequestHandler), Collections.emptyList());
+      var instanceProvider = TestInstanceProviders.of(throwingVoidRequestHandler);
+      var deezpatch =
+          Deezpatch.builder()
+              .instanceProvider(instanceProvider)
+              .requests(config -> config.handlers(throwingVoidRequestHandler.getClass()))
+              .build();
 
       var fireAndForgetRequest = new VoidRequest("This will throw.");
       RuntimeException thrown =
@@ -313,8 +741,13 @@ public class DeezpatchTests {
     @Test
     @DisplayName("should throw when event argument is null")
     void test1() {
+      var eventHandler = TestEventHandlers.testEventHandler();
+      var instanceProvider = TestInstanceProviders.of(eventHandler);
       var deezpatch =
-          buildDeezpatch(Collections.emptyList(), List.of(TestEventHandlers.testEventHandler()));
+          Deezpatch.builder()
+              .instanceProvider(instanceProvider)
+              .events(config -> config.handlers(eventHandler.getClass()))
+              .build();
 
       assertThrows(NullPointerException.class, () -> deezpatch.send(null));
     }
@@ -322,30 +755,64 @@ public class DeezpatchTests {
     @Test
     @DisplayName("should publish event to all registered event handlers")
     void test2() {
-      var testEventHandler = TestEventHandlers.testEventHandler();
-      var deezpatch = buildDeezpatch(Collections.emptyList(), List.of(testEventHandler));
+      var eventHandler = TestEventHandlers.testEventHandler();
+      var instanceProvider = TestInstanceProviders.of(eventHandler);
+      var deezpatch =
+          Deezpatch.builder()
+              .instanceProvider(instanceProvider)
+              .events(config -> config.handlers(eventHandler.getClass()))
+              .build();
 
       var testEvent = new TestEvent("Test");
       deezpatch.publish(testEvent);
 
-      assertTrue(testEventHandler.hasHandled(testEvent));
+      assertTrue(eventHandler.hasHandled(testEvent));
 
       int numberOfEventHandlers =
           (int)
-              Arrays.stream(testEventHandler.getClass().getMethods())
+              Arrays.stream(eventHandler.getClass().getMethods())
                   .filter(m -> m.isAnnotationPresent(EventHandler.class))
                   .count();
 
-      assertEquals(numberOfEventHandlers, testEventHandler.handledMessages().size());
+      assertEquals(numberOfEventHandlers, eventHandler.handledMessages().size());
+    }
+
+    @Test
+    @DisplayName(
+        "should publish event to all registered event handlers (custom event handler annotation)")
+    void test3() {
+      var customAnnotationEventHandler = TestEventHandlers.customAnnotationEventHandler();
+      var instanceProvider = TestInstanceProviders.of(customAnnotationEventHandler);
+      var deezpatch =
+          Deezpatch.builder()
+              .instanceProvider(instanceProvider)
+              .events(
+                  config ->
+                      config
+                          .handlers(customAnnotationEventHandler.getClass())
+                          .handlerAnnotations(CustomEventHandler.class))
+              .build();
+
+      var testEvent = new TestEvent("Test");
+      deezpatch.publish(testEvent);
+
+      assertTrue(customAnnotationEventHandler.hasHandled(testEvent));
+
+      int numberOfEventHandlers =
+          (int)
+              Arrays.stream(customAnnotationEventHandler.getClass().getMethods())
+                  .filter(m -> m.isAnnotationPresent(CustomEventHandler.class))
+                  .count();
+
+      assertEquals(numberOfEventHandlers, customAnnotationEventHandler.handledMessages().size());
     }
 
     @Test
     @DisplayName("should not throw when no event handlers are registered")
-    void test3() {
-      var deezpatch =
-          buildDeezpatch(
-              Collections.emptyList(), Collections.emptyList() // No event handlers
-              );
+    void test4() {
+      var instanceProvider = TestInstanceProviders.of();
+      // No event handlers
+      var deezpatch = Deezpatch.builder().instanceProvider(instanceProvider).build();
 
       var unhandledEvent = new UnhandledEvent();
       assertDoesNotThrow(() -> deezpatch.publish(unhandledEvent));
@@ -354,10 +821,15 @@ public class DeezpatchTests {
     @Test
     @DisplayName("should propagate exception thrown by event handler")
     // This test is true unless a custom event handler invocation strategy is used.
-    void test4() {
+    void test5() {
       var exception = new RuntimeException("Oops!");
       var throwingEventHandler = TestEventHandlers.throwingEventHandler(exception);
-      var deezpatch = buildDeezpatch(Collections.emptyList(), List.of(throwingEventHandler));
+      var instanceProvider = TestInstanceProviders.of(throwingEventHandler);
+      var deezpatch =
+          Deezpatch.builder()
+              .instanceProvider(instanceProvider)
+              .events(config -> config.handlers(throwingEventHandler.getClass()))
+              .build();
 
       var testEvent = new TestEvent("Test");
       RuntimeException thrown =
@@ -369,8 +841,8 @@ public class DeezpatchTests {
 
     @Test
     @DisplayName("should use event handler invocation strategy when publishing events")
-    void test5() {
-      var testEventHandler = TestEventHandlers.testEventHandler();
+    void test6() {
+      var eventHandler = TestEventHandlers.testEventHandler();
       var invocationStrategyInvoked = new AtomicBoolean();
 
       EventHandlerInvocationStrategy invocationStrategy =
@@ -383,55 +855,23 @@ public class DeezpatchTests {
             }
           };
 
+      var instanceProvider = TestInstanceProviders.of(eventHandler);
       var deezpatch =
-          buildDeezpatch(
-              Collections.emptyList(),
-              List.of(testEventHandler),
-              new SyncRequestHandlerInvocationStrategy(),
-              invocationStrategy // Custom event handler invocation strategy
-              );
+          Deezpatch.builder()
+              .instanceProvider(instanceProvider)
+              .events(
+                  config ->
+                      config
+                          .handlers(eventHandler.getClass())
+                          .invocationStrategy(invocationStrategy))
+              .build();
 
       var testEvent = new TestEvent("Test");
       deezpatch.publish(testEvent);
 
-      assertTrue(testEventHandler.hasHandled(testEvent));
+      assertTrue(eventHandler.hasHandled(testEvent));
       assertTrue(invocationStrategyInvoked.get());
     }
-  }
-
-  private static Deezpatch buildDeezpatch(
-      Collection<Object> requestHandlers, Collection<Object> eventHandlers) {
-    return buildDeezpatch(
-        requestHandlers,
-        eventHandlers,
-        // Default request handler invocation strategy.
-        new SyncRequestHandlerInvocationStrategy(),
-        // Default event handler invocation strategy.
-        new SyncEventHandlerInvocationStrategy());
-  }
-
-  private static Deezpatch buildDeezpatch(
-      Collection<Object> requestHandlers,
-      Collection<Object> eventHandlers,
-      RequestHandlerInvocationStrategy requestHandlerInvocationStrategy,
-      EventHandlerInvocationStrategy eventHandlerInvocationStrategy) {
-    Object[] instances = Stream.concat(requestHandlers.stream(), eventHandlers.stream()).toArray();
-
-    InstanceProvider instanceProvider = TestInstanceProviders.of(instances);
-
-    return Deezpatch.builder()
-        .instanceProvider(instanceProvider)
-        .requests(
-            config ->
-                config
-                    .register(requestHandlers.stream().map(Object::getClass).toArray(Class[]::new))
-                    .invocationStrategy(requestHandlerInvocationStrategy))
-        .events(
-            config ->
-                config
-                    .register(eventHandlers.stream().map(Object::getClass).toArray(Class[]::new))
-                    .invocationStrategy(eventHandlerInvocationStrategy))
-        .build();
   }
 
   static class UnhandledRequest implements Request<Void> {}

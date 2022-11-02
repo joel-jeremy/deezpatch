@@ -1,8 +1,7 @@
 package io.github.joeljeremy.deezpatch.core;
 
 /**
- * Marker interface for all requests. For requests to be dispatchable via {@link Dispatcher}, they
- * must implement this interface.
+ * Marker interface to represent a request.
  *
  * <h3>Requests can have a result and the result type is determined by {@link TResult} e.g.</h3>
  *
@@ -29,15 +28,15 @@ package io.github.joeljeremy.deezpatch.core;
  * <blockquote>
  *
  * <pre>
- * public class CreateOrder implements Request{@literal <}Void{@literal >} {
- *   private final String orderId;
+ * public class PlaceOrder implements Request{@literal <}Void{@literal >} {
+ *   private final OrderItems orderItems;
  *
- *   public CreateOrder(String orderId) {
- *     this.orderId = orderId;
+ *   public PlaceOrder(OrderItems orderItems) {
+ *     this.orderItems = orderItems;
  *   }
  *
- *   public String orderId() {
- *     return orderId;
+ *   public OrderItems orderItems() {
+ *     return orderItems;
  *   }
  * }
  * </pre>

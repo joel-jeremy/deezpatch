@@ -65,7 +65,7 @@ public abstract class Benchmarks {
       deezpatchRequestDispatcher =
           Deezpatch.builder()
               .instanceProvider(c -> deezpatchRequestHandler)
-              .requests(config -> config.register(DeezpatchRequestHandler.class))
+              .requests(config -> config.handlers(DeezpatchRequestHandler.class))
               .build();
 
       deezpatchEvent = new DeezpatchEvent();
@@ -73,7 +73,7 @@ public abstract class Benchmarks {
       deezpatchEventPublisher =
           Deezpatch.builder()
               .instanceProvider(c -> deezpatchEventHandler)
-              .events(config -> config.register(DeezpatchEventHandler.class))
+              .events(config -> config.handlers(DeezpatchEventHandler.class))
               .build();
 
       // Spring

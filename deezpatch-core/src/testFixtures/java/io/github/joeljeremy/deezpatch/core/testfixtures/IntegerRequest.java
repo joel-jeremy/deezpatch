@@ -1,11 +1,11 @@
-package io.github.joeljeremy.deezpatch.core.testentities;
+package io.github.joeljeremy.deezpatch.core.testfixtures;
 
 import io.github.joeljeremy.deezpatch.core.Request;
 
-public class ShortRequest implements Request<Short> {
+public class IntegerRequest implements Request<Integer> {
   private final String parameter;
 
-  public ShortRequest(String parameter) {
+  public IntegerRequest(String parameter) {
     this.parameter = parameter;
   }
 

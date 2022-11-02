@@ -5,21 +5,29 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import io.github.joeljeremy.deezpatch.core.InstanceProvider;
 import io.github.joeljeremy.deezpatch.core.RegisteredRequestHandler;
 import io.github.joeljeremy.deezpatch.core.Request;
 import io.github.joeljeremy.deezpatch.core.RequestKey;
-import io.github.joeljeremy.deezpatch.core.testentities.IntegerRequest;
-import io.github.joeljeremy.deezpatch.core.testentities.TestInstanceProviders;
-import io.github.joeljeremy.deezpatch.core.testentities.TestRequestHandlers;
-import io.github.joeljeremy.deezpatch.core.testentities.TestRequestHandlers.IncompatibleRequestHandler;
-import io.github.joeljeremy.deezpatch.core.testentities.TestRequestHandlers.InvalidRequestHandler;
-import io.github.joeljeremy.deezpatch.core.testentities.TestRequestHandlers.InvalidRequestHandlerMultipleParams;
-import io.github.joeljeremy.deezpatch.core.testentities.TestRequestHandlers.PrimitiveRequestHandler;
-import io.github.joeljeremy.deezpatch.core.testentities.TestRequestHandlers.ThrowingVoidRequestHandler;
-import io.github.joeljeremy.deezpatch.core.testentities.TestRequestHandlers.VoidRequestHandler;
-import io.github.joeljeremy.deezpatch.core.testentities.TrackableHandler;
-import io.github.joeljeremy.deezpatch.core.testentities.VoidRequest;
+import io.github.joeljeremy.deezpatch.core.testfixtures.CustomRequestHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.IntegerRequest;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestInstanceProviders;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequest;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequestHandlers;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequestHandlers.CustomAnnotationRequestHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequestHandlers.IncompatibleRequestHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequestHandlers.InvalidRequestHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequestHandlers.InvalidRequestHandlerMultipleParams;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequestHandlers.PrimitiveRequestHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequestHandlers.TestRequestHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequestHandlers.ThrowingVoidRequestHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestRequestHandlers.VoidRequestHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TestResult;
+import io.github.joeljeremy.deezpatch.core.testfixtures.TrackableHandler;
+import io.github.joeljeremy.deezpatch.core.testfixtures.VoidRequest;
+import java.lang.annotation.Annotation;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -30,7 +38,21 @@ public class DeezpatchRequestHandlerRegistryTests {
     @Test
     @DisplayName("should throw when instance provider argument is null")
     void test1() {
-      assertThrows(NullPointerException.class, () -> new DeezpatchRequestHandlerRegistry(null));
+      Set<Class<? extends Annotation>> requestHandlerAnnotations = Set.of();
+
+      assertThrows(
+          NullPointerException.class,
+          () -> new DeezpatchRequestHandlerRegistry(null, requestHandlerAnnotations));
+    }
+
+    @Test
+    @DisplayName("should throw when request handler annotations argument is null")
+    void test2() {
+      InstanceProvider instanceProvider = TestInstanceProviders.of();
+
+      assertThrows(
+          NullPointerException.class,
+          () -> new DeezpatchRequestHandlerRegistry(instanceProvider, null));
     }
   }
 
@@ -39,8 +61,7 @@ public class DeezpatchRequestHandlerRegistryTests {
     @Test
     @DisplayName("should throw when request handler class argument is null")
     void test1() {
-      DeezpatchRequestHandlerRegistry requestHandlerRegistry =
-          buildRequestHandlerRegistry(TestRequestHandlers.primitiveRequestHandler());
+      DeezpatchRequestHandlerRegistry requestHandlerRegistry = buildRequestHandlerRegistry();
 
       assertThrows(
           NullPointerException.class, () -> requestHandlerRegistry.register((Class<?>[]) null));
@@ -49,23 +70,43 @@ public class DeezpatchRequestHandlerRegistryTests {
     @Test
     @DisplayName("should detect and register methods annotated with @RequestHandler")
     void test2() {
+      TestRequestHandler requestHandler = TestRequestHandlers.testRequestHandler();
       DeezpatchRequestHandlerRegistry requestHandlerRegistry =
-          buildRequestHandlerRegistry(TestRequestHandlers.primitiveRequestHandler());
+          buildRequestHandlerRegistry(requestHandler);
 
-      requestHandlerRegistry.register(PrimitiveRequestHandler.class);
+      requestHandlerRegistry.register(requestHandler.getClass());
 
-      RequestKey<IntegerRequest, Integer> requestType = new RequestKey<>() {};
+      RequestKey<TestRequest, TestResult> requestType = new RequestKey<>() {};
       assertTrue(requestHandlerRegistry.getRequestHandlerFor(requestType).isPresent());
     }
 
     @Test
     @DisplayName(
-        "should support methods which declares primitive method return types in lieu of wrapper types")
+        "should detect and register methods annotated with custom request handler annotation")
     void test3() {
+      CustomAnnotationRequestHandler customAnnotationRequestHandler =
+          TestRequestHandlers.customAnnotationRequestHandler();
       DeezpatchRequestHandlerRegistry requestHandlerRegistry =
-          buildRequestHandlerRegistry(TestRequestHandlers.primitiveRequestHandler());
+          buildRequestHandlerRegistry(
+              Set.of(CustomRequestHandler.class), customAnnotationRequestHandler);
 
-      requestHandlerRegistry.register(PrimitiveRequestHandler.class);
+      requestHandlerRegistry.register(customAnnotationRequestHandler.getClass());
+
+      RequestKey<TestRequest, TestResult> requestType = new RequestKey<>() {};
+      assertTrue(requestHandlerRegistry.getRequestHandlerFor(requestType).isPresent());
+    }
+
+    @Test
+    @DisplayName(
+        "should support methods which declares primitive method return types in lieu of wrapper"
+            + " types")
+    void test4() {
+      PrimitiveRequestHandler primitiveRequestHandler =
+          TestRequestHandlers.primitiveRequestHandler();
+      DeezpatchRequestHandlerRegistry requestHandlerRegistry =
+          buildRequestHandlerRegistry(primitiveRequestHandler);
+
+      requestHandlerRegistry.register(primitiveRequestHandler.getClass());
 
       RequestKey<IntegerRequest, Integer> requestType = new RequestKey<>() {};
       assertTrue(requestHandlerRegistry.getRequestHandlerFor(requestType).isPresent());
@@ -73,11 +114,12 @@ public class DeezpatchRequestHandlerRegistryTests {
 
     @Test
     @DisplayName("should support methods which declare (primitive) void method return types")
-    void test4() {
+    void test5() {
+      VoidRequestHandler voidRequestHandler = TestRequestHandlers.voidRequestHandler();
       DeezpatchRequestHandlerRegistry requestHandlerRegistry =
-          buildRequestHandlerRegistry(TestRequestHandlers.voidRequestHandler());
+          buildRequestHandlerRegistry(voidRequestHandler);
 
-      requestHandlerRegistry.register(VoidRequestHandler.class);
+      requestHandlerRegistry.register(voidRequestHandler.getClass());
 
       RequestKey<VoidRequest, Void> requestType = new RequestKey<>() {};
       assertTrue(requestHandlerRegistry.getRequestHandlerFor(requestType).isPresent());
@@ -86,49 +128,54 @@ public class DeezpatchRequestHandlerRegistryTests {
     @Test
     @DisplayName(
         "should throw when a method annotated with @RequestHandler does not have a parameter")
-    void test5() {
+    void test6() {
+      InvalidRequestHandler invalidRequestHandler = TestRequestHandlers.invalidRequestHandler();
       DeezpatchRequestHandlerRegistry requestHandlerRegistry =
-          buildRequestHandlerRegistry(TestRequestHandlers.invalidRequestHandler());
+          buildRequestHandlerRegistry(invalidRequestHandler);
 
       assertThrows(
           IllegalArgumentException.class,
-          () -> requestHandlerRegistry.register(InvalidRequestHandler.class));
+          () -> requestHandlerRegistry.register(invalidRequestHandler.getClass()));
     }
 
     @Test
     @DisplayName(
         "should throw when a method annotated with @RequestHandler has more than one parameter")
-    void test6() {
+    void test7() {
+      InvalidRequestHandlerMultipleParams invalidRequestHandlerMultipleParams =
+          TestRequestHandlers.invalidRequestHandlerMultipleParams();
       DeezpatchRequestHandlerRegistry requestHandlerRegistry =
-          buildRequestHandlerRegistry(TestRequestHandlers.invalidRequestHandlerMultipleParams());
+          buildRequestHandlerRegistry(invalidRequestHandlerMultipleParams);
 
       assertThrows(
           IllegalArgumentException.class,
-          () -> requestHandlerRegistry.register(InvalidRequestHandlerMultipleParams.class));
+          () -> requestHandlerRegistry.register(invalidRequestHandlerMultipleParams.getClass()));
     }
 
     @Test
     @DisplayName(
         "should throw when there are multiple @RequestHandler methods that handle the same request")
-    void test7() {
-      DeezpatchRequestHandlerRegistry requestHandlerRegistry =
-          buildRequestHandlerRegistry(
-              TestRequestHandlers.primitiveRequestHandler(),
-              TestRequestHandlers.throwingIntegerRequestHandler(new RuntimeException("Oops!")));
+    void test8() {
+      VoidRequestHandler voidRequestHandler = TestRequestHandlers.voidRequestHandler();
+      ThrowingVoidRequestHandler throwingVoidRequestHandler =
+          TestRequestHandlers.throwingVoidRequestHandler(new RuntimeException("Oops!"));
 
-      // Register a TestRequest handler.
-      requestHandlerRegistry.register(VoidRequestHandler.class);
+      DeezpatchRequestHandlerRegistry requestHandlerRegistry =
+          buildRequestHandlerRegistry(voidRequestHandler, throwingVoidRequestHandler);
+
+      // Register a VoidRequest handler.
+      requestHandlerRegistry.register(voidRequestHandler.getClass());
 
       assertThrows(
           UnsupportedOperationException.class,
-          // Register another TestRequest handler.
-          () -> requestHandlerRegistry.register(ThrowingVoidRequestHandler.class));
+          // Register another VoidRequest handler.
+          () -> requestHandlerRegistry.register(throwingVoidRequestHandler.getClass()));
     }
 
     @Test
     @DisplayName(
         "should ignore method with correct method signature but not annotated with @RequestHandler")
-    void test8() {
+    void test9() {
       var requestHandler =
           new TrackableHandler() {
             @SuppressWarnings("unused")
@@ -151,13 +198,15 @@ public class DeezpatchRequestHandlerRegistryTests {
     @Test
     @DisplayName(
         "should throw when result type is the same as the request handler method's return type")
-    void test9() {
+    void test10() {
+      IncompatibleRequestHandler incompatibleRequestHandler =
+          TestRequestHandlers.incompatibleRequestHandler();
       DeezpatchRequestHandlerRegistry requestHandlerRegistry =
-          buildRequestHandlerRegistry(TestRequestHandlers.incompatibleRequestHandler());
+          buildRequestHandlerRegistry(incompatibleRequestHandler);
 
       assertThrows(
           UnsupportedOperationException.class,
-          () -> requestHandlerRegistry.register(IncompatibleRequestHandler.class));
+          () -> requestHandlerRegistry.register(incompatibleRequestHandler.getClass()));
     }
   }
 
@@ -166,8 +215,7 @@ public class DeezpatchRequestHandlerRegistryTests {
     @Test
     @DisplayName("should throw when request type argument is null")
     void test1() {
-      DeezpatchRequestHandlerRegistry requestHandlerRegistry =
-          buildRequestHandlerRegistry(TestRequestHandlers.primitiveRequestHandler());
+      DeezpatchRequestHandlerRegistry requestHandlerRegistry = buildRequestHandlerRegistry();
 
       assertThrows(
           NullPointerException.class, () -> requestHandlerRegistry.getRequestHandlerFor(null));
@@ -178,7 +226,7 @@ public class DeezpatchRequestHandlerRegistryTests {
     void test2() {
       var requestHandler = TestRequestHandlers.primitiveRequestHandler();
       DeezpatchRequestHandlerRegistry requestHandlerRegistry =
-          buildRequestHandlerRegistry(requestHandler).register(PrimitiveRequestHandler.class);
+          buildRequestHandlerRegistry(requestHandler).register(requestHandler.getClass());
 
       RequestKey<IntegerRequest, Integer> requestType = new RequestKey<>() {};
       Optional<RegisteredRequestHandler<IntegerRequest, Integer>> resolved =
@@ -199,8 +247,7 @@ public class DeezpatchRequestHandlerRegistryTests {
     @DisplayName(
         "should return empty Optional when there is no registered request handler for request type")
     void test3() {
-      DeezpatchRequestHandlerRegistry requestHandlerRegistry =
-          buildRequestHandlerRegistry(TestRequestHandlers.primitiveRequestHandler());
+      DeezpatchRequestHandlerRegistry requestHandlerRegistry = buildRequestHandlerRegistry();
 
       // No registrations...
 
@@ -215,7 +262,13 @@ public class DeezpatchRequestHandlerRegistryTests {
 
   private static DeezpatchRequestHandlerRegistry buildRequestHandlerRegistry(
       Object... requestHandlers) {
-    return new DeezpatchRequestHandlerRegistry(TestInstanceProviders.of(requestHandlers));
+    return new DeezpatchRequestHandlerRegistry(TestInstanceProviders.of(requestHandlers), Set.of());
+  }
+
+  private static DeezpatchRequestHandlerRegistry buildRequestHandlerRegistry(
+      Set<Class<? extends Annotation>> requestHandlerAnnotations, Object... requestHandlers) {
+    return new DeezpatchRequestHandlerRegistry(
+        TestInstanceProviders.of(requestHandlers), requestHandlerAnnotations);
   }
 
   static class RequestWithNoHandler implements Request<Void> {}

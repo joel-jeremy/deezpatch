@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.github.joeljeremy.deezpatch.core.testentities.IntegerRequest;
+import io.github.joeljeremy.deezpatch.core.testfixtures.IntegerRequest;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;

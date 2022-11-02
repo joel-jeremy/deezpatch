@@ -5,7 +5,7 @@ package io.github.joeljeremy.deezpatch.core;
  *
  * @param <T> The event type.
  */
-public interface RegisteredEventHandler<T> {
+public interface RegisteredEventHandler<T extends Event> {
   /**
    * Invoke event handler.
    *

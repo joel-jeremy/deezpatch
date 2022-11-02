@@ -1,11 +1,11 @@
-package io.github.joeljeremy.deezpatch.core.testentities;
+package io.github.joeljeremy.deezpatch.core.testfixtures;
 
 import io.github.joeljeremy.deezpatch.core.Request;
 
-public class CharacterRequest implements Request<Character> {
+public class BooleanRequest implements Request<Boolean> {
   private final String parameter;
 
-  public CharacterRequest(String parameter) {
+  public BooleanRequest(String parameter) {
     this.parameter = parameter;
   }
 

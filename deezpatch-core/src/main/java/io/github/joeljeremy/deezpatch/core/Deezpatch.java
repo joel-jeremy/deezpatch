@@ -2,16 +2,22 @@ package io.github.joeljeremy.deezpatch.core;
 
 import static java.util.Objects.requireNonNull;
 
+import io.github.joeljeremy.deezpatch.core.Deezpatch.Builder.EventHandlingConfiguration;
+import io.github.joeljeremy.deezpatch.core.Deezpatch.Builder.RequestHandlingConfiguration;
 import io.github.joeljeremy.deezpatch.core.internal.registries.DeezpatchEventHandlerRegistry;
 import io.github.joeljeremy.deezpatch.core.internal.registries.DeezpatchRequestHandlerRegistry;
 import io.github.joeljeremy.deezpatch.core.invocationstrategies.SyncEventHandlerInvocationStrategy;
 import io.github.joeljeremy.deezpatch.core.invocationstrategies.SyncRequestHandlerInvocationStrategy;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.Set;
 
 /** Checkout Deezpatch! */
 public class Deezpatch implements Dispatcher, Publisher {
@@ -25,18 +31,19 @@ public class Deezpatch implements Dispatcher, Publisher {
   /**
    * Constructor.
    *
-   * @param requestHandlerProvider The request handler provider.
-   * @param eventHandlerProvider The event handler provider.
+   * @param instanceProvider The instance provider.
+   * @param requestConfiguration The request configuration.
+   * @param eventConfiguration The event configuration.
    */
   private Deezpatch(
-      RequestHandlerProvider requestHandlerProvider,
-      RequestHandlerInvocationStrategy requestHandlerInvocationStrategy,
-      EventHandlerProvider eventHandlerProvider,
-      EventHandlerInvocationStrategy eventHandlerInvocationStrategy) {
-    this.requestHandlerProvider = requestHandlerProvider;
-    this.requestHandlerInvocationStrategy = requestHandlerInvocationStrategy;
-    this.eventHandlerProvider = eventHandlerProvider;
-    this.eventHandlerInvocationStrategy = eventHandlerInvocationStrategy;
+      InstanceProvider instanceProvider,
+      RequestHandlingConfiguration requestConfiguration,
+      EventHandlingConfiguration eventConfiguration) {
+    this.requestHandlerProvider =
+        requestConfiguration.buildRequestHandlerProvider(instanceProvider);
+    this.requestHandlerInvocationStrategy = requestConfiguration.requestHandlerInvocationStrategy;
+    this.eventHandlerProvider = eventConfiguration.buildEventHandlerProvider(instanceProvider);
+    this.eventHandlerInvocationStrategy = eventConfiguration.eventHandlerInvocationStrategy;
   }
 
   /** {@inheritDoc} */
@@ -106,17 +113,17 @@ public class Deezpatch implements Dispatcher, Publisher {
 
   /** The builder for {@link Deezpatch}. */
   public static class Builder {
-    private final List<Consumer<RequestConfiguration>> requestConfigurers = new ArrayList<>();
-    private final List<Consumer<EventConfiguration>> eventConfigurers = new ArrayList<>();
+    private final List<RequestHandlingConfigurator> requestConfigurators = new ArrayList<>();
+    private final List<EventHandlingConfigurator> eventConfigurators = new ArrayList<>();
     private InstanceProvider instanceProvider;
 
     @SuppressWarnings("NullAway.Init")
     private Builder() {}
 
     /**
-     * The instance provider to get handler instances from.
+     * The instance provider to get instances from.
      *
-     * @param instanceProvider The instance provider to get handler instances from.
+     * @param instanceProvider The instance provider to get instances from.
      * @return Deez builder.
      */
     public Builder instanceProvider(InstanceProvider instanceProvider) {
@@ -125,30 +132,30 @@ public class Deezpatch implements Dispatcher, Publisher {
     }
 
     /**
-     * Register a request handling configurer. Registered configurers will be executed during build
-     * time in the order they were registered.
+     * Register a request handling configurator. Registered configurators will be executed during
+     * build time in the order they were registered.
      *
-     * @param requestConfigurer Register a request handling configurer. Registered configurers will
-     *     be executed during build time in the order they were registered.
+     * @param requestHandlingConfigurator Register a request handling configurator. Registered
+     *     configurators will be executed during build time in the order they were registered.
      * @return Deez builder.
      */
-    public Builder requests(Consumer<RequestConfiguration> requestConfigurer) {
-      requireNonNull(requestConfigurer);
-      requestConfigurers.add(requestConfigurer);
+    public Builder requests(RequestHandlingConfigurator requestHandlingConfigurator) {
+      requireNonNull(requestHandlingConfigurator);
+      requestConfigurators.add(requestHandlingConfigurator);
       return this;
     }
 
     /**
-     * Register a event handling configurer. Registered configurers will be executed during build
-     * time in the order they were registered.
+     * Register a event handling configurator. Registered configurators will be executed during
+     * build time in the order they were registered.
      *
-     * @param eventConfigurer Register a event handling configurer. Registered configurers will be
-     *     executed during build time in the order they were registered.
+     * @param eventHandlingConfigurator Register a event handling configurator. Registered
+     *     configurators will be executed during build time in the order they were registered.
      * @return Deez builder.
      */
-    public Builder events(Consumer<EventConfiguration> eventConfigurer) {
-      requireNonNull(eventConfigurer);
-      eventConfigurers.add(eventConfigurer);
+    public Builder events(EventHandlingConfigurator eventHandlingConfigurator) {
+      requireNonNull(eventHandlingConfigurator);
+      eventConfigurators.add(eventHandlingConfigurator);
       return this;
     }
 
@@ -162,39 +169,96 @@ public class Deezpatch implements Dispatcher, Publisher {
         throw new IllegalStateException("Instance provider is required.");
       }
 
-      var requestConfiguration = new RequestConfiguration(instanceProvider);
-      requestConfigurers.forEach(rc -> rc.accept(requestConfiguration));
+      var requestHandlingConfiguration = new RequestHandlingConfiguration();
+      requestConfigurators.forEach(rhc -> rhc.configure(requestHandlingConfiguration));
 
-      var eventConfiguration = new EventConfiguration(instanceProvider);
-      eventConfigurers.forEach(ec -> ec.accept(eventConfiguration));
+      var eventHandlingConfiguration = new EventHandlingConfiguration();
+      eventConfigurators.forEach(ehc -> ehc.configure(eventHandlingConfiguration));
 
       return new Deezpatch(
-          requestConfiguration.requestHandlerRegistry,
-          requestConfiguration.requestHandlerInvocationStrategy,
-          eventConfiguration.eventHandlerRegistry,
-          eventConfiguration.eventHandlerInvocationStrategy);
+          instanceProvider, requestHandlingConfiguration, eventHandlingConfiguration);
+    }
+
+    private static <T> void requireNonNullElements(Collection<T> collection) {
+      requireNonNull(collection);
+      for (T element : collection) {
+        requireNonNull(element);
+      }
+    }
+
+    private static <T> void requireNonNullElements(T[] array) {
+      requireNonNull(array);
+      for (T element : array) {
+        requireNonNull(element);
+      }
     }
 
     /** Request handling configuration. */
-    public static class RequestConfiguration {
-      private final DeezpatchRequestHandlerRegistry requestHandlerRegistry;
+    public static final class RequestHandlingConfiguration {
+      private final Set<Class<?>> requestHandlerClasses = new HashSet<>();
+      private final Set<Class<? extends Annotation>> requestHandlerAnnotations = new HashSet<>();
       private RequestHandlerInvocationStrategy requestHandlerInvocationStrategy =
           new SyncRequestHandlerInvocationStrategy();
 
-      private RequestConfiguration(InstanceProvider instanceProvider) {
-        requestHandlerRegistry = new DeezpatchRequestHandlerRegistry(instanceProvider);
+      /**
+       * Register supported request handler annotations. Methods annotated with any of these
+       * annotations will be treated as request handlers. The {@link RequestHandler} annotation is
+       * supported by default.
+       *
+       * @apiNote Annotations must have runtime retention policy i.e. must be annotated with
+       *     {@code @Retention(RetentionPolicy.RUNTIME)}
+       * @param requestHandlerAnnotations The request handler annotations to support.
+       * @return Deez request configuration.
+       */
+      @SafeVarargs
+      public final RequestHandlingConfiguration handlerAnnotations(
+          Class<? extends Annotation>... requestHandlerAnnotations) {
+        requireNonNullElements(requestHandlerAnnotations);
+        Collections.addAll(this.requestHandlerAnnotations, requestHandlerAnnotations);
+        return this;
       }
 
       /**
-       * Scan class for methods annotated with {@link RequestHandler} and register them as request
-       * handlers.
+       * Register supported request handler annotations. Methods annotated with any of these
+       * annotations will be treated as request handlers. The {@link RequestHandler} annotation is
+       * supported by default.
        *
-       * @param requestHandlerClasses The classes to scan for {@link RequestHandler} annotations.
+       * @apiNote Annotations must have runtime retention policy i.e. must be annotated with
+       *     {@code @Retention(RetentionPolicy.RUNTIME)}
+       * @param requestHandlerAnnotations The request handler annotations to support.
        * @return Deez request configuration.
        */
-      public RequestConfiguration register(Class<?>... requestHandlerClasses) {
-        requireNonNull(requestHandlerClasses);
-        requestHandlerRegistry.register(requestHandlerClasses);
+      public final RequestHandlingConfiguration handlerAnnotations(
+          Collection<Class<? extends Annotation>> requestHandlerAnnotations) {
+        requireNonNullElements(requestHandlerAnnotations);
+        this.requestHandlerAnnotations.addAll(requestHandlerAnnotations);
+        return this;
+      }
+
+      /**
+       * Scan class for methods annotated with supported request handler annotations and register
+       * them as request handlers.
+       *
+       * @param requestHandlerClasses The classes to scan for supported request handler annotations.
+       * @return Deez request configuration.
+       */
+      public final RequestHandlingConfiguration handlers(Class<?>... requestHandlerClasses) {
+        requireNonNullElements(requestHandlerClasses);
+        Collections.addAll(this.requestHandlerClasses, requestHandlerClasses);
+        return this;
+      }
+
+      /**
+       * Scan class for methods annotated with supported request handler annotations and register
+       * them as request handlers.
+       *
+       * @param requestHandlerClasses The classes to scan for supported request handler annotations.
+       * @return Deez request configuration.
+       */
+      public final RequestHandlingConfiguration handlers(
+          Collection<Class<?>> requestHandlerClasses) {
+        requireNonNullElements(requestHandlerClasses);
+        this.requestHandlerClasses.addAll(requestHandlerClasses);
         return this;
       }
 
@@ -204,34 +268,86 @@ public class Deezpatch implements Dispatcher, Publisher {
        * @param requestHandlerInvocationStrategy The request handler invocation strategy to use.
        * @return Deez request configuration.
        */
-      public RequestConfiguration invocationStrategy(
+      public final RequestHandlingConfiguration invocationStrategy(
           RequestHandlerInvocationStrategy requestHandlerInvocationStrategy) {
         requireNonNull(requestHandlerInvocationStrategy);
         this.requestHandlerInvocationStrategy = requestHandlerInvocationStrategy;
         return this;
       }
+
+      private RequestHandlerProvider buildRequestHandlerProvider(
+          InstanceProvider instanceProvider) {
+        var requestHandlerRegistry =
+            new DeezpatchRequestHandlerRegistry(instanceProvider, requestHandlerAnnotations);
+        return requestHandlerRegistry.register(requestHandlerClasses.toArray(Class<?>[]::new));
+      }
     }
 
     /** Event handling configuration. */
-    public static class EventConfiguration {
-      private final DeezpatchEventHandlerRegistry eventHandlerRegistry;
+    public static final class EventHandlingConfiguration {
+      private final Set<Class<?>> eventHandlerClasses = new HashSet<>();
+      private final Set<Class<? extends Annotation>> eventHandlerAnnotations = new HashSet<>();
       private EventHandlerInvocationStrategy eventHandlerInvocationStrategy =
           new SyncEventHandlerInvocationStrategy();
 
-      private EventConfiguration(InstanceProvider instanceProvider) {
-        eventHandlerRegistry = new DeezpatchEventHandlerRegistry(instanceProvider);
+      /**
+       * Register supported event handler annotations. Methods annotated with these annotations will
+       * be treated as event handlers. The {@link EventHandler} annotation is supported by default.
+       *
+       * @apiNote Annotations must have runtime retention policy i.e. must be annotated with
+       *     {@code @Retention(RetentionPolicy.RUNTIME)}
+       * @param eventHandlerAnnotations The event handler annotations to support. The {@link
+       *     EventHandler} annotation is supported by default.
+       * @return Deez request configuration.
+       */
+      @SafeVarargs
+      public final EventHandlingConfiguration handlerAnnotations(
+          Class<? extends Annotation>... eventHandlerAnnotations) {
+        requireNonNullElements(eventHandlerAnnotations);
+        Collections.addAll(this.eventHandlerAnnotations, eventHandlerAnnotations);
+        return this;
       }
 
       /**
-       * Scan class for methods annotated with {@link EventHandler} and register them as event
-       * handlers.
+       * Register supported event handler annotations. Methods annotated with these annotations will
+       * be treated as event handlers. The {@link EventHandler} annotation is supported by default.
        *
-       * @param eventHandlerClasses The classes to scan for {@link EventHandler} annotations.
+       * @apiNote Annotations must have runtime retention policy i.e. must be annotated with
+       *     {@code @Retention(RetentionPolicy.RUNTIME)}
+       * @param eventHandlerAnnotations The event handler annotations to support. The {@link
+       *     EventHandler} annotation is supported by default.
+       * @return Deez request configuration.
+       */
+      public final EventHandlingConfiguration handlerAnnotations(
+          Collection<Class<? extends Annotation>> eventHandlerAnnotations) {
+        requireNonNullElements(eventHandlerAnnotations);
+        this.eventHandlerAnnotations.addAll(eventHandlerAnnotations);
+        return this;
+      }
+
+      /**
+       * Scan class for methods annotated with supported event handler annotations and register them
+       * as event handlers.
+       *
+       * @param eventHandlerClasses The classes to scan for supported event handler annotations.
        * @return Deez event configuration.
        */
-      public EventConfiguration register(Class<?>... eventHandlerClasses) {
-        requireNonNull(eventHandlerClasses);
-        eventHandlerRegistry.register(eventHandlerClasses);
+      public final EventHandlingConfiguration handlers(Class<?>... eventHandlerClasses) {
+        requireNonNullElements(eventHandlerClasses);
+        Collections.addAll(this.eventHandlerClasses, eventHandlerClasses);
+        return this;
+      }
+
+      /**
+       * Scan class for methods annotated with supported event handler annotations and register them
+       * as event handlers.
+       *
+       * @param eventHandlerClasses The classes to scan for supported event handler annotations.
+       * @return Deez event configuration.
+       */
+      public final EventHandlingConfiguration handlers(Collection<Class<?>> eventHandlerClasses) {
+        requireNonNullElements(eventHandlerClasses);
+        this.eventHandlerClasses.addAll(eventHandlerClasses);
         return this;
       }
 
@@ -241,13 +357,39 @@ public class Deezpatch implements Dispatcher, Publisher {
        * @param eventHandlerInvocationStrategy The event handler invocation strategy to use.
        * @return Deez event configuration.
        */
-      public EventConfiguration invocationStrategy(
+      public final EventHandlingConfiguration invocationStrategy(
           EventHandlerInvocationStrategy eventHandlerInvocationStrategy) {
         requireNonNull(eventHandlerInvocationStrategy);
         this.eventHandlerInvocationStrategy = eventHandlerInvocationStrategy;
         return this;
       }
+
+      private EventHandlerProvider buildEventHandlerProvider(InstanceProvider instanceProvider) {
+        var eventHandlerRegistry =
+            new DeezpatchEventHandlerRegistry(instanceProvider, eventHandlerAnnotations);
+        return eventHandlerRegistry.register(eventHandlerClasses.toArray(Class<?>[]::new));
+      }
     }
+  }
+
+  /** Request handling configurator. */
+  public static interface RequestHandlingConfigurator {
+    /**
+     * Configure request handling.
+     *
+     * @param config The request handling configuration.
+     */
+    void configure(RequestHandlingConfiguration config);
+  }
+
+  /** Event handling configurator. */
+  public static interface EventHandlingConfigurator {
+    /**
+     * Configure event handling.
+     *
+     * @param config The event handling configuration.
+     */
+    void configure(EventHandlingConfiguration config);
   }
 
   /** Determines the strategy to use in executing request handlers. */

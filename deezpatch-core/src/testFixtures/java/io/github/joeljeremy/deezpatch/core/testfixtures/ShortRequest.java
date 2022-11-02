@@ -1,11 +1,11 @@
-package io.github.joeljeremy.deezpatch.core.testentities;
+package io.github.joeljeremy.deezpatch.core.testfixtures;
 
 import io.github.joeljeremy.deezpatch.core.Request;
 
-public class LongRequest implements Request<Long> {
+public class ShortRequest implements Request<Short> {
   private final String parameter;
 
-  public LongRequest(String parameter) {
+  public ShortRequest(String parameter) {
     this.parameter = parameter;
   }
 
