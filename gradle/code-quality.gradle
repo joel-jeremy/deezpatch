@@ -29,7 +29,7 @@ jacocoTestCoverageVerification {
     } 
   } 
 }
-tasks.named("check").configure {
+tasks.named("test").configure {
   finalizedBy tasks.withType(JacocoReport)
   finalizedBy tasks.withType(JacocoCoverageVerification)
 }
