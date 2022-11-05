@@ -13,7 +13,8 @@ reporting {
             .toList()
 
         def execFiles = javaProjects.stream()
-            .flatMap { fileTree(it.buildDir).include("/jacoco/*.exec").stream() }
+            .flatMap { it.tasks.withType(JacocoReport).stream() }
+            .flatMap { it.executionData.stream() }
             .toList()
 
         dependsOn testTasks
@@ -29,12 +30,8 @@ reporting {
   }
 }
 
-afterEvaluate {
-  javaProjects.each {
-    it.tasks.named("check").configure {
-      dependsOn reporting.reports.collect { it.reportTask }
-    }
-  }
+tasks.register("reports").configure {
+  dependsOn reporting.reports.collect { it.reportTask }
 }
 
 dependencies {
