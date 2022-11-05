@@ -157,7 +157,7 @@ public abstract class RequestKey<T extends Request<R>, R> {
    * @param requestType The request type.
    * @return The request type.
    */
-  public static RequestKey<?, ?> from(Type requestType) {
+  public static RequestKey<Request<Object>, Object> from(Type requestType) {
     return from(requestType, determineResultType(TypeUtilities.getRawType(requestType)));
   }
 
@@ -168,7 +168,7 @@ public abstract class RequestKey<T extends Request<R>, R> {
    * @param resultType The result type.
    * @return The request type.
    */
-  private static RequestKey<?, ?> from(Type requestType, Type resultType) {
+  private static RequestKey<Request<Object>, Object> from(Type requestType, Type resultType) {
     return new RequestKey<>(requestType, resultType) {};
   }
 

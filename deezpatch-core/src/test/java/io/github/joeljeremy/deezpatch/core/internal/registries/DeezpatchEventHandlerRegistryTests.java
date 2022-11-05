@@ -117,12 +117,13 @@ public class DeezpatchEventHandlerRegistryTests {
         "should throw when a method annotated with @EventHandler does not have a parameter")
     void test4() {
       InvalidEventHandler invalidEventHandler = TestEventHandlers.invalidEventHandler();
+      Class<?> eventHandlerClass = invalidEventHandler.getClass();
+
       DeezpatchEventHandlerRegistry eventHandlerRegistry =
           buildEventHandlerRegistry(invalidEventHandler);
 
       assertThrows(
-          IllegalArgumentException.class,
-          () -> eventHandlerRegistry.register(invalidEventHandler.getClass()));
+          IllegalArgumentException.class, () -> eventHandlerRegistry.register(eventHandlerClass));
     }
 
     @Test
@@ -149,13 +150,13 @@ public class DeezpatchEventHandlerRegistryTests {
     void test6() {
       InvalidReturnTypeEventHandler invalidReturnTypeEventHandler =
           TestEventHandlers.invalidReturnTypeEventHandler();
+      Class<?> eventHandlerClass = invalidReturnTypeEventHandler.getClass();
 
       DeezpatchEventHandlerRegistry eventHandlerRegistry =
           buildEventHandlerRegistry(invalidReturnTypeEventHandler);
 
       assertThrows(
-          IllegalArgumentException.class,
-          () -> eventHandlerRegistry.register(invalidReturnTypeEventHandler.getClass()));
+          IllegalArgumentException.class, () -> eventHandlerRegistry.register(eventHandlerClass));
     }
   }
 

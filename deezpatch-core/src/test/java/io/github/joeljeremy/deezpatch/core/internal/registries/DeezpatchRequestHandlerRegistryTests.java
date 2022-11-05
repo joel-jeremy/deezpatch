@@ -130,12 +130,14 @@ public class DeezpatchRequestHandlerRegistryTests {
         "should throw when a method annotated with @RequestHandler does not have a parameter")
     void test6() {
       InvalidRequestHandler invalidRequestHandler = TestRequestHandlers.invalidRequestHandler();
+      Class<?> requestHandlerClass = invalidRequestHandler.getClass();
+
       DeezpatchRequestHandlerRegistry requestHandlerRegistry =
           buildRequestHandlerRegistry(invalidRequestHandler);
 
       assertThrows(
           IllegalArgumentException.class,
-          () -> requestHandlerRegistry.register(invalidRequestHandler.getClass()));
+          () -> requestHandlerRegistry.register(requestHandlerClass));
     }
 
     @Test
@@ -144,12 +146,14 @@ public class DeezpatchRequestHandlerRegistryTests {
     void test7() {
       InvalidRequestHandlerMultipleParams invalidRequestHandlerMultipleParams =
           TestRequestHandlers.invalidRequestHandlerMultipleParams();
+      Class<?> requestHandlerClass = invalidRequestHandlerMultipleParams.getClass();
+
       DeezpatchRequestHandlerRegistry requestHandlerRegistry =
           buildRequestHandlerRegistry(invalidRequestHandlerMultipleParams);
 
       assertThrows(
           IllegalArgumentException.class,
-          () -> requestHandlerRegistry.register(invalidRequestHandlerMultipleParams.getClass()));
+          () -> requestHandlerRegistry.register(requestHandlerClass));
     }
 
     @Test
@@ -163,13 +167,16 @@ public class DeezpatchRequestHandlerRegistryTests {
       DeezpatchRequestHandlerRegistry requestHandlerRegistry =
           buildRequestHandlerRegistry(voidRequestHandler, throwingVoidRequestHandler);
 
+      Class<?> requestHandlerClass1 = voidRequestHandler.getClass();
+      Class<?> requestHandlerClass2 = throwingVoidRequestHandler.getClass();
+
       // Register a VoidRequest handler.
-      requestHandlerRegistry.register(voidRequestHandler.getClass());
+      requestHandlerRegistry.register(requestHandlerClass1);
 
       assertThrows(
           UnsupportedOperationException.class,
           // Register another VoidRequest handler.
-          () -> requestHandlerRegistry.register(throwingVoidRequestHandler.getClass()));
+          () -> requestHandlerRegistry.register(requestHandlerClass2));
     }
 
     @Test
@@ -201,12 +208,14 @@ public class DeezpatchRequestHandlerRegistryTests {
     void test10() {
       IncompatibleRequestHandler incompatibleRequestHandler =
           TestRequestHandlers.incompatibleRequestHandler();
+      Class<?> requestHandlerClass = incompatibleRequestHandler.getClass();
+
       DeezpatchRequestHandlerRegistry requestHandlerRegistry =
           buildRequestHandlerRegistry(incompatibleRequestHandler);
 
       assertThrows(
           UnsupportedOperationException.class,
-          () -> requestHandlerRegistry.register(incompatibleRequestHandler.getClass()));
+          () -> requestHandlerRegistry.register(requestHandlerClass));
     }
   }
 
