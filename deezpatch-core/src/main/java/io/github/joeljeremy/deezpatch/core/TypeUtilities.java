@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -200,9 +201,11 @@ public class TypeUtilities {
    * @return The {@link TypeVariable} instance if the given type is a {@link TypeVariable} instance.
    *     Otherwise, {@code null}.
    */
-  public static @Nullable TypeVariable<?> asTypeVariable(Type type) {
+  public static @Nullable TypeVariable<GenericDeclaration> asTypeVariable(Type type) {
     if (type instanceof TypeVariable<?>) {
-      return (TypeVariable<?>) type;
+      @SuppressWarnings("unchecked")
+      TypeVariable<GenericDeclaration> tv = (TypeVariable<GenericDeclaration>) type;
+      return tv;
     }
     return null;
   }
@@ -243,12 +246,7 @@ public class TypeUtilities {
     requireNonNull(type, "type");
 
     if (isParameterizedType(type) || isTypeVariable(type) || isGenericArrayType(type)) {
-      return new GenericArrayType() {
-        @Override
-        public Type getGenericComponentType() {
-          return type;
-        }
-      };
+      return new SyntheticGenericArrayType(type);
     }
 
     // Wildcards cannot be arrays, so we use its upper/lower bounds to
@@ -284,5 +282,25 @@ public class TypeUtilities {
 
     Class<?> rawType = getRawType(type);
     return ARRAY_TYPE_CACHE.get(rawType);
+  }
+
+  /** A synthetic implementation of {@code GenericArrayType}. */
+  private static final class SyntheticGenericArrayType implements GenericArrayType {
+    private final Type genericComponentType;
+
+    /**
+     * Constructor.
+     *
+     * @param genericComponentType The generic array's generic component type.
+     */
+    private SyntheticGenericArrayType(Type genericComponentType) {
+      this.genericComponentType = genericComponentType;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Type getGenericComponentType() {
+      return genericComponentType;
+    }
   }
 }

@@ -70,7 +70,8 @@ public class DeezpatchRequestHandlerRegistry
         validateMethodParameters(method);
 
         // First parameter in the method is the request object.
-        RequestKey<?, ?> requestType = RequestKey.from(method.getGenericParameterTypes()[0]);
+        RequestKey<Request<Object>, Object> requestType =
+            RequestKey.from(method.getGenericParameterTypes()[0]);
 
         validateMethodReturnType(method, requestType);
 
