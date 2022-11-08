@@ -9,7 +9,7 @@ plugins {
 
 description = "Deezpatch Core"
 
-tasks.withType<Jar>().configureEach {
+tasks.named<Jar>("jar").configure {
   manifest {
     attributes(mapOf(
       "Automatic-Module-Name" to "io.github.joeljeremy.deezpatch.core"
