@@ -1,45 +1,51 @@
-// Copy classpath of root project
-buildscript {
-  dependencies {
-    classpath files(rootProject.buildscript.configurations.classpath) 
-  } 
+import net.ltgt.gradle.errorprone.CheckSeverity
+// Kotlin extension methods.
+import net.ltgt.gradle.errorprone.errorprone
+import net.ltgt.gradle.nullaway.nullaway
+
+plugins {
+  id("deezpatch.java-conventions")
+  id("jacoco")
+  id("net.ltgt.errorprone")
+  id("net.ltgt.nullaway")
+  id("com.diffplug.spotless")
 }
 
-apply plugin: "jacoco"
-apply plugin: "net.ltgt.errorprone"
-apply plugin: "net.ltgt.nullaway"
-apply plugin: "com.diffplug.spotless"
-
 dependencies {
-  errorprone "com.google.errorprone:error_prone_core:${versions.errorprone}"
-  errorprone "com.uber.nullaway:nullaway:${versions.nullaway}"
-  compileOnly "org.checkerframework:checker-qual:${versions.checkerframework}"
+  errorprone(libs.errorprone)
+  errorprone(libs.nullaway)
+  compileOnly(libs.checkerframework)
 }
 
 jacoco {
-  toolVersion = "${versions.jacoco}"
+  toolVersion = libs.versions.jacoco.get()
 }
 
-jacocoTestCoverageVerification { 
+tasks.withType<JacocoCoverageVerification>().configureEach {
+  val execFiles = javaProjects()
+      .flatMap { it.tasks.withType<JacocoReport>() }
+      .flatMap { it.executionData.files }
+
+  executionData.from(execFiles)
+
   violationRules { 
     rule { 
       limit { 
-        minimum = 1
+        minimum = "1".toBigDecimal()
       } 
     } 
   } 
 }
-tasks.named("test").configure {
-  finalizedBy tasks.withType(JacocoReport)
-  finalizedBy tasks.withType(JacocoCoverageVerification)
+tasks.named("check").configure {
+  finalizedBy(tasks.withType<JacocoCoverageVerification>())
 }
 
-tasks.withType(JavaCompile).configureEach { task ->
+tasks.withType<JavaCompile>().configureEach {
   options.errorprone {
     // Only apply to main source set (not test,jmh)
-    enabled = task.name.equals("compileJava")
+    isEnabled.set(name == "compileJava")
 
-    def enabledChecks = [
+    val enabledChecks = listOf(
       "AssertFalse", "BuilderReturnThis", "CheckedExceptionNotThrown", "ClassName", 
       "ComparisonContractViolated", "DepAnn", "EmptyIf", "EqualsBrokenForNull",
       "FieldCanBeFinal", "FieldCanBeLocal", "FieldCanBeStatic", "ForEachIterable",
@@ -51,28 +57,28 @@ tasks.withType(JavaCompile).configureEach { task ->
       "StronglyTypeTime", "SwitchDefault", "TimeUnitMismatch", "TransientMisuse", 
       "UnnecessarilyVisible", "UnnecessaryAnonymousClass", "UnnecessaryOptionalGet", 
       "UnsafeLocaleUsage", "UnusedTypeParameter", "UsingJsr305CheckReturnValue"
-    ]
-    enabledChecks.each { enable(it) }
+    )
+    enabledChecks.forEach { check -> enable(check) }
 
-    def disabledChecks = [
+    val disabledChecks = listOf(
       "CanIgnoreReturnValueSuggester", "CatchingUnchecked"
-    ]
-    disabledChecks.each { disable(it) }
-
+    )
+    disabledChecks.forEach { check -> disable(check) }
+    
     nullaway {
-      severity = net.ltgt.gradle.errorprone.CheckSeverity.ERROR
+      severity.set(CheckSeverity.ERROR)
       annotatedPackages.add("io.github.joeljeremy.deezpatch")
-      checkOptionalEmptiness = true
-      suggestSuppressions = true
+      checkOptionalEmptiness.set(true)
+      suggestSuppressions.set(true)
     }
   }
 }
 
 spotless {
-  enforceCheck System.properties.containsKey("spotless")
+  isEnforceCheck = hasProperty("spotless-check")
   java {
     // Generated code should not be subjected to spotless.
-    target "src/*/java/**/*.java"
+    target("src/*/java/**/*.java")
     // Only format files which have changed since origin/main.
     // ratchetFrom "origin/main"
     toggleOffOn()

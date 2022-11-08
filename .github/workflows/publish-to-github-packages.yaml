@@ -26,7 +26,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Publish Snapshot to GitHub Packages
-        run: ./gradlew -Pgithub-packages publish
+        run: ./gradlew publish
         env:
-          GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ORG_GRADLE_PROJECT_githubActor: ${{ github.actor }}
+          ORG_GRADLE_PROJECT_githubToken: ${{ github.token }}

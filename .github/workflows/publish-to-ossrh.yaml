@@ -26,9 +26,9 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Publish Snapshot to OSSRH
-        run: ./gradlew -Possrh publishToSonatype
+        run: ./gradlew publishToSonatype
         env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          ORG_GRADLE_PROJECT_ossrhUsername: ${{ secrets.OSSRH_USERNAME }}
+          ORG_GRADLE_PROJECT_ossrhPassword: ${{ secrets.OSSRH_PASSWORD }}
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
