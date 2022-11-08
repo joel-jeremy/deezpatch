@@ -1,4 +1,6 @@
-plugins { 
+import org.kt3k.gradle.plugin.coveralls.CoverallsTask
+
+plugins {
   id("com.github.kt3k.coveralls")
 }
 
@@ -8,7 +10,7 @@ coveralls {
       "${rootProject.buildDir}/reports/jacoco/allCodeCoverageReport/allCodeCoverageReport.xml"
 }
 
-tasks.named("coveralls").configure {
+tasks.named<CoverallsTask>("coveralls").configure {
   group = "Coverage reports"
   description = "Uploads the aggregated coverage report to Coveralls"
 
