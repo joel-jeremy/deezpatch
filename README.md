@@ -256,7 +256,7 @@ public static void main(String[] args) {
 
 ## 🎛️ Custom Request/Event Handler Annotations
 
-In cases where a project is built in such a way that bringing in external dependencies is considered a bad practice (e.g. domain layer/package in a Hexagonal (Ports and Adapters) architecture), Deezpatch provides a way to use custom/user-defined request/event handler annotations (in addition to the built-in [RequestHandler](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/RequestHandler.java) and [EventHandler](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/EventHandler.java) annotations) to annotate request/event handlers.
+In cases where a project is built in such a way that bringing in external dependencies is considered a bad practice (e.g. domain layer/package in a Hexagonal (Ports and Adapters) architecture), Deezpatch provides a way to use custom request/event handler annotations (in addition to the built-in [RequestHandler](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/RequestHandler.java) and [EventHandler](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/EventHandler.java) annotations) to annotate request/event handlers.
 
 This way, Deezpatch can still be used without adding the core Deezpatch library as a dependency of a project's domain layer/package. Instead, it may be used in the outer layers/packages to wire things up.
 
@@ -265,21 +265,21 @@ This way, Deezpatch can still be used without adding the core Deezpatch library 
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface MyCustomRequestHandlerAnnotation {}
+public @interface AwesomeRequestHandler {}
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface MyCustomEventHandlerAnnotation {}
+public @interface AwesomeEventHandler {}
 
 public class MyRequestHandler {
-  @MyCustomRequestHandlerAnnotation
+  @AwesomeRequestHandler
   public void handle(TestRequest request) {
     // Handle.
   }
 }
 
 public class MyEventHandler {
-  @MyCustomRequestHandlerAnnotation
+  @AwesomeEventHandler
   public void handle(TestEvent event) {
     // Handle.
   }
@@ -296,10 +296,10 @@ public static void main(String[] args) {
   Deezpatch deezpatch = Deezpatch.builder()
       .instanceProvider(applicationContext::getBean)
       .requests(config -> 
-          config.handlerAnnotations(MyCustomRequestHandlerAnnotation.class)
+          config.handlerAnnotations(AwesomeRequestHandler.class)
               .handlers(MyRequestHandler.class))
       .events(config -> 
-          config.handlerAnnotations(MyCustomEventHandlerAnnotation.java)
+          config.handlerAnnotations(AwesomeEventHandler.java)
               .handlers(MyEventHandler.class))
       .build();
 }
