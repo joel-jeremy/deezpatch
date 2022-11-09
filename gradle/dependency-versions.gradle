@@ -1,9 +1,0 @@
-ext {
-  versions = [
-    junitJupiter: "5.9.1",
-    jacoco: "0.8.8",
-    errorprone: "2.16",
-    nullaway: "0.10.4",
-    checkerframework: "3.27.0"
-  ]
-}

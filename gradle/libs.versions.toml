@@ -1,0 +1,39 @@
+[versions]
+junitjupiter = "5.9.1"
+nexuspublish-plugin = "1.1.0"
+jacoco = "0.8.8"
+errorprone = "2.16"
+errorprone-plugin = "3.0.1"
+nullaway = "0.10.4"
+nullaway-plugin = "1.5.0"
+checkerframework = "3.27.0"
+spotless-plugin = "6.11.0"
+coveralls-plugin = "2.12.0"
+snyk-plugin = "0.4"
+sonarqube-plugin = "3.5.0.2730"
+jmh-plugin = "0.6.8"
+dependencyupdates-plugin = "0.43.0"
+
+[libraries]
+nexuspublish-plugin = { module = "io.github.gradle-nexus:publish-plugin", version.ref = "nexuspublish-plugin" }
+errorprone = { module = "com.google.errorprone:error_prone_core", version.ref = "errorprone" }
+errorprone-plugin = { module = "net.ltgt.gradle:gradle-errorprone-plugin", version.ref = "errorprone-plugin" }
+nullaway = { module = "com.uber.nullaway:nullaway", version.ref = "nullaway" }
+nullaway-plugin = { module = "net.ltgt.gradle:gradle-nullaway-plugin", version.ref = "nullaway-plugin" }
+checkerframework = { module = "org.checkerframework:checker-qual", version.ref = "checkerframework" }
+spotless-plugin = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless-plugin" }
+dependencyupdates-plugin = { module = "com.github.ben-manes:gradle-versions-plugin", version.ref = "dependencyupdates-plugin" }
+snyk-plugin = { module = "gradle.plugin.io.snyk.gradle.plugin:snyk", version.ref = "snyk-plugin" }
+coveralls-plugin = { module = "gradle.plugin.org.kt3k.gradle.plugin:coveralls-gradle-plugin", version.ref = "coveralls-plugin" }
+sonarqube-plugin = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version.ref = "sonarqube-plugin" }
+
+[plugins]
+jmh = { id = "me.champeau.jmh", version.ref = "jmh-plugin" }
+nexuspublish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexuspublish-plugin" }
+coveralls = { id = "com.github.kt3k.coveralls", version.ref = "coveralls-plugin" }
+snyk = { id = "io.snyk.gradle.plugin.snykplugin", version.ref = "snyk-plugin" }
+sonarqube = { id = "org.sonarqube", version.ref = "sonarqube-plugin" }
+errorprone = { id = "net.ltgt.errorprone", version.ref = "errorprone-plugin" }
+nullaway = { id = "net.ltgt.nullaway", version.ref = "nullaway-plugin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless-plugin" }
+dependencyupdates = { id = "com.github.ben-manes.versions", version.ref = "dependencyupdates-plugin" }
