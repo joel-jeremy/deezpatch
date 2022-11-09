@@ -30,13 +30,7 @@ To build the project, run the command:
 ./gradlew build
 ```
 
-> The above command will build all the projects and run unit and integration tests. It will also generate test report and jacoco test coverage report.
-
-To check code formats, run the command:
-
-```sh
-./gradlew build -PspotlessCheck
-```
+> The above command will check code format, build all the projects, and run unit and integration tests. It will also generate test report and jacoco test coverage report.
 
 ## Test Runs
 
@@ -60,9 +54,10 @@ Integration tests usually takes longer to complete than unit tests. In cases whe
 
 The project adheres to the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html).
 
-To easily fix code formatting warning/errors, the Spotless Gradle plugin can be used to apply [Google Java Format](https://github.com/google/google-java-format). Just run the command:
+To easily fix code formatting warning/errors, the Spotless Gradle plugin can be used to apply [Google Java Format](https://github.com/google/google-java-format). Just run the commands:
 
-- `./gradlew build -PspotlessCheck` to check for formatting errors.  
+- `./gradlew build` to check for formatting errors.
+  - The `skipSpotlessCheck` property can be set to skip Spotless' code format check e.g. `./gradlew build -PskipSpotlessCheck`
 - `./gradlew spotlessApply` to automatically fix formatting errors.
 
 CheckStyle extension/plugin can also be installed to your favorite IDE ([VS Code](https://marketplace.visualstudio.com/items?itemName=shengchen.vscode-checkstyle), [IntelliJ](https://plugins.jetbrains.com/plugin/1065-checkstyle-idea), [Eclipse](https://checkstyle.org/eclipse-cs/#!/)) to highlight code when it does not adhere to [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html) (see [CheckStyle Google Style Docs](https://checkstyle.sourceforge.io/google_style.html) and [google_checks.xml](https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/google_checks.xml)).
