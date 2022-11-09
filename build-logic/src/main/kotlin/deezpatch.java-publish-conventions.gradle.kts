@@ -48,7 +48,7 @@ publishing {
   repositories {
     maven {
       url = uri("https://maven.pkg.github.com/joel-jeremy/deezpatch")
-      name = "github-packages"
+      name = "githubPackages"
       credentials {
         username = findProperty("githubActor") as String?
         password = findProperty("githubToken") as String?

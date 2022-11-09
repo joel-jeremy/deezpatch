@@ -23,7 +23,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Release to GitHub Packages
-        run: ./gradlew -Prelease publish
+        run: ./gradlew -Prelease publishAllPublicationsToGithubPackagesRepository
         env:
           ORG_GRADLE_PROJECT_githubActor: ${{ github.actor }}
           ORG_GRADLE_PROJECT_githubToken: ${{ github.token }}
