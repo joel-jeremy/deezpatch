@@ -20,6 +20,6 @@ tasks.named<CoverallsTask>("coveralls").configure {
 fun mainSrcDirs(): List<String> {
   return javaProjects()
       .mapNotNull { it.extensions.findByType<JavaPluginExtension>() }
-      .flatMap { it.sourceSets.getByName<SourceSet>("main").allSource.srcDirs }
+      .flatMap { it.sourceSets["main"].allSource.srcDirs }
       .map { it.absolutePath }
 }

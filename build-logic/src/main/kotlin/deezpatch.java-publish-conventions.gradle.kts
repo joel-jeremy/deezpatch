@@ -5,7 +5,7 @@ plugins {
 }
 
 // Do not publish test fixtures.
-val javaComponent = components["java"] as AdhocComponentWithVariants
+val javaComponent = components.getByName<AdhocComponentWithVariants>("java")
 javaComponent.withVariantsFromConfiguration(configurations["testFixturesApiElements"]) { skip() }
 javaComponent.withVariantsFromConfiguration(configurations["testFixturesRuntimeElements"]) { skip() }
 
@@ -15,9 +15,9 @@ publishing {
       from(components["java"])
 
       pom {
+        packaging = "jar"
         name.set(project.description)
         description.set(project.description)
-        packaging = "jar"
         url.set("https://github.com/joel-jeremy/deezpatch")
 
         licenses {
@@ -69,7 +69,7 @@ if (project.hasProperty("release")) {
 }
 
 signing {
-  // isRequired = false
+  isRequired = hasProperty("signingRequired")
 
   val signingKey: String? by project
   val signingPassword: String? by project

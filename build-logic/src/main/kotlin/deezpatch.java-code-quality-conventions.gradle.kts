@@ -75,7 +75,7 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 spotless {
-  isEnforceCheck = hasProperty("spotless-check")
+  isEnforceCheck = hasProperty("spotlessCheck")
   java {
     // Generated code should not be subjected to spotless.
     target("src/*/java/**/*.java")
