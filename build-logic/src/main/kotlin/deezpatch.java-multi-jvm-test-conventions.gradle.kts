@@ -11,14 +11,6 @@ additionalTestRunsOnJvmVersions().forEach { javaVersion ->
     javaLauncher.set(javaToolchains.launcherFor {
       languageVersion.set(javaVersion)
     })
-
-    if (javaVersion.canCompileOrRun(17)) {
-      // We are reflectively setting environment variable in some unit tests.
-      // As of Java 17, this is no longer permitted. We need this flag to re-enable
-      // the unit test hack. We are opening java.util because we are reflectively
-      // accessing the internal mutable map of a Collections.unmodifiableMap instance.
-      jvmArgs.add("--add-opens=java.base/java.util=ALL-UNNAMED")
-    }
   }
 
   tasks.named("check").configure {
