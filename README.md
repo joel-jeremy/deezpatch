@@ -4,7 +4,8 @@
 [![Code QL](https://github.com/joel-jeremy/deezpatch/actions/workflows/codeql.yaml/badge.svg)](https://github.com/joel-jeremy/deezpatch/actions/workflows/codeql.yaml)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.joel-jeremy.deezpatch/core/badge.svg)](https://search.maven.org/search?q=g:%22io.github.joel-jeremy.deezpatch%22)
 [![Coverage Status](https://coveralls.io/repos/github/joel-jeremy/deezpatch/badge.svg?branch=main)](https://coveralls.io/github/joel-jeremy/deezpatch?branch=main)
-[![Known Vulnerabilities](https://snyk.io/test/github/joel-jeremy/deezpatch/badge.svg)](https://snyk.io/test/github/joel-jeremy/deezpatch)
+<!-- Commenting out until issue gets fixed: https://github.com/snyk/cli/issues/668 -->
+<!-- [![Known Vulnerabilities](https://snyk.io/test/github/joel-jeremy/deezpatch/badge.svg)](https://snyk.io/test/github/joel-jeremy/deezpatch) -->
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/joel-jeremy/deezpatch/blob/main/LICENSE)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.deezpatch&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.deezpatch&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
