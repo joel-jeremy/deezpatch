@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 /**
  * Methods annotated with this annotation are registered as {@link Event} handlers.
  *
- * <h3>Given the following events:</h3>
+ * <h2>Given the following events:</h2>
  *
  * <blockquote>
  *
@@ -41,7 +41,7 @@ import java.lang.annotation.Target;
  *
  * </blockquote>
  *
- * <h3>Valid event handlers are:</h3>
+ * <h2>Valid event handlers are:</h2>
  *
  * <blockquote>
  *

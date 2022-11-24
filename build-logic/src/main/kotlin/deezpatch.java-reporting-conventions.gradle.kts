@@ -7,7 +7,7 @@ reporting {
   reports {
     register<JacocoCoverageReport>("allCodeCoverageReport") { 
       testType.set("all")
-      reportTask.configure {
+      reportTask {
         val testTasks = javaProjects()
             .flatMap { it.tasks.withType<Test>() }
 
@@ -28,7 +28,7 @@ reporting {
   }
 }
 
-tasks.register("reports").configure {
+tasks.register("reports") {
   dependsOn(reporting.reports.withType<JacocoCoverageReport>().map { it.reportTask })
   dependsOn(reporting.reports.withType<AggregateTestReport>().map { it.reportTask })
 }

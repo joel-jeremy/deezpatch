@@ -13,7 +13,7 @@ additionalTestRunsOnJvmVersions().forEach { javaVersion ->
     })
   }
 
-  tasks.named("check").configure {
+  tasks.named("check") {
     dependsOn(testTask)
   }
 }

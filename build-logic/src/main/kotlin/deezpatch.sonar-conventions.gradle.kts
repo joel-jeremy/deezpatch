@@ -17,10 +17,10 @@ sonarqube {
   }
 }
 
-tasks.named("sonar").configure {
+tasks.named("sonar") {
   dependsOn(tasks.withType<JacocoReport>())
 }
 
-tasks.named("sonarqube").configure {
+tasks.named("sonarqube") {
   dependsOn(tasks.withType<JacocoReport>())
 }

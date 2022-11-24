@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 /**
  * Methods annotated with this annotation are registered as {@link Request} handlers.
  *
- * <h3>Given the following requests:</h3>
+ * <h2>Given the following requests:</h2>
  *
  * <blockquote>
  *
@@ -43,7 +43,7 @@ import java.lang.annotation.Target;
  *
  * </blockquote>
  *
- * <h3>Valid request handlers are:</h3>
+ * <h2>Valid request handlers are:</h2>
  *
  * <blockquote>
  *

@@ -36,7 +36,7 @@ tasks.withType<JacocoCoverageVerification>().configureEach {
     } 
   } 
 }
-tasks.named("check").configure {
+tasks.named("check") {
   finalizedBy(tasks.withType<JacocoCoverageVerification>())
 }
 

@@ -3,7 +3,7 @@ package io.github.joeljeremy.deezpatch.core;
 /**
  * Marker interface to represent a request.
  *
- * <h3>Requests can have a result and the result type is determined by {@link TResult} e.g.</h3>
+ * <h2>Requests can have a result and the result type is determined by {@link TResult} e.g.</h2>
  *
  * <blockquote>
  *
@@ -23,7 +23,7 @@ package io.github.joeljeremy.deezpatch.core;
  *
  * </blockquote>
  *
- * <h3>In cases where no results are expected, {@code Void} must be used as result type e.g.</h3>
+ * <h2>In cases where no results are expected, {@code Void} must be used as result type e.g.</h2>
  *
  * <blockquote>
  *
@@ -43,7 +43,7 @@ package io.github.joeljeremy.deezpatch.core;
  *
  * </blockquote>
  *
- * <h3>Request implementations with type parameters/type variables are not permitted e.g.</h3>
+ * <h2>Request implementations with type parameters/type variables are not permitted e.g.</h2>
  *
  * <blockquote>
  *
