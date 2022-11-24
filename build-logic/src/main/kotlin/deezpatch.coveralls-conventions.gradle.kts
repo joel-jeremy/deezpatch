@@ -10,7 +10,7 @@ coveralls {
       "${rootProject.buildDir}/reports/jacoco/allCodeCoverageReport/allCodeCoverageReport.xml"
 }
 
-tasks.named<CoverallsTask>("coveralls").configure {
+tasks.named<CoverallsTask>("coveralls") {
   group = "Coverage reports"
   description = "Uploads the aggregated coverage report to Coveralls"
 
