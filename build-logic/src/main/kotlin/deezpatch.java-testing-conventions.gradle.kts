@@ -11,9 +11,6 @@ testing {
       targets {
         all {
           testTask {
-            onlyIf("skipIntegrationTests property is not set.") {
-              !project.hasProperty("skipIntegrationTests")
-            }
             shouldRunAfter(tasks.named("test"))
           }
         }
