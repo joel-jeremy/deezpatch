@@ -6,6 +6,8 @@ plugins {
   id("deezpatch.coveralls-conventions")
   id("deezpatch.snyk-conventions")
   id("deezpatch.dependency-updates-conventions")
+  id("deezpatch.eclipse-conventions")
+  id("deezpatch.idea-conventions")
 }
 
 allprojects {
