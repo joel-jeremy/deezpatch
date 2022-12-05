@@ -77,9 +77,9 @@ Unit tests in this project follow a specific structure.
 - Use `@DisplayName` to describe the scenario being tested by the `@Test` method e.g. `@DisplayName("should throw when x argument is null)`.
 
     ```java
-    // Class under test: io.github.joeljeremy.deezpatcher.core.Deezpatch
+    // Class under test: io.github.joeljeremy.deezpatch.core.Deezpatch
     public class Deezpatch implements Dispatcher, Publisher {
-        public Deezpatcher(...) {
+        public Deezpatch(...) {
             ...
         }
         
@@ -93,7 +93,7 @@ Unit tests in this project follow a specific structure.
 
         public static class Builder {
             ...
-            public Deezpatcher build() {
+            public Deezpatch build() {
                 ...
             }
         }
