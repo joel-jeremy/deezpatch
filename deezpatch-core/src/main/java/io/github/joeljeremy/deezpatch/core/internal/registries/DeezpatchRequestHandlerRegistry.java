@@ -3,6 +3,8 @@ package io.github.joeljeremy.deezpatch.core.internal.registries;
 import static java.util.Objects.requireNonNull;
 
 import io.github.joeljeremy.deezpatch.core.InstanceProvider;
+import io.github.joeljeremy.deezpatch.core.Middleware;
+import io.github.joeljeremy.deezpatch.core.MiddlewarePipelineProvider;
 import io.github.joeljeremy.deezpatch.core.RegisteredRequestHandler;
 import io.github.joeljeremy.deezpatch.core.Request;
 import io.github.joeljeremy.deezpatch.core.RequestHandler;
@@ -13,6 +15,8 @@ import io.github.joeljeremy.deezpatch.core.internal.Internal;
 import io.github.joeljeremy.deezpatch.core.internal.LambdaFactory;
 import io.github.joeljeremy.deezpatch.core.internal.RequestHandlerMethod;
 import io.github.joeljeremy.deezpatch.core.internal.VoidRequestHandlerMethod;
+import io.github.joeljeremy.deezpatch.core.internal.registries.DeezpatchMiddlewareRegistry.MiddlewarePipelineFactory;
+import io.github.joeljeremy.deezpatch.core.internal.registries.DeezpatchMiddlewareRegistry.RegisteredMiddlewarePipeline;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -38,18 +42,22 @@ public class DeezpatchRequestHandlerRegistry
       new WeakHashMap<>();
 
   private final InstanceProvider instanceProvider;
+  private final MiddlewarePipelineProvider middlewarePipelineProvider;
   private final Set<Class<? extends Annotation>> requestHandlerAnnotations;
 
   /**
    * Constructor.
    *
    * @param instanceProvider The instance provider.
+   * @param middlewarePipelineProvider The middleware pipeline provider.
    * @param requestHandlerAnnotations The supported request handler annotations.
    */
   public DeezpatchRequestHandlerRegistry(
       InstanceProvider instanceProvider,
+      MiddlewarePipelineProvider middlewarePipelineProvider,
       Set<Class<? extends Annotation>> requestHandlerAnnotations) {
     this.instanceProvider = requireNonNull(instanceProvider);
+    this.middlewarePipelineProvider = requireNonNull(middlewarePipelineProvider);
     this.requestHandlerAnnotations =
         withNativeRequestHandler(requireNonNull(requestHandlerAnnotations));
   }
@@ -103,20 +111,23 @@ public class DeezpatchRequestHandlerRegistry
     return Optional.ofNullable(handler);
   }
 
-  private void register(RequestKey<?, ?> requestType, Method requestHandlerMethod) {
-    requireNonNull(requestType);
+  private void register(RequestKey<?, ?> requestKey, Method requestHandlerMethod) {
+    requireNonNull(requestKey);
     requireNonNull(requestHandlerMethod);
 
+    MiddlewarePipelineFactory<?> pipelineFactory =
+        middlewarePipelineProvider.getPipelineFactoryFor(requestKey);
+
     RegisteredRequestHandler<?, ?> builtHandler =
-        buildRequestHandler(requestHandlerMethod, instanceProvider);
+        buildRequestHandler(requestHandlerMethod, pipelineFactory);
 
     Map<Type, RegisteredRequestHandler<?, ?>> handlersByResultType =
-        mappingsByRequestType.computeIfAbsent(requestType.requestType(), k -> new WeakHashMap<>());
+        mappingsByRequestType.computeIfAbsent(requestKey.requestType(), k -> new WeakHashMap<>());
 
-    if (handlersByResultType.putIfAbsent(requestType.resultType(), builtHandler) != null) {
+    if (handlersByResultType.putIfAbsent(requestKey.resultType(), builtHandler) != null) {
       throw new UnsupportedOperationException(
           "Duplicate request handler registration for request type: "
-              + requestType
+              + requestKey
               + ". Please note that primitive and wrapper result types "
               + "are considered the same.");
     }
@@ -131,25 +142,24 @@ public class DeezpatchRequestHandlerRegistry
     return false;
   }
 
-  private static RegisteredRequestHandler<?, ?> buildRequestHandler(
-      Method requestHandlerMethod, InstanceProvider instanceProvider) {
+  private RegisteredRequestHandler<?, ?> buildRequestHandler(
+      Method requestHandlerMethod, MiddlewarePipelineFactory<?> pipelineFactory) {
 
     requireNonNull(requestHandlerMethod);
-    requireNonNull(instanceProvider);
 
     // We build different lambdas for void-returning request handlers
     // methods and non-void returning ones.
     if (void.class.equals(requestHandlerMethod.getReturnType())) {
       // For void-returning methods, we automatically handle return of
       // an empty Optional to the dispatcher.
-      return buildRequestHandlerWithVoidReturnType(requestHandlerMethod, instanceProvider);
+      return buildRequestHandlerWithVoidReturnType(requestHandlerMethod, pipelineFactory);
     } else {
-      return buildRequestHandlerWithReturnType(requestHandlerMethod, instanceProvider);
+      return buildRequestHandlerWithReturnType(requestHandlerMethod, pipelineFactory);
     }
   }
 
-  private static RegisteredRequestHandler<?, ?> buildRequestHandlerWithReturnType(
-      Method requestHandlerMethod, InstanceProvider instanceProvider) {
+  private RegisteredRequestHandler<?, ?> buildRequestHandlerWithReturnType(
+      Method requestHandlerMethod, MiddlewarePipelineFactory<?> pipelineFactory) {
 
     RequestHandlerMethod requestHandlerMethodLambda =
         LambdaFactory.createLambdaFunction(requestHandlerMethod, RequestHandlerMethod.class);
@@ -161,9 +171,19 @@ public class DeezpatchRequestHandlerRegistry
     return new RegisteredRequestHandler<Request<Object>, Object>() {
       @Override
       public Optional<Object> invoke(Request<Object> request) {
-        return Optional.ofNullable(
-            requestHandlerMethodLambda.invoke(
-                instanceProvider.getInstance(requestHandlerClass), request));
+        Middleware.Next<Object> next =
+            () -> {
+              return Optional.ofNullable(
+                  requestHandlerMethodLambda.invoke(
+                      instanceProvider.getInstance(requestHandlerClass), request));
+            };
+
+        @SuppressWarnings("unchecked")
+        MiddlewarePipelineFactory<Object> pf = (MiddlewarePipelineFactory<Object>) pipelineFactory;
+
+        RegisteredMiddlewarePipeline<Object> middlewares = pf.create(request, next);
+
+        return middlewares.invoke();
       }
 
       @Override
@@ -173,28 +193,41 @@ public class DeezpatchRequestHandlerRegistry
     };
   }
 
-  private static RegisteredRequestHandler<?, ?> buildRequestHandlerWithVoidReturnType(
-      Method requestHandlerMethod, InstanceProvider instanceProvider) {
+  private RegisteredRequestHandler<?, ?> buildRequestHandlerWithVoidReturnType(
+      Method requestHandlerMethod, MiddlewarePipelineFactory<?> pipelineFactory) {
 
     VoidRequestHandlerMethod requestHandlerMethodLambda =
         LambdaFactory.createLambdaFunction(requestHandlerMethod, VoidRequestHandlerMethod.class);
 
     final Class<?> requestHandlerClass = requestHandlerMethod.getDeclaringClass();
-    final String requestHandlerString = requestHandlerMethod.toGenericString();
+    final String requestHandlerMethodString = requestHandlerMethod.toGenericString();
 
     // Only request event handler instance when invoked instead of during registration time.
     return new RegisteredRequestHandler<Request<Object>, Object>() {
       @Override
       public Optional<Object> invoke(Request<Object> request) {
-        requestHandlerMethodLambda.invoke(
-            instanceProvider.getInstance(requestHandlerClass), request);
+        @SuppressWarnings("unchecked")
+        MiddlewarePipelineFactory<Object> pf = (MiddlewarePipelineFactory<Object>) pipelineFactory;
+
+        Middleware.Next<Object> next =
+            () -> {
+              requestHandlerMethodLambda.invoke(
+                  instanceProvider.getInstance(requestHandlerClass), request);
+              return Optional.empty();
+            };
+
+        RegisteredMiddlewarePipeline<Object> middlewares = pf.create(request, next);
+
+        // Execute.
+        middlewares.invoke();
+
         // Method return type is void so always return an empty result.
         return Optional.empty();
       }
 
       @Override
       public String toString() {
-        return requestHandlerString;
+        return requestHandlerMethodString;
       }
     };
   }
@@ -202,8 +235,8 @@ public class DeezpatchRequestHandlerRegistry
   private static void validateMethodParameters(Method method) {
     if (method.getParameterCount() != 1) {
       throw new IllegalArgumentException(
-          "Methods marked with @RequestHandler must accept a single parameter which is the request"
-              + " object.");
+          "Methods marked with @RequestHandler (or any of the supported request handler"
+              + " annotations) must accept a single parameter which is the request object.");
     }
   }
 
@@ -238,35 +271,5 @@ public class DeezpatchRequestHandlerRegistry
     // The native @RequestHandler annotation.
     merged.add(RequestHandler.class);
     return Collections.unmodifiableSet(merged);
-  }
-
-  private static class PrimitiveTypeMap extends ClassValue<Class<?>> {
-    /**
-     * Map wrapper types to its primitive type. If type is not a wrapper type, the same type is
-     * returned.
-     */
-    @Override
-    protected Class<?> computeValue(Class<?> type) {
-      if (Void.class.equals(type)) {
-        return void.class;
-      } else if (Integer.class.equals(type)) {
-        return int.class;
-      } else if (Short.class.equals(type)) {
-        return short.class;
-      } else if (Long.class.equals(type)) {
-        return long.class;
-      } else if (Float.class.equals(type)) {
-        return float.class;
-      } else if (Double.class.equals(type)) {
-        return double.class;
-      } else if (Byte.class.equals(type)) {
-        return byte.class;
-      } else if (Character.class.equals(type)) {
-        return char.class;
-      } else if (Boolean.class.equals(type)) {
-        return boolean.class;
-      }
-      return type;
-    }
   }
 }

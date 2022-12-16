@@ -158,7 +158,7 @@ public abstract class RequestKey<T extends Request<R>, R> {
    * @return The request type.
    */
   public static RequestKey<Request<Object>, Object> from(Type requestType) {
-    return from(requestType, determineResultType(TypeUtilities.getRawType(requestType)));
+    return from(requestType, determineResultType(requestType));
   }
 
   /**
@@ -172,8 +172,14 @@ public abstract class RequestKey<T extends Request<R>, R> {
     return new RequestKey<>(requestType, resultType) {};
   }
 
-  private static Type determineResultType(Class<?> requestType) {
-    return RESULT_TYPE_BY_REQUEST_TYPE.get(requestType);
+  private static Type determineResultType(Type requestType) {
+    ParameterizedType parameterizedRequestType = TypeUtilities.asParameterizedType(requestType);
+    if (parameterizedRequestType != null
+        && Request.class.equals(parameterizedRequestType.getRawType())) {
+      // First type parameter is the result type.
+      return parameterizedRequestType.getActualTypeArguments()[0];
+    }
+    return RESULT_TYPE_BY_REQUEST_TYPE.get(TypeUtilities.getRawType(requestType));
   }
 
   /**

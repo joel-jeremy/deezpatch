@@ -83,7 +83,7 @@ public class DeezpatchEventHandlerRegistry implements EventHandlerRegistry, Even
 
     List<RegisteredEventHandler<?>> handlers = eventHandlersByEventType.get(eventType);
 
-    handlers.add(buildEventHandler(eventHandlerMethod, instanceProvider));
+    handlers.add(buildEventHandler(eventHandlerMethod));
   }
 
   private boolean isEventHandler(Method method) {
@@ -95,8 +95,7 @@ public class DeezpatchEventHandlerRegistry implements EventHandlerRegistry, Even
     return false;
   }
 
-  private static RegisteredEventHandler<?> buildEventHandler(
-      Method eventHandlerMethod, InstanceProvider instanceProvider) {
+  private RegisteredEventHandler<?> buildEventHandler(Method eventHandlerMethod) {
 
     requireNonNull(eventHandlerMethod);
 
@@ -104,7 +103,7 @@ public class DeezpatchEventHandlerRegistry implements EventHandlerRegistry, Even
         LambdaFactory.createLambdaFunction(eventHandlerMethod, EventHandlerMethod.class);
 
     final Class<?> eventHandlerClass = eventHandlerMethod.getDeclaringClass();
-    final String eventHandlerString = eventHandlerMethod.toGenericString();
+    final String eventHandlerMethodString = eventHandlerMethod.toGenericString();
 
     // Only request event handler instance when invoked instead of during registration time.
     return new RegisteredEventHandler<Event>() {
@@ -115,7 +114,7 @@ public class DeezpatchEventHandlerRegistry implements EventHandlerRegistry, Even
 
       @Override
       public String toString() {
-        return eventHandlerString;
+        return eventHandlerMethodString;
       }
     };
   }
@@ -123,8 +122,8 @@ public class DeezpatchEventHandlerRegistry implements EventHandlerRegistry, Even
   private static void validateMethodParameters(Method method) {
     if (method.getParameterCount() != 1) {
       throw new IllegalArgumentException(
-          "Methods marked with @EventHandler must accept a single parameter which is the event"
-              + " object.");
+          "Methods marked with @EventHandler (or any of the supported event handler annotations)"
+              + " must accept a single parameter which is the event object.");
     }
   }
 

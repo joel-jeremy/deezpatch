@@ -1,5 +1,6 @@
 package io.github.joeljeremy.deezpatch.core;
 
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -64,6 +65,6 @@ import java.lang.annotation.Target;
  * @implSpec The annotated methods accept a single method parameter which is the {@link Event}
  *     object. The method's return type must be {@code void}.
  */
+@Target({METHOD, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-@Target(METHOD)
 public @interface EventHandler {}
