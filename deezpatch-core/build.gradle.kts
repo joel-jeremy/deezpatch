@@ -21,7 +21,7 @@ tasks.named<Jar>("jar") {
 }
 
 dependencies {
-  jmh("org.springframework:spring-context:5.3.23")
+  jmh("org.springframework:spring-context:6.0.5")
   jmh("net.sizovs:pipelinr:0.7")
   jmh("org.greenrobot:eventbus-java:3.3.1")
 }
