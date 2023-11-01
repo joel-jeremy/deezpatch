@@ -2,7 +2,7 @@
 junitjupiter = "5.9.1"
 nexuspublish-plugin = "1.1.0"
 jacoco = "0.8.8"
-errorprone = "2.21.1"
+errorprone = "2.23.0"
 errorprone-plugin = "3.0.1"
 nullaway = "0.10.12"
 nullaway-plugin = "1.5.0"
