@@ -11,7 +11,7 @@ spotless-plugin = "6.22.0"
 coveralls-plugin = "2.12.0"
 snyk-plugin = "0.4"
 sonarqube-plugin = "3.5.0.2730"
-jmh-plugin = "0.7.1"
+jmh-plugin = "0.7.2"
 dependencyupdates-plugin = "0.43.0"
 
 [libraries]
