@@ -6,7 +6,7 @@ plugins {
 
 fun isNonStable(version: String): Boolean {
   val nonStableKeyword = listOf("PREVIEW", "ALPHA", "BETA", "SNAPSHOT").any { 
-    keyword -> version.toUpperCase().contains(keyword)
+    keyword -> version.uppercase().contains(keyword)
   }
   return nonStableKeyword
 }

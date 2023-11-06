@@ -6,8 +6,8 @@ plugins {
 
 coveralls {
   sourceDirs = mainSrcDirs()
-  jacocoReportPath =
-      "${rootProject.buildDir}/reports/jacoco/allCodeCoverageReport/allCodeCoverageReport.xml"
+  jacocoReportPath = rootProject.layout.buildDirectory.file(
+      "reports/jacoco/allCodeCoverageReport/allCodeCoverageReport.xml")
 }
 
 tasks.named<CoverallsTask>("coveralls") {

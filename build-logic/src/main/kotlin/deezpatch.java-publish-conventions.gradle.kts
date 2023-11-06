@@ -16,30 +16,30 @@ publishing {
 
       pom {
         packaging = "jar"
-        name.set(project.description)
-        description.set(project.description)
-        url.set("https://github.com/joel-jeremy/deezpatch")
+        name = project.providers.provider { project.description }
+        description = project.providers.provider { project.description }
+        url = "https://github.com/joel-jeremy/deezpatch"
 
         licenses {
           license {
-            name.set("The Apache License, Version 2.0")
-            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+            name = "The Apache License, Version 2.0"
+            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
           }
         }
 
         developers {
           developer {
-            id.set("joel-jeremy")
-            name.set("Joel Jeremy M. Marquez")
-            email.set("joeljeremy.marquez@gmail.com")
-            roles.set(listOf("owner", "developer"))
+            id = "joel-jeremy"
+            name = "Joel Jeremy M. Marquez"
+            email = "joeljeremy.marquez@gmail.com"
+            roles = listOf("owner", "developer")
           }
         }
 
         scm {
-          connection.set("scm:git:https://github.com/joel-jeremy/deezpatch.git")
-          developerConnection.set("scm:git:https://github.com/joel-jeremy/deezpatch.git")
-          url.set("https://github.com/joel-jeremy/deezpatch")
+          connection = "scm:git:https://github.com/joel-jeremy/deezpatch.git"
+          developerConnection = "scm:git:https://github.com/joel-jeremy/deezpatch.git"
+          url = "https://github.com/joel-jeremy/deezpatch"
         }
       }
     }

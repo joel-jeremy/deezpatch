@@ -43,7 +43,7 @@ tasks.named("check") {
 tasks.withType<JavaCompile>().configureEach {
   options.errorprone {
     // Only apply to main source set (not test,jmh)
-    isEnabled.set(name == "compileJava")
+    isEnabled = name == "compileJava"
 
     val enabledChecks = listOf(
       "AssertFalse", "BuilderReturnThis", "CheckedExceptionNotThrown", "ClassName", 
@@ -66,10 +66,10 @@ tasks.withType<JavaCompile>().configureEach {
     disabledChecks.forEach { check -> disable(check) }
     
     nullaway {
-      severity.set(CheckSeverity.ERROR)
+      severity = CheckSeverity.ERROR
       annotatedPackages.add("io.github.joeljeremy.deezpatch")
-      checkOptionalEmptiness.set(true)
-      suggestSuppressions.set(true)
+      checkOptionalEmptiness = true
+      suggestSuppressions = true
     }
   }
 }

@@ -27,9 +27,9 @@ dependencies {
 }
 
 jmh {
-  jmhVersion.set("1.35")
-  humanOutputFile.set(project.file("${project.buildDir}/reports/jmh/human.txt"))
-  resultsFile.set(project.file("${project.buildDir}/reports/jmh/results.json"))
-  resultFormat.set("JSON")
+  jmhVersion = "1.35"
+  humanOutputFile = layout.buildDirectory.file("reports/jmh/human.txt")
+  resultsFile = layout.buildDirectory.file("reports/jmh/results.json")
+  resultFormat = "JSON"
   jvmArgs.addAll(listOf("-Xmx2G"))
 }

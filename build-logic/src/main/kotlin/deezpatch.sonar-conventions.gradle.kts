@@ -12,8 +12,8 @@ sonarqube {
     property("sonar.projectKey", rootProject.group)
     property("sonar.organization", "joel-jeremy")
     property("sonar.host.url", "https://sonarcloud.io")
-    property("sonar.coverage.jacoco.xmlReportPaths", 
-        "${rootProject.buildDir}/reports/jacoco/allCodeCoverageReport/allCodeCoverageReport.xml")
+    property("sonar.coverage.jacoco.xmlReportPaths", rootProject.layout.buildDirectory.file(
+        "reports/jacoco/allCodeCoverageReport/allCodeCoverageReport.xml"))
   }
 }
 
