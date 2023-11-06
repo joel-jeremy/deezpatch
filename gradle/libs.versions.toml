@@ -1,6 +1,6 @@
 [versions]
 junitjupiter = "5.9.1"
-nexuspublish-plugin = "1.1.0"
+nexuspublish-plugin = "1.3.0"
 jacoco = "0.8.8"
 errorprone = "2.23.0"
 errorprone-plugin = "3.0.1"
