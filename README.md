@@ -86,7 +86,7 @@ public class PingQuery implements Request<Pong> {}
 
 ## 📨  Request Handlers
 
-Requests are handled by request handlers. Request handlers can be registered through the use of the [@RequestHandler](core/src/main/java/io/github/joeljeremy/deezpatch/core/RequestHandler.java) annotation.
+Requests are handled by request handlers. Request handlers can be registered through the use of the [@RequestHandler](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/RequestHandler.java) annotation.
 
 A request must only have a single request handler.
 
@@ -155,7 +155,7 @@ public class GreetedEvent implements Event {
 
 ## 📨 Event Handlers
 
-Events are handled by event handlers. Event handlers can be registered through the use of the [@EventHandler](core/src/main/java/io/github/joeljeremy/deezpatch/core/EventHandler.java) annotation.
+Events are handled by event handlers. Event handlers can be registered through the use of the [@EventHandler](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/EventHandler.java) annotation.
 
 An event can have zero or more event handlers.
 
@@ -203,7 +203,7 @@ public static void main(String[] args) {
 
 ## 🔩 Easy Integration with Dependency Injection (DI) Frameworks
 
-The library provides an [InstanceProvider](core/src/main/java/io/github/joeljeremy/deezpatch/core/InstanceProvider.java) interface as an extension point to let users customize how request/event handler instances should be instantiated. This can be as simple as `new`-ing up request/event handlers or getting instances from a DI framework such as Spring's `ApplicationContext`, Guice's `Injector`, etc.
+The library provides an [InstanceProvider](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/InstanceProvider.java) interface as an extension point to let users customize how request/event handler instances should be instantiated. This can be as simple as `new`-ing up request/event handlers or getting instances from a DI framework such as Spring's `ApplicationContext`, Guice's `Injector`, etc.
 
 ### Example with No DI framework
 
