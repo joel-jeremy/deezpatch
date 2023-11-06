@@ -68,4 +68,4 @@ jobs:
       - name: SonarQube
         env:
           ORG_GRADLE_PROJECT_sonarToken: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sonarqube -S
+        run: ./gradlew sonar -S
