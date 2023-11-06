@@ -7,9 +7,9 @@ additionalTestRunsOnJvmVersions().forEach { additionalJavaVersion ->
 
   val testTask = tasks.register<Test>(testTaskName) {
     useJUnitPlatform()
-    javaLauncher.set(javaToolchains.launcherFor {
-      languageVersion.set(additionalJavaVersion)
-    })
+    javaLauncher = javaToolchains.launcherFor {
+      languageVersion = additionalJavaVersion
+    }
   }
 
   tasks.named("check") {

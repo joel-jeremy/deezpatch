@@ -189,10 +189,8 @@ public abstract class RequestKey<T extends Request<R>, R> {
             requestType + " does not implement " + Request.class.getName() + ".");
       }
 
-      /**
-       * Note: Does not support parameterized request types yet e.g. public class MyRequest<T>
-       * implements Request<T> {}
-       */
+      // Note: Does not support parameterized request types yet e.g. public class MyRequest<T>
+      // implements Request<T> {}
       return determineResultType(requestType);
     }
 

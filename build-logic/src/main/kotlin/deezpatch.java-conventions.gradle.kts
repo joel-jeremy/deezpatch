@@ -4,12 +4,12 @@ plugins {
 
 java {
   toolchain {
-    languageVersion.set(JavaLanguageVersion.of(17))
+    languageVersion = JavaLanguageVersion.of(17)
   }
 }
 
 tasks.withType<JavaCompile>().configureEach {
-  options.release.set(11)
+  options.release = 11
 }
 
 tasks.withType<Javadoc>().configureEach {

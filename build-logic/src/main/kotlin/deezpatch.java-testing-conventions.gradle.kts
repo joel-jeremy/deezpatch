@@ -7,7 +7,7 @@ plugins {
 testing {
   suites {
     register<JvmTestSuite>("integrationTest") {
-      testType.set(TestSuiteType.INTEGRATION_TEST)
+      testType = TestSuiteType.INTEGRATION_TEST
       targets {
         all {
           testTask {
