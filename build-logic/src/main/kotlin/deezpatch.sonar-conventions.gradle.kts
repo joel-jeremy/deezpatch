@@ -2,7 +2,7 @@ plugins {
   id("org.sonarqube")
 }
 
-sonarqube {
+sonar {
   properties {
     val sonarToken = findProperty("sonarToken")
     if (sonarToken != null) {

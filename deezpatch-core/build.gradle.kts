@@ -1,9 +1,9 @@
 plugins {
   id("deezpatch.java-library-conventions")
+  id("deezpatch.java-multi-jvm-test-conventions")
   id("deezpatch.java-testing-conventions")
   id("deezpatch.java-code-quality-conventions")
   id("deezpatch.java-publish-conventions")
-  id("deezpatch.java-multi-jvm-test-conventions")
   id("deezpatch.eclipse-conventions")
   // See https://youtrack.jetbrains.com/issue/KTIJ-19370
   @Suppress("DSL_SCOPE_VIOLATION")
