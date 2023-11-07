@@ -15,9 +15,13 @@
 <!-- Commenting out until issue gets fixed: https://github.com/snyk/cli/issues/668 -->
 <!-- [![Known Vulnerabilities](https://snyk.io/test/github/joel-jeremy/deezpatch/badge.svg)](https://snyk.io/test/github/joel-jeremy/deezpatch) -->
 
-A simple dispatch library.
+A simple fast dispatch library.
 
 The library aims to help build applications which apply the [Command Query Responsibility Segregation](https://martinfowler.com/bliki/CQRS.html) (CQRS) pattern.
+
+## Like the project?
+
+Please consider giving the repository a ⭐. It means a lot! Thank you :)
 
 ## 🛠️ Get Deezpatch
 
