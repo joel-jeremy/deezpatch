@@ -23,7 +23,7 @@ additionalTestRunsOnJvmVersions().forEach { additionalJavaVersion ->
  */
 fun additionalTestRunsOnJvmVersions(): List<JavaLanguageVersion> {
   // 17 is enabled by default (Default java-conventions toolchain is 17)
-  val defaultJvmVersions = "11,19"
+  val defaultJvmVersions = "11,21"
   val jvmVersions = findProperty("additionalTestRunsOnJvmVersions") as String?
       ?: defaultJvmVersions
   return jvmVersions.split(",").filter { it.isNotEmpty() }.map { JavaLanguageVersion.of(it) }
