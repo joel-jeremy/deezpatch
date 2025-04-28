@@ -5,8 +5,8 @@ plugins {
 
 reporting {
   reports {
-    register<JacocoCoverageReport>("allCodeCoverageReport") { 
-      testType = "all"
+    val allCodeCoverageReport by creating(JacocoCoverageReport::class) {
+      testSuiteName = "all"
       reportTask {
         val testTasks = javaProjects()
             .flatMap { it.tasks.withType<Test>() }
@@ -19,11 +19,11 @@ reporting {
         executionData(execFiles)
       }
     }
-    register<AggregateTestReport>("testAggregateTestReport") { 
-      testType = TestSuiteType.UNIT_TEST
+    val testAggregateTestReport by creating(AggregateTestReport::class) { 
+      testSuiteName = "test"
     }
-    register<AggregateTestReport>("integrationTestAggregateTestReport") { 
-      testType = TestSuiteType.INTEGRATION_TEST
+    val integrationTestAggregateTestReport by creating(AggregateTestReport::class) { 
+      testSuiteName = "integrationTest"
     }
   }
 }
