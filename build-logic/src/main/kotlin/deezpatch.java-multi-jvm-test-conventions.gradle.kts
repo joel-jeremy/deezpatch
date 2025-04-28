@@ -2,6 +2,8 @@ plugins {
   id("deezpatch.java-conventions")
 }
 
+val test by testing.suites.existing(JvmTestSuite::class);
+
 additionalTestRunsOnJvmVersions().forEach { additionalJavaVersion ->
   val testTaskName = "testOnJava${additionalJavaVersion}"
 
@@ -10,6 +12,8 @@ additionalTestRunsOnJvmVersions().forEach { additionalJavaVersion ->
     javaLauncher = javaToolchains.launcherFor {
       languageVersion = additionalJavaVersion
     }
+    testClassesDirs = files(test.map { it.sources.output.classesDirs })
+    classpath = files(test.map { it.sources.runtimeClasspath })
   }
 
   tasks.named("check") {
