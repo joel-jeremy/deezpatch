@@ -16,7 +16,7 @@ jobs:
         uses: gradle/actions/wrapper-validation@v4
 
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/actions/setup-gradle@v3
       
       - name: Build with Gradle
         run: ./gradlew build
