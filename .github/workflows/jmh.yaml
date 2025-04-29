@@ -1,7 +1,7 @@
 name: Run JMH
 on: workflow_dispatch
 jobs:
-  build:
+  jmh:
     runs-on: ubuntu-latest
     
     strategy:
