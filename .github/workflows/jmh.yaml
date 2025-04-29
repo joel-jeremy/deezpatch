@@ -1,0 +1,58 @@
+name: Run JMH
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        java: [11, 17]
+
+    permissions:
+      contents: write      # Needed to push changes
+      pull-requests: write # Needed to create PR
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'temurin'
+        
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@v3
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v3
+      
+      - name: Run JMH via Gradle
+        run: ./gradlew jmh
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create new branch
+        run: |
+          BRANCH_NAME="jmh-$(date +%s)"
+          git checkout -b $BRANCH_NAME
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+
+      - name: Commit changes
+        run: |
+          git add .
+          git commit -m "[skip ci] New JMH results"
+          git push origin ${{ env.BRANCH_NAME }}
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          head: ${{ env.BRANCH_NAME }}
+          title: "Add new JMH results"
+          body: "This PR contains auto-generated JMH result files."
+
