@@ -24,7 +24,7 @@ jobs:
         uses: gradle/actions/wrapper-validation@v4
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Publish Snapshot to GitHub Packages
         run: ./gradlew publishAllPublicationsToGithubPackagesRepository
