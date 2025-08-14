@@ -10,7 +10,7 @@ checkerframework = "3.49.5"
 spotless-plugin = "7.0.3"
 coveralls-plugin = "2.12.2"
 snyk-plugin = "0.7.0"
-sonarqube-plugin = "6.1.0.5360"
+sonarqube-plugin = "6.2.0.5505"
 jmh-plugin = "0.7.3"
 dependencyupdates-plugin = "0.52.0"
 
