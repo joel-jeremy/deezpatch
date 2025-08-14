@@ -12,9 +12,9 @@ plugins {
 }
 
 dependencies {
+  implementation(libs.jspecify)
   errorprone(libs.errorprone)
   errorprone(libs.nullaway)
-  compileOnly(libs.checkerframework)
 }
 
 jacoco {

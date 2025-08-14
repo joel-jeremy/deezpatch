@@ -3,5 +3,5 @@ module io.github.joeljeremy.deezpatch.core {
   exports io.github.joeljeremy.deezpatch.core;
   exports io.github.joeljeremy.deezpatch.core.invocationstrategies;
 
-  requires static org.checkerframework.checker.qual;
+  requires static org.jspecify;
 }

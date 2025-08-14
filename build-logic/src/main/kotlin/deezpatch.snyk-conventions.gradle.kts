@@ -3,7 +3,6 @@ plugins {
 }
 
 snyk {
-  setApi(findProperty("snykToken") as String?)
   setSeverity("low")
   setArguments("--all-sub-projects --sarif-file-output=snyk.sarif")
   setAutoDownload(true)
