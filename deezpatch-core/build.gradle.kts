@@ -26,8 +26,8 @@ dependencies {
 
 jmh {
   jmhVersion = "1.37"
-  humanOutputFile = project.file("${project.buildDir}/reports/jmh/human.txt")
-  resultsFile = project.file("${project.buildDir}/reports/jmh/results.json")
+  humanOutputFile = project.layout.buildDirectory.file("reports/jmh/human.txt")
+  resultsFile = project.layout.buildDirectory.file("reports/jmh/results.json")
   resultFormat = "JSON"
   jvmArgs.addAll(listOf("-Xmx2G"))
 }
