@@ -5,8 +5,6 @@ plugins {
   id("deezpatch.java-code-quality-conventions")
   id("deezpatch.java-publish-conventions")
   id("deezpatch.eclipse-conventions")
-  // See https://youtrack.jetbrains.com/issue/KTIJ-19370
-  @Suppress("DSL_SCOPE_VIOLATION")
   alias(libs.plugins.jmh)
 }
 
