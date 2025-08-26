@@ -29,7 +29,7 @@ val benchmarksFolderPath = "src/jmh/java/io/github/joeljeremy/deezpatch/core/ben
 jmh {
   jmhVersion = "1.37"
   humanOutputFile = layout.buildDirectory.file("reports/jmh/human.txt")
-  resultsFile = layout.projectDirectory.file("${benchmarksFolderPath}/results-java${java.toolchain.languageVersion.get()}.json")
+  resultsFile = layout.projectDirectory.file("${benchmarksFolderPath}/results-java${JavaVersion.current().majorVersion}.json")
   resultFormat = "JSON"
   jvmArgs.addAll(listOf("-Xmx2G"))
 }
