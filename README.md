@@ -17,8 +17,9 @@
 
 A simple yet 🗲FAST🗲 library to dispatch commands and events to corresponding handlers 🚀
 
+The library aims to take advantage of the intuitiveness of using the annotations for handlers (e.g. `@RequestHandler`/`@EventHandler`) without the drawbacks of reflection.
+
 The library aims to help build applications which apply the [Command Query Responsibility Segregation](https://martinfowler.com/bliki/CQRS.html) (CQRS) pattern.  
-It combines the benefit of intuitiveness of using the annotations for handlers (e.g. `@RequestHandler`/`@EventHandler`) without the drawbacks of reflection.
 
 ## Like the project?
 
