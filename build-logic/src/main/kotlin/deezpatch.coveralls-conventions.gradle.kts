@@ -14,6 +14,8 @@ tasks.named<CoverallsTask>("coveralls") {
   group = "Coverage reports"
   description = "Uploads the aggregated coverage report to Coveralls"
 
+  notCompatibleWithConfigurationCache("Coveralls plugin does not support configuration cache.")
+
   dependsOn(tasks.withType<JacocoReport>())
 }
 
