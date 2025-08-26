@@ -24,10 +24,12 @@ dependencies {
   jmh("org.greenrobot:eventbus-java:3.3.1")
 }
 
+val benchmarksFolderPath = "src/jmh/java/io/github/joeljeremy/deezpatch/core/benchmarks"
+
 jmh {
   jmhVersion = "1.37"
-  humanOutputFile = project.layout.buildDirectory.file("reports/jmh/human.txt")
-  resultsFile = project.layout.buildDirectory.file("reports/jmh/results.json")
+  humanOutputFile = layout.buildDirectory.file("reports/jmh/human.txt")
+  resultsFile = layout.projectDirectory.file("${benchmarksFolderPath}/results-java${java.toolchain.languageVersion.get()}.json")
   resultFormat = "JSON"
   jvmArgs.addAll(listOf("-Xmx2G"))
 }
