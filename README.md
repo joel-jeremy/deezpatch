@@ -315,6 +315,30 @@ public static void main(String[] args) {
 }
 ```
 
+## 🎛️ Custom Invocation Strategies
+
+The library provides [Deezpatch.RequestHandlerInvocationStrategy](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/Deezpatch.java) and [Deezpatch.EventHandlerInvocationStrategy](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/Deezpatch.java) interfaces as extension points to let users customize how request/event handler methods are invoked by the Dispatcher and Publisher.
+
+Built-in implementations are:
+- [SyncRequestHandlerInvocationStrategy](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/invocationstrategies/SyncRequestHandlerInvocationStrategy.java) (Default)
+- [SyncEventHandlerInvocationStrategy](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/invocationstrategies/SyncEventHandlerInvocationStrategy.java) (Default)
+- [AsyncEventHandlerInvocationStrategy](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/invocationstrategies/AsyncEventHandlerInvocationStrategy.java)
+
+Users can create a new implementation and override the defaults by:
+```java
+// Register custom invocation strategy.
+Deezpatch deezpatch = Deezpatch.builder()
+    .requests(config -> 
+        config.invocationStrategy(
+            new LoggingInvocationStrategy(
+                new RetryOnErrorInvocationStrategy())))
+    .events(config -> 
+        config.invocationStrategy(
+            new LoggingInvocationStrategy(
+                new OrderGuaranteedInvocationStrategy())))
+      .build();
+```
+
 ---
 
 [![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=joel-jeremy_deezpatch)
