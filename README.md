@@ -5,25 +5,31 @@
 [![Code QL](https://github.com/joel-jeremy/deezpatch/actions/workflows/codeql.yaml/badge.svg)](https://github.com/joel-jeremy/deezpatch/actions/workflows/codeql.yaml)
 [![Maven Central](https://maven-badges.sml.io/maven-central/io.github.joel-jeremy.deezpatch/deezpatch-core/badge.svg)](https://maven-badges.sml.io/maven-central/io.github.joel-jeremy.deezpatch/deezpatch-core)
 [![Coverage Status](https://coveralls.io/repos/github/joel-jeremy/deezpatch/badge.svg?branch=main)](https://coveralls.io/github/joel-jeremy/deezpatch?branch=main)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=joel-jeremy_deezpatch&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=joel-jeremy_deezpatch)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=joel-jeremy_deezpatch&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=joel-jeremy_deezpatch)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=joel-jeremy_deezpatch&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=joel-jeremy_deezpatch)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=joel-jeremy_deezpatch&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=joel-jeremy_deezpatch)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=joel-jeremy_deezpatch&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=joel-jeremy_deezpatch)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=joel-jeremy_deezpatch&metric=coverage)](https://sonarcloud.io/summary/new_code?id=joel-jeremy_deezpatch)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=coverage)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=bugs)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
 [![Discord](https://img.shields.io/discord/1025648239162175578.svg?logo=discord&logoColor=white&logoWidth=20&labelColor=7289DA&label=Discord&color=17cf48)](https://discord.gg/bAfgXRVx3T)
 <!-- Commenting out until issue gets fixed: https://github.com/snyk/cli/issues/668 -->
 <!-- [![Known Vulnerabilities](https://snyk.io/test/github/joel-jeremy/deezpatch/badge.svg)](https://snyk.io/test/github/joel-jeremy/deezpatch) -->
 
-A simple fast dispatch library.
+A simple yet 🗲FAST🗲 library to dispatch requests and events to corresponding handlers 🚀
 
-The library aims to help build applications which apply the [Command Query Responsibility Segregation](https://martinfowler.com/bliki/CQRS.html) (CQRS) pattern.
+The library aims to take advantage of the intuitiveness of using the annotations for handlers (e.g. `@RequestHandler`/`@EventHandler`) without the drawbacks of reflection.
+
+The library aims to help build applications which apply the [Command Query Responsibility Segregation](https://martinfowler.com/bliki/CQRS.html) (CQRS) pattern.  
 
 ## Like the project?
 
 Please consider giving the repository a ⭐. It means a lot! Thank you :)
 
-## 🛠️ Get Deezpatch
+## Get Deezpatch
 
 ### Gradle
 
@@ -41,7 +47,7 @@ implementation "io.github.joel-jeremy.deezpatch:deezpatch-core:${version}"
 </dependency>
 ```
 
-### 🧩 Java 9 Module Names
+### Java 9 Module Names
 
 Deezpatch jars are published with Automatic-Module-Name manifest attribute:
 
@@ -55,7 +61,7 @@ module foo.bar {
 }
 ```
 
-## 🚀 Performance
+## Performance
 
 What differentiates Deezpatch from other messaging/dispatch libraries? The library takes advantage of the benefits provided by [java.lang.invoke.LambdaMetafactory](https://docs.oracle.com/javase/8/docs/api/java/lang/invoke/LambdaMetafactory.html) to avoid the cost of invoking methods reflectively. This results in performance close to directly invoking the request handler and event handler methods!
 
@@ -66,7 +72,7 @@ What differentiates Deezpatch from other messaging/dispatch libraries? The libra
 
 ### [Java 17 Benchmarks](https://jmh.morethan.io/?source=https://raw.githubusercontent.com/joel-jeremy/deezpatch/main/deezpatch-core/src/jmh/java/io/github/joeljeremy/deezpatch/core/benchmarks/results-java17.json)
 
-## ✉️ Requests
+## Requests
 
 Requests are messages that either:
 
@@ -91,7 +97,7 @@ public class GreetCommand implements Request<Void> {
 public class PingQuery implements Request<Pong> {}
 ```
 
-## 📨  Request Handlers
+## Request Handlers
 
 Requests are handled by request handlers. Request handlers can be registered through the use of the [@RequestHandler](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/RequestHandler.java) annotation.
 
@@ -115,7 +121,7 @@ public class PingQueryHandler {
 }
 ```
 
-## 🏤 Request Dispatcher
+## Request Dispatcher
 
 Requests are dispatched to a single request handler and this can be done through a dispatcher.
 
@@ -142,7 +148,7 @@ public static void main(String[] args) {
 }
 ```
 
-## ✉️ Events
+## Events
 
 Events are messages that indicate that something has occurred in the system.
 
@@ -160,7 +166,7 @@ public class GreetedEvent implements Event {
 }
 ```
 
-## 📨 Event Handlers
+## Event Handlers
 
 Events are handled by event handlers. Event handlers can be registered through the use of the [@EventHandler](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/EventHandler.java) annotation.
 
@@ -185,7 +191,7 @@ public class GreetedEventHandler {
 }
 ```
 
-## 📣 Event Publisher
+## Event Publisher
 
 Events are dispatched to zero or more event handlers and this can be done through a publisher.
 
@@ -208,7 +214,7 @@ public static void main(String[] args) {
 }
 ```
 
-## 🔩 Easy Integration with Dependency Injection (DI) Frameworks
+## Easy Integration with Dependency Injection (DI) Frameworks
 
 The library provides an [InstanceProvider](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/InstanceProvider.java) interface as an extension point to let users customize how request/event handler instances should be instantiated. This can be as simple as `new`-ing up request/event handlers or getting instances from a DI framework such as Spring's `ApplicationContext`, Guice's `Injector`, etc.
 
@@ -262,7 +268,7 @@ public static void main(String[] args) {
 }
 ```
 
-## 🎛️ Custom Request/Event Handler Annotations
+## Custom Request/Event Handler Annotations
 
 In cases where a project is built in such a way that bringing in external dependencies is considered a bad practice (e.g. domain layer/package in a Hexagonal (Ports and Adapters) architecture), Deezpatch provides a way to use custom request/event handler annotations (in addition to the built-in [RequestHandler](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/RequestHandler.java) and [EventHandler](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/EventHandler.java) annotations) to annotate request/event handlers.
 
@@ -311,6 +317,30 @@ public static void main(String[] args) {
               .handlers(MyEventHandler.class))
       .build();
 }
+```
+
+## Custom Invocation Strategies
+
+The library provides [Deezpatch.RequestHandlerInvocationStrategy](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/Deezpatch.java) and [Deezpatch.EventHandlerInvocationStrategy](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/Deezpatch.java) interfaces as extension points to let users customize how request/event handler methods are invoked by the Dispatcher and Publisher.
+
+Built-in implementations are:
+- [SyncRequestHandlerInvocationStrategy](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/invocationstrategies/SyncRequestHandlerInvocationStrategy.java) (Default)
+- [SyncEventHandlerInvocationStrategy](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/invocationstrategies/SyncEventHandlerInvocationStrategy.java) (Default)
+- [AsyncEventHandlerInvocationStrategy](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/invocationstrategies/AsyncEventHandlerInvocationStrategy.java)
+
+Users can create a new implementation and override the defaults by:
+```java
+// Register custom invocation strategy.
+Deezpatch deezpatch = Deezpatch.builder()
+    .requests(config -> 
+        config.invocationStrategy(
+            new LoggingInvocationStrategy(
+                new RetryOnErrorInvocationStrategy())))
+    .events(config -> 
+        config.invocationStrategy(
+            new LoggingInvocationStrategy(
+                new OrderGuaranteedInvocationStrategy())))
+      .build();
 ```
 
 ---

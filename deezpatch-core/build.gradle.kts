@@ -5,8 +5,6 @@ plugins {
   id("deezpatch.java-code-quality-conventions")
   id("deezpatch.java-publish-conventions")
   id("deezpatch.eclipse-conventions")
-  // See https://youtrack.jetbrains.com/issue/KTIJ-19370
-  @Suppress("DSL_SCOPE_VIOLATION")
   alias(libs.plugins.jmh)
 }
 
@@ -22,14 +20,16 @@ tasks.named<Jar>("jar") {
 
 dependencies {
   jmh("org.springframework:spring-context:6.2.10")
-  jmh("net.sizovs:pipelinr:0.10")
+  jmh("net.sizovs:pipelinr:0.11")
   jmh("org.greenrobot:eventbus-java:3.3.1")
 }
 
+val benchmarksFolderPath = "src/jmh/java/io/github/joeljeremy/deezpatch/core/benchmarks"
+
 jmh {
-  jmhVersion = "1.35"
+  jmhVersion = "1.37"
   humanOutputFile = layout.buildDirectory.file("reports/jmh/human.txt")
-  resultsFile = layout.buildDirectory.file("reports/jmh/results.json")
+  resultsFile = layout.projectDirectory.file("${benchmarksFolderPath}/results-java${JavaVersion.current().majorVersion}.json")
   resultFormat = "JSON"
   jvmArgs.addAll(listOf("-Xmx2G"))
 }
