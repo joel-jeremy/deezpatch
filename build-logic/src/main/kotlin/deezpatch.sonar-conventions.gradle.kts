@@ -12,15 +12,13 @@ sonar {
     property("sonar.projectKey", rootProject.group)
     property("sonar.organization", "joel-jeremy")
     property("sonar.host.url", "https://sonarcloud.io")
-    property("sonar.coverage.jacoco.xmlReportPaths", rootProject.layout.buildDirectory.file(
-        "reports/jacoco/allCodeCoverageReport/allCodeCoverageReport.xml"))
+    property("sonar.coverage.jacoco.xmlReportPaths", 
+      file(rootProject.layout.buildDirectory.file("reports/jacoco/allCodeCoverageReport/allCodeCoverageReport.xml")))
   }
 }
 
+val allCodeCoverageReport by tasks.existing
 tasks.named("sonar") {
   dependsOn(tasks.withType<JacocoReport>())
-}
-
-tasks.named("sonarqube") {
-  dependsOn(tasks.withType<JacocoReport>())
+  inputs.files(allCodeCoverageReport.map { it.outputs.files })
 }
