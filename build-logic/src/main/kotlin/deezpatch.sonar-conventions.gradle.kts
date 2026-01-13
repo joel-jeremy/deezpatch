@@ -6,7 +6,7 @@ sonar {
   properties {
     val sonarToken = findProperty("sonarToken")
     if (sonarToken != null) {
-      property("sonar.login", sonarToken)
+      property("sonar.token", sonarToken)
     }
     property("sonar.projectName", rootProject.name)
     property("sonar.projectKey", rootProject.group)
