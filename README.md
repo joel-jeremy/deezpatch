@@ -10,7 +10,7 @@
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=coverage)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.deezpatch&metric=coverage)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=bugs)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
