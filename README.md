@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/joel-jeremy/deezpatch/blob/main/LICENSE)
 [![Gradle Build](https://github.com/joel-jeremy/deezpatch/actions/workflows/gradle-build.yaml/badge.svg)](https://github.com/joel-jeremy/deezpatch/actions/workflows/gradle-build.yaml)
 [![Code QL](https://github.com/joel-jeremy/deezpatch/actions/workflows/codeql.yaml/badge.svg)](https://github.com/joel-jeremy/deezpatch/actions/workflows/codeql.yaml)
-[![Maven Central](https://maven-badges.sml.io/maven-central/io.github.joel-jeremy.deezpatch/deezpatch-core/badge.svg)](https://maven-badges.sml.io/maven-central/io.github.joel-jeremy.deezpatch/deezpatch-core)
+[![Sonatype Central](https://maven-badges.sml.io/sonatype-central/io.github.joel-jeremy.deezpatch/deezpatch-core/badge.svg)](https://maven-badges.sml.io/maven-central/io.github.joel-jeremy.deezpatch/deezpatch-core)
 [![codecov](https://codecov.io/gh/joel-jeremy/deezpatch/graph/badge.svg?token=1KVQMOXYHT)](https://codecov.io/gh/joel-jeremy/deezpatch)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
