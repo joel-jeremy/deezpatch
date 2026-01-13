@@ -10,7 +10,7 @@ jspecify = "1.0.0"
 spotless-plugin = "8.0.0"
 coveralls-plugin = "2.12.2"
 snyk-plugin = "0.7.0"
-sonarqube-plugin = "6.3.1.5724"
+sonarqube-plugin = "7.0.0.6105"
 jmh-plugin = "0.7.3"
 dependencyupdates-plugin = "0.53.0"
 
