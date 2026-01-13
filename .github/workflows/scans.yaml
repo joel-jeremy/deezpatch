@@ -33,10 +33,10 @@ jobs:
       #   with:
       #     sarif_file: snyk.sarif
       
-      - name: Coveralls
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-        run: ./gradlew check coveralls -S
+      # - name: Coveralls
+      #   env:
+      #     COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+      #   run: ./gradlew check coveralls -S
 
   sonarqube:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
