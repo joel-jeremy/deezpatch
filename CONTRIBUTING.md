@@ -49,6 +49,8 @@ Integration tests usually takes longer to complete than unit tests. In cases whe
 ./gradlew build -x integrationTest
 ```
 
+Tests are run in multiple JVM runtimes. By default, it is run in LTS versions (succeeding the version used in source compilation) + the latest released non-LTS version. Test runtimes are overrideable by setting the `ADDITIONAL_TEST_RUNS_ON_JVM_VERSIONS` environment variable or `additionalTestRunsOnJvmVersions` system property e.g. `ADDITIONAL_TEST_RUNS_ON_JVM_VERSIONS=11,17` / `additionalTestRunsOnJvmVersions=11,17`.
+
 ## Development Guidelines
 
 ### Code Format
