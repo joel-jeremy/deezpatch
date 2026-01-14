@@ -1,4 +1,4 @@
-# Emissary
+# Emissary (formerly Deezpatch)
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/joel-jeremy/emissary/blob/main/LICENSE)
 [![Gradle Build](https://github.com/joel-jeremy/emissary/actions/workflows/gradle-build.yaml/badge.svg)](https://github.com/joel-jeremy/emissary/actions/workflows/gradle-build.yaml)
@@ -31,6 +31,9 @@ Please consider giving the repository a ⭐. It means a lot! Thank you :)
 
 ## Get Emissary
 
+> [!IMPORTANT]  
+> Up until v1.1.0, the core library is published under the old `deezpatch-core` name. This has been renamed to `emissary-core` starting from v2.0.0 onwards.
+
 ### Gradle
 
 ```groovy
@@ -48,6 +51,9 @@ implementation "io.github.joel-jeremy.emissary:emissary-core:${version}"
 ```
 
 ### Java 9 Module Names
+
+> [!IMPORTANT]  
+> Up until v1.1.0, the core library has the module name `io.github.joeljeremy.deezpatch.core`. This has been renamed to `io.github.joeljeremy.emissary.core` starting from v2.0.0 onwards.
 
 Emissary jars are published with Automatic-Module-Name manifest attribute:
 
