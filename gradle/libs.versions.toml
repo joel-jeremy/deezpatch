@@ -3,12 +3,11 @@ junitjupiter = "5.10.1"
 nexuspublish-plugin = "2.0.0"
 jacoco = "0.8.9"
 errorprone = "2.42.0"
-errorprone-plugin = "4.3.0"
+errorprone-plugin = "4.4.0"
 nullaway = "0.12.15"
 nullaway-plugin = "2.3.0"
 jspecify = "1.0.0"
-spotless-plugin = "8.0.0"
-coveralls-plugin = "2.12.2"
+spotless-plugin = "8.1.0"
 snyk-plugin = "0.7.0"
 sonarqube-plugin = "7.2.2.6593"
 jmh-plugin = "0.7.3"
@@ -24,13 +23,11 @@ jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 spotless-plugin = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless-plugin" }
 dependencyupdates-plugin = { module = "com.github.ben-manes:gradle-versions-plugin", version.ref = "dependencyupdates-plugin" }
 snyk-plugin = { module = "gradle.plugin.io.snyk.gradle.plugin:snyk", version.ref = "snyk-plugin" }
-coveralls-plugin = { module = "gradle.plugin.org.kt3k.gradle.plugin:coveralls-gradle-plugin", version.ref = "coveralls-plugin" }
 sonarqube-plugin = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version.ref = "sonarqube-plugin" }
 
 [plugins]
 jmh = { id = "me.champeau.jmh", version.ref = "jmh-plugin" }
 nexuspublish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexuspublish-plugin" }
-coveralls = { id = "com.github.kt3k.coveralls", version.ref = "coveralls-plugin" }
 snyk = { id = "io.snyk.gradle.plugin.snykplugin", version.ref = "snyk-plugin" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube-plugin" }
 errorprone = { id = "net.ltgt.errorprone", version.ref = "errorprone-plugin" }

@@ -10,7 +10,6 @@ dependencies {
    */
   implementation(libs.nexuspublish.plugin)
   implementation(libs.snyk.plugin)
-  implementation(libs.coveralls.plugin)
   implementation(libs.sonarqube.plugin)
   implementation(libs.errorprone.plugin)
   implementation(libs.nullaway.plugin)

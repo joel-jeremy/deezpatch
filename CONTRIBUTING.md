@@ -17,8 +17,8 @@ Got an idea to enhance the library? Please feel free to create an issue describi
 
 To be able to work on this project, the following software needs to be installed on your machine:
 
-- Java (>= 17)
-  - Gradle is run on Java 17 but source code is compiled to Java 11.
+- Java (>= 21)
+  - Gradle is run on Java 21 but source code is compiled to Java 11.
 - Docker (Rancher Desktop or Docker Desktop)
   - For integration tests.
 - Git
@@ -71,15 +71,15 @@ The project follows the [GitHub flow](https://docs.github.com/en/get-started/qui
 
 Unit tests in this project follow a specific structure.
 
-- Classes must have a corresponding test class i.e. `Deezpatch` -> `DeezpatchTests`. The test class must be in the exact same java package as the class it corresponds to.
+- Classes must have a corresponding test class i.e. `Emissary` -> `EmissaryTests`. The test class must be in the exact same java package as the class it corresponds to.
 - Test classes are nested in structure. Each method in the class under test must have a corresponding `@Nested` test class.
 - Each `@Nested` test class must test scenarios that is supported by the method it corresponds to via `@Test`.
 - Use `@DisplayName` to describe the scenario being tested by the `@Test` method e.g. `@DisplayName("should throw when x argument is null)`.
 
     ```java
-    // Class under test: io.github.joeljeremy.deezpatch.core.Deezpatch
-    public class Deezpatch implements Dispatcher, Publisher {
-        public Deezpatch(...) {
+    // Class under test: io.github.joeljeremy.emissary.core.Emissary
+    public class Emissary implements Dispatcher, Publisher {
+        public Emissary(...) {
             ...
         }
         
@@ -93,14 +93,14 @@ Unit tests in this project follow a specific structure.
 
         public static class Builder {
             ...
-            public Deezpatch build() {
+            public Emissary build() {
                 ...
             }
         }
     }
 
-    // Test class: io.github.joeljeremy.deezpatch.core.DeezpatchTests
-    class DeezpatchTests {
+    // Test class: io.github.joeljeremy.emissary.core.EmissaryTests
+    class EmissaryTests {
         @Nested
         class Constructors {
             // @Test methods here...
