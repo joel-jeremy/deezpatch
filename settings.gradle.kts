@@ -5,8 +5,8 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "deezpatch"
+rootProject.name = "emissary"
 
 includeBuild("build-logic")
 
-include("deezpatch-core")
+include("emissary-core")

@@ -1,0 +1,88 @@
+import net.ltgt.gradle.errorprone.CheckSeverity
+// Kotlin extension methods.
+import net.ltgt.gradle.errorprone.errorprone
+import net.ltgt.gradle.nullaway.nullaway
+
+plugins {
+  id("emissary.java-conventions")
+  id("jacoco")
+  id("net.ltgt.errorprone")
+  id("net.ltgt.nullaway")
+  id("com.diffplug.spotless")
+}
+
+dependencies {
+  implementation(libs.jspecify)
+  errorprone(libs.errorprone)
+  errorprone(libs.nullaway)
+}
+
+jacoco {
+  toolVersion = libs.versions.jacoco.get()
+}
+
+tasks.withType<JacocoCoverageVerification>().configureEach {
+  val execFiles = javaProjects()
+      .flatMap { it.tasks.withType<JacocoReport>() }
+      .flatMap { it.executionData.files }
+
+  executionData.from(execFiles)
+
+  violationRules { 
+    rule { 
+      limit { 
+        minimum = "1".toBigDecimal()
+      } 
+    } 
+  } 
+}
+tasks.named("check") {
+  finalizedBy(tasks.withType<JacocoCoverageVerification>())
+}
+
+tasks.withType<JavaCompile>().configureEach {
+  options.errorprone {
+    // Only apply to main source set (not test,jmh)
+    isEnabled = name == "compileJava"
+
+    val enabledChecks = listOf(
+      "AssertFalse", "BuilderReturnThis", "CheckedExceptionNotThrown", "ClassName", 
+      "ComparisonContractViolated", "DepAnn", "EmptyIf", "EqualsBrokenForNull",
+      "FieldCanBeFinal", "FieldCanBeLocal", "FieldCanBeStatic", "ForEachIterable",
+      "FuzzyEqualsShouldNotBeUsedInEqualsMethod", "FunctionalInterfaceClash",
+      "IterablePathParameter", "LongLiteralLowerCaseSuffix", "MissingBraces",
+      "MissingDefault", "MixedArrayDimensions", "NoAllocation", "PackageLocation", 
+      "PreferredInterfaceType", "RedundantThrows", "RemoveUnusedImports", 
+      "ReturnsNullCollection", "SelfAlwaysReturnsThis", "StronglyTypeByteString", 
+      "StronglyTypeTime", "SwitchDefault", "TimeUnitMismatch", "TransientMisuse", 
+      "UnnecessarilyVisible", "UnnecessaryAnonymousClass", "UnnecessaryOptionalGet", 
+      "UnsafeLocaleUsage", "UnusedTypeParameter", "UsingJsr305CheckReturnValue"
+    )
+    enabledChecks.forEach { check -> enable(check) }
+
+    val disabledChecks = listOf(
+      "CanIgnoreReturnValueSuggester", "CatchingUnchecked"
+    )
+    disabledChecks.forEach { check -> disable(check) }
+    
+    nullaway {
+      severity = CheckSeverity.ERROR
+      annotatedPackages.add("io.github.joeljeremy.emissary")
+      checkOptionalEmptiness = true
+      suggestSuppressions = true
+    }
+  }
+}
+
+spotless {
+  isEnforceCheck = !hasProperty("skipSpotlessCheck")
+  java {
+    // Generated code should not be subjected to spotless.
+    target("src/*/java/**/*.java")
+    // Only format files which have changed since origin/main.
+    // ratchetFrom "origin/main"
+    toggleOffOn()
+    googleJavaFormat().reflowLongStrings()
+    formatAnnotations()
+  }
+}

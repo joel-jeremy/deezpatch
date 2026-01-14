@@ -1,23 +1,23 @@
-# Deezpatch
+# Emissary
 
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/joel-jeremy/deezpatch/blob/main/LICENSE)
-[![Gradle Build](https://github.com/joel-jeremy/deezpatch/actions/workflows/gradle-build.yaml/badge.svg)](https://github.com/joel-jeremy/deezpatch/actions/workflows/gradle-build.yaml)
-[![Code QL](https://github.com/joel-jeremy/deezpatch/actions/workflows/codeql.yaml/badge.svg)](https://github.com/joel-jeremy/deezpatch/actions/workflows/codeql.yaml)
-[![Sonatype Central](https://maven-badges.sml.io/sonatype-central/io.github.joel-jeremy.deezpatch/deezpatch-core/badge.svg)](https://maven-badges.sml.io/sonatype-central/io.github.joel-jeremy.deezpatch/deezpatch-core)
-[![codecov](https://codecov.io/gh/joel-jeremy/deezpatch/graph/badge.svg?token=1KVQMOXYHT)](https://codecov.io/gh/joel-jeremy/deezpatch)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.deezpatch&metric=coverage)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=bugs)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.deezpatch)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/joel-jeremy/emissary/blob/main/LICENSE)
+[![Gradle Build](https://github.com/joel-jeremy/emissary/actions/workflows/gradle-build.yaml/badge.svg)](https://github.com/joel-jeremy/emissary/actions/workflows/gradle-build.yaml)
+[![Code QL](https://github.com/joel-jeremy/emissary/actions/workflows/codeql.yaml/badge.svg)](https://github.com/joel-jeremy/emissary/actions/workflows/codeql.yaml)
+[![Sonatype Central](https://maven-badges.sml.io/sonatype-central/io.github.joel-jeremy.emissary/emissary-core/badge.svg)](https://maven-badges.sml.io/sonatype-central/io.github.joel-jeremy.emissary/emissary-core)
+[![codecov](https://codecov.io/gh/joel-jeremy/emissary/graph/badge.svg?token=1KVQMOXYHT)](https://codecov.io/gh/joel-jeremy/emissary)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.emissary)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.emissary)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.emissary)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.emissary)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.emissary)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.emissary&metric=coverage)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.emissary)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=bugs)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.emissary)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.emissary)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.emissary)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=io.github.joel-jeremy.externalized-properties&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.emissary)
 [![Discord](https://img.shields.io/discord/1025648239162175578.svg?logo=discord&logoColor=white&logoWidth=20&labelColor=7289DA&label=Discord&color=17cf48)](https://discord.gg/bAfgXRVx3T)
 <!-- Commenting out until issue gets fixed: https://github.com/snyk/cli/issues/668 -->
-<!-- [![Known Vulnerabilities](https://snyk.io/test/github/joel-jeremy/deezpatch/badge.svg)](https://snyk.io/test/github/joel-jeremy/deezpatch) -->
+<!-- [![Known Vulnerabilities](https://snyk.io/test/github/joel-jeremy/emissary/badge.svg)](https://snyk.io/test/github/joel-jeremy/emissary) -->
 
 A simple yet 🗲FAST🗲 library to dispatch requests and events to corresponding handlers 🚀
 
@@ -29,48 +29,48 @@ The library aims to help build applications which apply the [Command Query Respo
 
 Please consider giving the repository a ⭐. It means a lot! Thank you :)
 
-## Get Deezpatch
+## Get Emissary
 
 ### Gradle
 
 ```groovy
-implementation "io.github.joel-jeremy.deezpatch:deezpatch-core:${version}"
+implementation "io.github.joel-jeremy.emissary:emissary-core:${version}"
 ```
 
 ### Maven
 
 ```xml
 <dependency>
-    <groupId>io.github.joel-jeremy.deezpatch</groupId>
-    <artifactId>deezpatch-core</artifactId>
+    <groupId>io.github.joel-jeremy.emissary</groupId>
+    <artifactId>emissary-core</artifactId>
     <version>${version}</version>
 </dependency>
 ```
 
 ### Java 9 Module Names
 
-Deezpatch jars are published with Automatic-Module-Name manifest attribute:
+Emissary jars are published with Automatic-Module-Name manifest attribute:
 
-- Core - `io.github.joeljeremy.deezpatch.core`
+- Core - `io.github.joeljeremy.emissary.core`
 
 Module authors can use above module names in their module-info.java:
 
 ```java
 module foo.bar {
-    requires io.github.joeljeremy.deezpatch.core;
+    requires io.github.joeljeremy.emissary.core;
 }
 ```
 
 ## Performance
 
-What differentiates Deezpatch from other messaging/dispatch libraries? The library takes advantage of the benefits provided by [java.lang.invoke.LambdaMetafactory](https://docs.oracle.com/javase/8/docs/api/java/lang/invoke/LambdaMetafactory.html) to avoid the cost of invoking methods reflectively. This results in performance close to directly invoking the request handler and event handler methods!
+What differentiates Emissary from other messaging/dispatch libraries? The library takes advantage of the benefits provided by [java.lang.invoke.LambdaMetafactory](https://docs.oracle.com/javase/8/docs/api/java/lang/invoke/LambdaMetafactory.html) to avoid the cost of invoking methods reflectively. This results in performance close to directly invoking the request handler and event handler methods!
 
 ### ~ 1000% more throughput compared to other similar libraries (Spring Events, Pipelinr, etc)
 ### ~ 90% less time compared to other similar libraries (Spring Events, Pipelinr, etc)
 
-### [Java 11 Benchmarks](https://jmh.morethan.io/?source=https://raw.githubusercontent.com/joel-jeremy/deezpatch/main/deezpatch-core/src/jmh/java/io/github/joeljeremy/deezpatch/core/benchmarks/results-java11.json)
+### [Java 11 Benchmarks](https://jmh.morethan.io/?source=https://raw.githubusercontent.com/joel-jeremy/emissary/main/emissary-core/src/jmh/java/io/github/joeljeremy/emissary/core/benchmarks/results-java11.json)
 
-### [Java 17 Benchmarks](https://jmh.morethan.io/?source=https://raw.githubusercontent.com/joel-jeremy/deezpatch/main/deezpatch-core/src/jmh/java/io/github/joeljeremy/deezpatch/core/benchmarks/results-java17.json)
+### [Java 17 Benchmarks](https://jmh.morethan.io/?source=https://raw.githubusercontent.com/joel-jeremy/emissary/main/emissary-core/src/jmh/java/io/github/joeljeremy/emissary/core/benchmarks/results-java17.json)
 
 ## Requests
 
@@ -99,7 +99,7 @@ public class PingQuery implements Request<Pong> {}
 
 ## Request Handlers
 
-Requests are handled by request handlers. Request handlers can be registered through the use of the [@RequestHandler](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/RequestHandler.java) annotation.
+Requests are handled by request handlers. Request handlers can be registered through the use of the [@RequestHandler](emissary-core/src/main/java/io/github/joeljeremy/emissary/core/RequestHandler.java) annotation.
 
 A request must only have a single request handler.
 
@@ -131,8 +131,8 @@ public static void main(String[] args) {
     // but any other DI framework can be used e.g. Guice, Dagger, etc.
     ApplicationContext applicationContext = springApplicationContext();
 
-    // Deezpatch implements the Dispatcher interface.
-    Dispatcher dispatcher = Deezpatch.builder()
+    // Emissary implements the Dispatcher interface.
+    Dispatcher dispatcher = Emissary.builder()
         .instanceProvider(applicationContext::getBean)
         .requests(config -> config.handlers(
             GreetCommandHandler.java,
@@ -168,7 +168,7 @@ public class GreetedEvent implements Event {
 
 ## Event Handlers
 
-Events are handled by event handlers. Event handlers can be registered through the use of the [@EventHandler](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/EventHandler.java) annotation.
+Events are handled by event handlers. Event handlers can be registered through the use of the [@EventHandler](emissary-core/src/main/java/io/github/joeljeremy/emissary/core/EventHandler.java) annotation.
 
 An event can have zero or more event handlers.
 
@@ -201,8 +201,8 @@ public static void main(String[] args) {
     // but any other DI framework can be used e.g. Guice, Dagger, etc.
     ApplicationContext applicationContext = springApplicationContext();
 
-    // Deezpatch implements the Publisher interface.
-    Publisher publisher = Deezpatch.builder()
+    // Emissary implements the Publisher interface.
+    Publisher publisher = Emissary.builder()
         .instanceProvider(applicationContext::getBean)
         .events(config -> config.handlers(
             GreetedEventHandler.java
@@ -216,7 +216,7 @@ public static void main(String[] args) {
 
 ## Easy Integration with Dependency Injection (DI) Frameworks
 
-The library provides an [InstanceProvider](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/InstanceProvider.java) interface as an extension point to let users customize how request/event handler instances should be instantiated. This can be as simple as `new`-ing up request/event handlers or getting instances from a DI framework such as Spring's `ApplicationContext`, Guice's `Injector`, etc.
+The library provides an [InstanceProvider](emissary-core/src/main/java/io/github/joeljeremy/emissary/core/InstanceProvider.java) interface as an extension point to let users customize how request/event handler instances should be instantiated. This can be as simple as `new`-ing up request/event handlers or getting instances from a DI framework such as Spring's `ApplicationContext`, Guice's `Injector`, etc.
 
 ### Example with No DI framework
 
@@ -224,7 +224,7 @@ The library provides an [InstanceProvider](deezpatch-core/src/main/java/io/githu
 // Application.java
 
 public static void main(String[] args) {
-  Deezpatch deezpatch = Deezpatch.builder()
+  Emissary emissary = Emissary.builder()
       .instanceProvider(Application::getInstance)
       .requests(...)
       .events(...)
@@ -247,7 +247,7 @@ private static Object getInstance(Class<?> handlerType) {
 ```java
 public static void main(String[] args) {
   ApplicationContext applicationContext = springApplicationContext();
-  Deezpatch deezpatch = Deezpatch.builder()
+  Emissary emissary = Emissary.builder()
       .instanceProvider(applicationContext::getBean)
       .requests(...)
       .events(...)
@@ -260,7 +260,7 @@ public static void main(String[] args) {
 ```java
 public static void main(String[] args) {
   Injector injector = guiceInjector();
-  Deezpatch deezpatch = Deezpatch.builder()
+  Emissary emissary = Emissary.builder()
       .instanceProvider(injector::getInstance)
       .requests(...)
       .events(...)
@@ -270,9 +270,9 @@ public static void main(String[] args) {
 
 ## Custom Request/Event Handler Annotations
 
-In cases where a project is built in such a way that bringing in external dependencies is considered a bad practice (e.g. domain layer/package in a Hexagonal (Ports and Adapters) architecture), Deezpatch provides a way to use custom request/event handler annotations (in addition to the built-in [RequestHandler](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/RequestHandler.java) and [EventHandler](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/EventHandler.java) annotations) to annotate request/event handlers.
+In cases where a project is built in such a way that bringing in external dependencies is considered a bad practice (e.g. domain layer/package in a Hexagonal (Ports and Adapters) architecture), Emissary provides a way to use custom request/event handler annotations (in addition to the built-in [RequestHandler](emissary-core/src/main/java/io/github/joeljeremy/emissary/core/RequestHandler.java) and [EventHandler](emissary-core/src/main/java/io/github/joeljeremy/emissary/core/EventHandler.java) annotations) to annotate request/event handlers.
 
-This way, Deezpatch can still be used without adding the core Deezpatch library as a dependency of a project's domain layer/package. Instead, it may be used in the outer layers/packages to wire things up.
+This way, Emissary can still be used without adding the core Emissary library as a dependency of a project's domain layer/package. Instead, it may be used in the outer layers/packages to wire things up.
 
 ```java
 // Let's say below classes are declared in a project's core/domain package:
@@ -307,7 +307,7 @@ public static void main(String[] args) {
   ApplicationContext applicationContext = springApplicationContext();
 
   // Register handlers and custom annotations.
-  Deezpatch deezpatch = Deezpatch.builder()
+  Emissary emissary = Emissary.builder()
       .instanceProvider(applicationContext::getBean)
       .requests(config -> 
           config.handlerAnnotations(AwesomeRequestHandler.class)
@@ -321,17 +321,17 @@ public static void main(String[] args) {
 
 ## Custom Invocation Strategies
 
-The library provides [Deezpatch.RequestHandlerInvocationStrategy](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/Deezpatch.java) and [Deezpatch.EventHandlerInvocationStrategy](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/Deezpatch.java) interfaces as extension points to let users customize how request/event handler methods are invoked by the Dispatcher and Publisher.
+The library provides [Emissary.RequestHandlerInvocationStrategy](emissary-core/src/main/java/io/github/joeljeremy/emissary/core/Emissary.java) and [Emissary.EventHandlerInvocationStrategy](emissary-core/src/main/java/io/github/joeljeremy/emissary/core/Emissary.java) interfaces as extension points to let users customize how request/event handler methods are invoked by the Dispatcher and Publisher.
 
 Built-in implementations are:
-- [SyncRequestHandlerInvocationStrategy](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/invocationstrategies/SyncRequestHandlerInvocationStrategy.java) (Default)
-- [SyncEventHandlerInvocationStrategy](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/invocationstrategies/SyncEventHandlerInvocationStrategy.java) (Default)
-- [AsyncEventHandlerInvocationStrategy](deezpatch-core/src/main/java/io/github/joeljeremy/deezpatch/core/invocationstrategies/AsyncEventHandlerInvocationStrategy.java)
+- [SyncRequestHandlerInvocationStrategy](emissary-core/src/main/java/io/github/joeljeremy/emissary/core/invocationstrategies/SyncRequestHandlerInvocationStrategy.java) (Default)
+- [SyncEventHandlerInvocationStrategy](emissary-core/src/main/java/io/github/joeljeremy/emissary/core/invocationstrategies/SyncEventHandlerInvocationStrategy.java) (Default)
+- [AsyncEventHandlerInvocationStrategy](emissary-core/src/main/java/io/github/joeljeremy/emissary/core/invocationstrategies/AsyncEventHandlerInvocationStrategy.java)
 
 Users can create a new implementation and override the defaults by:
 ```java
 // Register custom invocation strategy.
-Deezpatch deezpatch = Deezpatch.builder()
+Emissary emissary = Emissary.builder()
     .requests(config -> 
         config.invocationStrategy(
             new LoggingInvocationStrategy(
@@ -345,4 +345,4 @@ Deezpatch deezpatch = Deezpatch.builder()
 
 ---
 
-[![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=joel-jeremy_deezpatch)
+[![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=io.github.joel-jeremy.emissary)
